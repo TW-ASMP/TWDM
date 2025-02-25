@@ -10,13 +10,13 @@ properties:
 
   #====================
 
-  class name:
+  class_name:
     type: string
     description: a noun or short noun-phrase name of the class
 
   #====================
 
-  class name with synonym(s):
+  synonym_names:
     oneOf: 
       - type: null
       - type: array
@@ -26,14 +26,14 @@ properties:
 
   #====================
 
-  class definition:
+  class_definition:
     oneOf:
       - type: null
       - type: string
 
   #====================
 
-  appliable to individual:
+  appliable_to_individual:
     type: boolean
     $comment: |
       a "FALSE" value indicates that the class is meant to be a structural part of the classifcation tree, and cannot be used to classify any entity (i.e. asset, role, space, etc).

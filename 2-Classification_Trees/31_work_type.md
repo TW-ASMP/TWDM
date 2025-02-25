@@ -1,10 +1,10 @@
 ## Work Type [^2]
 
-* corrective / repair
+* corrective
 * emergency [^1]
 * investigative
 * preventive
-* asset data
+* informational
 * project
   * contractor support
 

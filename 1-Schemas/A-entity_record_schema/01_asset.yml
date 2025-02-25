@@ -76,7 +76,7 @@ properties:
               where (class_y.properties.only used as a part asset) is TRUE
         checked_on: 2024-08-15
   
-  class_dependent_specifications:
+  specifications:
   #---------------------------------------
     type: object
     description: is a set of properties applicable to the class value. 
@@ -560,11 +560,11 @@ rule_spec:
             - asset_x.properties."operating_state" = "installed"
             - asset_x.properties."assigned_to_asset_role" is NOT null
           and one of the following is true
-            - asset_x.properties."assigned_to_asset_role".properties."asset installation location" is NOT null
+            - asset_x.properties."assigned_to_asset_role".properties."asset_installation_location" is NOT null
             - asset_x.properties."assigned_to_asset_role".properties."service_address_or_coordinate" is NOT null
         then
             (asset_x.properties."installation_or_parking_location") would be set to the value of 
-              (asset_x.properties."assigned_to_asset_role".properties."asset installation location")
+              (asset_x.properties."assigned_to_asset_role".properties."asset_installation_location")
             (asset_x.properties."service_address_or_coordinate") would be set to the value of 
               (asset_x.properties."assigned_to_asset_role".properties."service_address_or_coordinate")
 

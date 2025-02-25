@@ -12,10 +12,10 @@ properties:
   
   allOf:
     - $ref: "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
-    #inherit the defintions and rules from th "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
+    #inherit the definitions and rules from th "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
     
   #====================
-  parent class:
+  parent_class:
     $ref: B-entity_class_object_schema/01_asset_item_tool_class_object_schema.yml
 
   #====================

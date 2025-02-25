@@ -34,25 +34,25 @@ definitions:
     properties:
 
       manufacturer:
-      #>--------------------------
+      ##--------------------------
         $ref: MaximoCompanyObject
       
       model_and_sub-model:
-      #>--------------------------
+      ##--------------------------
         oneOf:
         - type: null
         - type: string
         description: For example, "Multilin 869"
       
       product_version_or_model_year:
-      #>--------------------------
+      ##--------------------------
         oneOf:
         - type: null
         - type: string
         description: Identifies the specific version of the product model. For example "v2" or "2023".
       
       manufacturer_PN:
-      #>--------------------------
+      ##--------------------------
         oneOf:
         - type: null
         - type: string

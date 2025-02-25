@@ -50,7 +50,8 @@ properties:
     $comment: |
       see space_classification.md file
 
-  class_dependent_specifications:
+  specifications:
+    type: object
 
     type: object
     description: is a set of properties applicable to the class. 

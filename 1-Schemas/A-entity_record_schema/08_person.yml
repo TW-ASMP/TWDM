@@ -5,94 +5,111 @@ type: object
 
 properties:
 
-  ID:
+  employee_number:
   #---------------------------------
-    description: Unique identifier for the person
     type: string
 
   first_name:
   #---------------------------------
-    description: First name of the person
     type: string
   
   last_name:
   #---------------------------------
-    description: Last name of the person
-    type: string
-
-  employee_number:
-  #-----------------------------------------------
     type: string
   
   display_name:
   #---------------------------------
     description: Full name displayed (usually a combination of first and last names)
-    type: string
-
-  division:
-  #---------------------------------
-    description: Indicates which City division that the person works for
-    type: string
+    oneOf:
+      - type: null
+      - type: string
 
   section:
   #---------------------------------
     description: Indicates which section within a division that the person works for
     type: string
+    oneOf:
+      - type: null
+      - type: string
 
   unit:
   #---------------------------------
     description: Indicates which business-unit within a section that the person works for
-    type: string
+    oneOf:
+      - type: null
+      - type: string
   
-  person_role_in_system:
+  status:
   #---------------------------------
-    description: the role(s), associated with a certain type of system access, that the person plays in the system. 
-    type: array
-    items: 
-      $ref: "./11_person_role.yml"
+    type: string
+    enum:
+      - active
+      - inactive
+      - departed 
+  
+  person_roles:
+  #---------------------------------
+    description: The role, associated with a certain type of system access, that the person plays in the system. 
+    oneOf:
+      - type: null
+      - type: array
+        items: 
+          $ref: MaximoSecurityRole
     
-  primary_trade:
-  #---------------------------------
-    description: Primary craft or skill associated with the person
-    type: string
+  # NOTE: persons' association to trade in documented in the trade object    
 
-  qualification:
+  qualifications:
   #---------------------------------
-    description: 
-    type: string
+    description: The qualifications that the person gained through training or certification. 
+    oneOf:
+      - type: null
+      - type: array
+        items: 
+          type: object
+          properties:
+
+            qualification:
+            ##---------------------------------
+              $ref: "./09_qualification.yml"
+            
+            start_date:
+            ##---------------------------------------
+              description: the first effective day
+              oneOf: 
+                - type: null
+                - type: number
+            
+            expiration_date:
+            ##---------------------------------------
+              description: the last effective date
+              oneOf: 
+                - type: null
+                - type: number
 
   external_contractor:
   #---------------------------------
     description: Indicates whether the person is not an employee of the City
     type: boolean
-
-  status:
-  #---------------------------------
-    type: string
-    enum:
-      - ACTIVE
-      - INACTIVE
-    description: Status of the person
   
-  qualifications:
-  #-----------------------------------------------
-    description:
+  contract:
+  #---------------------------------
+    description: identifies the contracting company that the person works for
     oneOf:
       - type: null
-      - type: array
-        items:
-          $ref: "./09_qualification.yml"
-
+      - type: object
+        $ref: "./13_service_contract.yml"
+  
   contact:
-  #-----------------------------------------------
+  #---------------------------------
     properties:
+      
       email_address:
-        
+      ##-----------------------------------------------  
         description: Email address of the person
         type: string
         format: email
 
       phone:
-        
+      ##-----------------------------------------------
         description: Contact phone number of the person
         type: string

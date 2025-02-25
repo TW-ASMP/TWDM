@@ -17,7 +17,6 @@ properties:
   #---------------------------------------
     description: A human readable short description of the item.
     type: string
-    
     rule_spec:
       - name: item master record naming
         form: long
@@ -53,11 +52,6 @@ properties:
         status: specified
         checked_on: 2024-08-15
 
-  class_dependent_specifications:
-  #---------------------------------------
-    description: A set of properties applicable to the class value. 
-    type: object
-
   rotating:
   #---------------------------------------
     description: Signifies that instances of this item are tracked as serialized individuals.
@@ -65,12 +59,12 @@ properties:
 
   material_item:
   #---------------------------------------
-    description: indicates that the item is a material item
+    description: indicates that the item is a material item, which are handled in continuous quantities.
     type: boolean
     $comment: |
       Concept of material: materials are often handled in continuous quantities. For example, you might purchase a certain length of piping or a volume of concrete, and you have to measure and cut or shape these materials to fit your project's requirements.
   
-  # GENERIC COMMODITY AND SPECIFIC PRODUCT DEFINITION
+  # GENERIC COMMODITY AND COMMERCIAL PRODUCT DEFINITION
   #=======================================
 
   commodity_or_commercial_product:
@@ -91,66 +85,85 @@ properties:
     $comment: Toronto Water is not using the UNSPSC or any other commodity taxonomy code for item identification, as Toronto Water's classification system plays the same role and can be mapped to other taxonomies. 
 
 
-  # SPECIFIC PRODUCT DESCRIPTION
+  # COMMERCIAL PRODUCT DESCRIPTION
   #=======================================
 
-  commercial_product:
+  commercial_product_definition:
   #---------------------------------------
-    description: 
+    description: Points to the commercial product definition.
     oneOf: 
       - type: null
       - $ref: "./00_common_definitions.yml#/definitions/manufacturer_and_model_def"
   
   commercial_product_description:
   #---------------------------------------
-    description: A description formed from the concatenation of the components of the commercial product.
+    description: A description concatenated from the text components of the commercial product.
     oneOf: 
-    - type: null
-    - type: string
+      - type: null
+      - type: string
     rule_spec:
       - name: Concatenation of commercial product description
         status: TBD
   
   instant_of_generic_commodity:
   #---------------------------------------
-    description: indicates that the specific product is also an instance of a commodity
+    description: Indicates the commercial product is also a type of generic commodities.  
     oneOf: 
       - type: null
-      - $ref: "./05_item_master.yml"
-    rule_spec:
-      - description: range of the instant_of_generic_commodities property must be items whose TW_defined_commodity value is 'true'.
-        form: short
-        spec_ID: 01JF33GVB2DT7K5FJ3SA3P9EP4
+      - type: array
+        items:
+          $ref: "./05_item_master.yml"
 
   # OTHER ITEMS DESCRIPTIONS
   #=======================================
 
-  format_of_individual_unit:
+  item_format:
   #---------------------------------------
-    description: describes the format of individual unit - for example, "500ml can" "24x300inch role", "an object", or "a set of objects".
+    description: Describes the format of the individual units (forming the inventory count)- for example, "can" "role", "sheet", "object", "box", "bag",....
     type: string
 
-  unit_cost_in_CAD:
+  specifications:
   #---------------------------------------
-    description: The expected of the item in the order format
+    description: A set of properties applicable to the selected class value, as well as the format of individual unit.
+    type: object
+    $comment: For items, there should be additional quantitative specification, such as volume - 500 ml.
+
+  cost_in_CAD:
+  #---------------------------------------
+    description: The expected cost of an each unit of the item.
     type: number
-    $comment: In the future, this field should contain a average cost 
 
   unit_of_issue:
   #---------------------------------------
-    description: describes how the quantity of product is measured, when it is issued to work, such as "feet", "kg", or "individual unit".
+    description: Describes how the quantity of the item is measured, when it is issued out, such as "feet", "kg", "sheet".
     type: string
     rule_spec:
       - name: Unit of issue for assets and parts (non-material items)
         spec_ID: 01JK1VER5T6HK314XPB4W5T27V
         type: validation
         form: short
-        description: if the item is not an material item, its unit of issue would be "individual unit"
+        description: if the item is not an material item, its unit of issue would be "individual item"
+      - name: Default value of  unit_of_issue
+        spec_ID: 01JK7AM2RA8S8EPAH57W33SJ79
+        type: assertion
+        form: short
+        description: When an item record is created, the default unit of issue is the same as the item format. 
 
-  equivalent_items:
+  quantity_in_units_of_issue:
+  #---------------------------------------
+    description: indicates how many units of issue is in the item.
+    type: number
+    rule_spec:
+      - name: Default quantity in units
+        spec_ID: 01JK7AFSHFQ2W8G5JD3B9XSWBV
+        type: assertion
+        form: short
+        description: When an item record is created, the default value of quantity_in_units_of_issue is 1. 
+  
+  alternate_format_of_same_item:
   #---------------------------------------
     description: |
-      Usually identifies the same commercial product item made by the same manufacturer, but differing only in the format of the individual unit. For example, the 208-litre drum item and the 5-litre bottle item of Penzoil 5W30 Synthetic Lubricant. 
+      Usually identifies the same commercial product item made by the same manufacturer, but differing only in the format. For example, the 208-litre drum item and the 5-litre bottle item of Penzoil 5W30 Synthetic Lubricant. 
     oneOf: 
       - type: null
       - type: array
@@ -174,22 +187,22 @@ properties:
           properties:
 
             vendor:
-            #>---------------------------------------    
+            ##---------------------------------------    
               $ref: MaximoCompanyObject
             
-            packaging_format:
-            #>---------------------------------------
+            unit_of_order:
+            ##---------------------------------------
               type: object
               properties:
 
-                description_of_format:
+                description:
                 #>>--------------------------------------- 
                   description: a description the packages of individual units such as "box of 24" or "individual unit"
                   type: string
                 
                 number_in_package:
                 #>>---------------------------------------
-                  description: indicate the number of individual units that are in the package
+                  description: indicate the number of items that are in the package
                   type: number
 
               rule_spec:
@@ -199,19 +212,19 @@ properties:
                   spec_ID: 01JK1KEZSR9ASBXMWE406TCBPN
             
             vendor_item_number:
-            #>---------------------------------------
+            ##---------------------------------------
               oneOf:
                 - type: string
                 - type: null
               
             cost_in_CAD:
-            #>---------------------------------------
+            ##---------------------------------------
               description: The expected of the item in the order format
               type: number
               $comment: To TW, in the future, this field should contain a running average of the recent purchase costs, possibly also adjusted for recent inflation.
             
             contracts:
-            #>---------------------------------------
+            ##---------------------------------------
               description: the existing contracts that can be used for order the product
               $ref: MaximoContractObject
               

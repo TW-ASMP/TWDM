@@ -1,6 +1,6 @@
 $schema: http://json-schema.org/draft-07/schema#
 title: Qualification
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/1-Schemas/A-entity_record_schema/09_qualification.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/1-Schemas/A-entity_record_schema/09_qualification_instance.yml
 type: object
 
 properties:
@@ -13,31 +13,27 @@ properties:
   
   name:
   #---------------------------------
-
     description: a short name given by the creator of the record.
     type: string
-
-
-  class:
+  
+  status:
   #---------------------------------
-    
+    type: string
+    enum:
+      - active
+      - inactive
+
+  type:
+  #---------------------------------
     type: string
     enum:
     - professional license
-    - industry certification
-    - internal certification
+    - skill certification
     - record of training
-  
-  start_date:
-  #---------------------------------
-  
-  
-  expiration_date:
-  #---------------------------------
 
-  issued_by:
+  issuing_organization:
   #---------------------------------
     oneOf:
       - type: null
       - $ref: "./04_org_or_group.yml"
-    
+  

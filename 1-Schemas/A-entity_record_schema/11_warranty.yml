@@ -62,9 +62,9 @@ properties:
         items:
           $ref: "./01_asset.yml"
 
-  warranty_contract_attachment:
+  contract_document:
   #---------------------------------------
-    description: the warranty contract document
+    description: the PDF version of the contract document.
     oneOf: 
       - type: null
       - type: array

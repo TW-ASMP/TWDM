@@ -21,7 +21,7 @@ properties:
 
     $ref: B-entity_class_object_schema/04_org_class.yml
 
-  class_dependent_specifications:
+  specifications:
 
     type: object
     description: is a set of properties applicable to the class. 
