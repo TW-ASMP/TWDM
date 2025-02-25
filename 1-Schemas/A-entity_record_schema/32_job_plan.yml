@@ -59,7 +59,7 @@ properties:
 
   specific_to_operational_units:
 
-    description: identifies the Toronto Water site(s), defined as a functional group in this schema, for which the job plan is specifically customized.
+    description: identifies the Toronto Water site(s), defined as a org-chart group in this schema, for which the job plan is specifically customized.
     type:
       oneOf:
       - type: null
@@ -71,12 +71,12 @@ properties:
         TAB - Ashbridges Bay Wastewater Treatment Plants
         COL - Waste and Storm Water Collection
     rule_spec: >
-      - name: job plan's specific_to_operational_units property must be an unit level functional group
+      - name: job plan's specific_to_operational_units property must be an unit level org-chart group
         spec_ID: 01JD2V5X97J1Y45JWDW4SV1FJ4
         type: [validation]
         specification: |
           Given an job plan, JP_x, all values of JP_x.specific_to_operational_units must be
-            - an functional group, and
+            - an org-chart group, and
             - whose .class = unit (a subclass of Group in the City)
        
   #================

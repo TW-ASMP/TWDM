@@ -122,37 +122,37 @@ properties:
       - unavailable (down)  
       - not applicable
     $comment: |
-      To data architect and implementer: the "not applicable" value is important, because when we are reporting on equipment uptime, we need to know about the periods in which the operating state is not applicable. For example, if the asset is not assigned to any role, functional_group, or anyone.
+      To data architect and implementer: the "not applicable" value is important, because when we are reporting on equipment uptime, we need to know about the periods in which the operating state is not applicable. For example, if the asset is not assigned to any role, org-chart_group, or anyone.
 
 ## OWNER, OPERATOR, MAINTAINER GROUP
   #=================================
 
-  owned_by_functional_group:
+  owned_by_org-chart_group:
   
     oneOf: [type: null, $ref: "./04_org_or_group.yml"]
-    description: Denotes the functional_group that owns the asset.
+    description: Denotes the org-chart_group that owns the asset.
     integration: true
     
     rule_spec: 
-      - name: valid values of "owned_by_functional_group" property
+      - name: valid values of "owned_by_org-chart_group" property
         spec_ID: 410N2dr_xx
         type: [validation,UI]
         specification: |
-          - The valid range of values for selection includes the first or second of the functional group hierarchy, specified in the (\TWmaximoConfig\3-System_Hierarchies\04_org_hierarchy.md) . For examples,
+          - The valid range of values for selection includes the first or second of the org-chart group hierarchy, specified in the (\TWmaximoConfig\3-System_Hierarchies\04_org_hierarchy.md) . For examples,
             - first level example: York Region, 
             - second level example: Toronto Water
           - The UI must only present the valid range of values to the users for selection, and the valid range of values must be presented as a hierarchy.
         checked_on: 2024-08-19
 
-  owned_by_another_functional_group:
+  owned_by_another_org-chart_group:
 
     oneOf:
     - type: null
     - type: string
-    description: name of an functional group that is not found in the current list (and should be added)
+    description: name of an org-chart group that is not found in the current list (and should be added)
     integration: true
     $comment: |
-      []To WIM, this data field should be added to the GIS to allow an asset record to be enter into the system, even if the functional_group that owns it had not been added to the value list.
+      []To WIM, this data field should be added to the GIS to allow an asset record to be enter into the system, even if the org-chart_group that owns it had not been added to the value list.
   
   maintenance_group:
   
