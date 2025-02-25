@@ -12,7 +12,7 @@ properties:
 
   allOf:
     - $ref: "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
-    #inherit the defintions and rules from th "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
+    #inherit the definitions and rules from th "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
 
   parent_class:
     $ref: B-entity_class_object_schema/02_asset_role_class.yml
@@ -31,7 +31,7 @@ properties:
   defined_set_of_roles:
     oneOf: [type: boolean, type: null]
     read-only: true  
-    description: a role that can be occupied by a collection of descrete assets. 
+    description: a role that can be occupied by a collection of discrete assets. 
 
   compatible_asset_occupant_classes:
     oneOf: 
@@ -50,15 +50,15 @@ rule_spec:
   - name: Is an role, functional structure role, or defined set of roles       
     spec_ID: NyD4XGbuex
     specification: |
-      if roleClassX is a decendent of "Discrete Asset Role" in the role classification hierarchy:
+      if roleClassX is a descendent of "Discrete Asset Role" in the role classification hierarchy:
         set roleClassX.properties."a discrete asset role" to TRUE
         set roleClassX.properties."a functional structure role" to FALSE
         set roleClassX.properties."a defined ser of role" to FALSE
-      elif roleClassX is a decendent of "functional structure role" in the role classification hierarchy: 
+      elif roleClassX is a descendent of "functional structure role" in the role classification hierarchy: 
         set roleClassX.properties."a discrete asset role" to FALSE
         set roleClassX.properties."a functional structure role" to TRUE
         set roleClassX.properties."a defined ser of role" to FALSE
-      elif roleClassX is a decendent of "Defined Set of Roles" in the role classification hierarchy:
+      elif roleClassX is a descendent of "Defined Set of Roles" in the role classification hierarchy:
         set roleClassX.properties."a discrete asset role" to FALSE
         set roleClassX.properties."a functional structure role" to FALSE
         set roleClassX.properties."a defined ser of role" to TRUE        
