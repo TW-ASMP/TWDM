@@ -8,13 +8,9 @@ type: object
 
 properties:
 
-
-
   class_name:
     type: string
     description: a noun or short noun-phrase name of the class
-
-
 
   synonym_names:
     oneOf: 
@@ -24,27 +20,22 @@ properties:
           type: string
     description: other synonymous names that may be used by a user in search 
 
-
-
   class_definition:
     oneOf:
       - type: null
       - type: string
 
-
-
-  appliable_to_individual:
+  can_be_applied_to_instances:
     type: boolean
     $comment: |
-      a "FALSE" value indicates that the class is meant to be a structural part of the classifcation tree, and cannot be used to classify any entity (i.e. asset, role, space, etc).
-
+      a "FALSE" value indicates that the class is meant to be a structural part of the classification tree, and cannot be used to classify any entity (i.e. asset, role, space, etc).
   
-  retired:
-    type: boolean
-    rule_spec: 
-      - name: rules on retire classes
-        spec_ID: Vy3qYEZ_ex
-        type: [UI]
-        specification: |
-          a retired class should not appear in the list of classes for user selection. Also, the value of its properties."appliable to individual" must be FALSE. 
-        status: draft
+  # RECORD PROPERTIES
+
+  duplicate_record_of:
+
+    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
+
+  record_retirement_information:
+    
+    $ref: "./00_common_definitions.yml#/definitions/content_entity_record_retirement_def"

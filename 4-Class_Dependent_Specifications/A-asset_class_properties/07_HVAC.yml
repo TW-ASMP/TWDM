@@ -8,43 +8,37 @@ $comment: >
 
 properties:
 
-  cfm_rating:
-  
+  CFM_rating:
     oneOf:
       - type: null
       - type: number
     description: Indicates the capacity rating for the HVAC unit in CFM
 
   static_pressure:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the static pressure for the HVAC unit in inch water column 
 
   has_heating_function:
-  
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the presence of a heating function in the HVAC unit such as heating coil or gas burner
 
   has_cooling_function:
-  
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the presence of a cooling function in the HVAC unit such as cooling coil
 
   has_dehumidification_function:
-  
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the presence of a dehumidifier
 
   has_maintainable_damper:
-  
     oneOf:
       - type: null
       - type: boolean
@@ -52,13 +46,11 @@ properties:
     $comment: 
 
   uses_belt:
-  
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the presence of replaceable belts
 
-    $comment: 
 
 
   

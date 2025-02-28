@@ -9,7 +9,6 @@ $comment: >
 properties:
 
   type:
-
     oneOf:
       - type: null
       - type: string
@@ -28,7 +27,6 @@ properties:
     $comment: may be redundant to label them valve in the valve type
 
   special_type:
-
     oneOf:
       - type: null
       - type: string
@@ -42,14 +40,12 @@ properties:
     $comment: may be redundant to label them valve in the valve type
 
   size:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the valve size in inches
 
   ANSI_type:
-
     oneOf:
       - type: null
       - type: string
@@ -65,7 +61,6 @@ properties:
       - 4500
 
   ANSI_class:
-
     oneOf:
       - type: null
       - type: string
@@ -76,14 +71,12 @@ properties:
       - "Limited"
 
   horse_power:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the horse power of the motor
 
   NEMA_frame:
-
     oneOf:
       - type: null
       - type: string
@@ -168,8 +161,7 @@ properties:
       - "L182ACY"
       - "L186AT"
 
-  NEMA_enclosure:
-
+  NEMA_enclosure_type:
     oneOf:
       - type: null
       - type: string
@@ -183,73 +175,66 @@ properties:
       - EXPL
       - HAZ
 
-  sealed_bearings:
-
+  bearings_are_sealed:
     oneOf:
       - type: null
       - type: boolean
     description: Indicates if the motor has sealed bearings
 
-  CWP:
-
+  cold_working_pressure:
     oneOf:
       - type: null
       - type: number
     description: Indicates the cold working pressure of the valve in psi
 
   nominal_pressure:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the nominal pressure of the valve in psi
   
-  valve_body:
-
+  valve_body_type:
     oneOf:
       - type: null
       - type: string
     description: Indicates the valve body material 
     enum:
-      - "Carbon Steel"
-      - "Stainless Steel"
-      - "Duplex"
-      - "Alloy" 
-      - "Composite"
-      - "Titanium"
+      - "carbon steel"
+      - "stainless steel"
+      - "duplex"
+      - "alloy" 
+      - "composite"
+      - "titanium"
 
   actuator_type:
-
     oneOf:
       - type: null
       - type: string
     description: Indicates the type of actuator
     enum:
-      - Electric
-      - Pneumatic
-      - Hydraulic
-      - Manual
+      - "electric"
+      - "pneumatic"
+      - "hydraulic"
+      - "manual"
 
-  stem_seal:
-
+  stem_seal_type:
     oneOf:
       - type: null
       - type: string
     description: Indicates the type of stem seal for the valve
     enum:
-      - "Duplex"
-      - "Lip Seal"
-      - "O-ring"
-      - "Stuffing Box"
+      - "duplex"
+      - "lip seal"
+      - "o-ring"
+      - "stuffing box"
 
   valve_turn_direction:
-
     oneOf:
       - type: null
       - type: string
     enum:
       - "counter-clockwise"
       - "clockwise"
-    $comment: This specification is specifically requested by DOS (via Silvia Sawada)
+    $comment: This specification is specifically requested by DOS via Silvia Sawada
 
   

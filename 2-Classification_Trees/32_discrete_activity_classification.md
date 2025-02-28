@@ -46,12 +46,14 @@
 ## Requirements for Implementer
 
 ```yaml
+  
   rule_spec:
   - name: Valid Assignment of an Asset
     spec_ID: 01JDCNEFAED17CWF2K851ZAJKW
     type: [assertion]
     description: |
-      classes names specified with an asterisk symbol shall have the their .property.appliable_to_individual value set to false
+      classes names specified with an asterisk symbol shall have the their .property.can_be_applied_to_instances value set to false
+
 ```
 
 

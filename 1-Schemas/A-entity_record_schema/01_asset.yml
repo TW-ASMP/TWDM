@@ -97,7 +97,7 @@ properties:
       - $ref: "./04_org-chart_group.yml"
     description: group responsible for the operation of the asset
  
-# ASSIGNMENTs
+# ASSIGNMENTS
 
   assignment_type:
     oneOf: 

@@ -9,56 +9,48 @@ $comment: >
 properties:
 
   primary_voltage:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the primary voltage rating for the transformer in Volts
 
   secondary_voltage:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the secondary voltage rating for the transformer in Volts
 
   power_rating:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the power rating for the transformer in kVA
 
   oil_filled:
-
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the requirement for oil cooling for the transformer
 
   pressure_relay:
-
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the presence of a sudden pressure relay
 
   cooling_air_fan:
-
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the presence of a cooling air fan(s)
 
   coolant_pump:
-
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the presence of a coolant pump
 
   gas_monitor:
-
     oneOf:
       - type: null
       - type: boolean

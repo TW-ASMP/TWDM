@@ -8,8 +8,7 @@ $comment: >
 
 properties:
 
-  type:
-
+  breaker_type:
     oneOf:
       - type: null
       - type: string
@@ -20,21 +19,18 @@ properties:
       - "molded case"
 
   max_voltage:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates what the maximum continuous voltage rating for the breaker in Volts
 
   max_amperage:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates what the maximum continuous current rating for the breaker in Amps
 
   main_contactor_type:
-
     oneOf:
       - type: null
       - type: string

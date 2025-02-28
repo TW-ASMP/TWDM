@@ -165,7 +165,8 @@ definitions:
 
   record_retirement_def:
     properties:
-      record_retired:
+      
+      record_is_active:
         type: Boolean
       
       retired_by:
@@ -180,9 +181,9 @@ definitions:
           - type: string
             enum:
               - "record is a duplicate"
-              - "referent was removed or had departed"
-              - "referent is lost"
-              - "record added by mistake - no referent ever existed"
+              - "removed or had departed"
+              - "lost"
+              - "record added by mistake"
       
       date_of_actual_removal_or_departure:
         description: is the date that the entity referent of the record was removed or had departed
@@ -200,7 +201,8 @@ definitions:
   
   content_entity_record_retirement_def:
     properties:
-      record_retired:
+
+      record_is_active:
         type: Boolean
       
       retired_by:
@@ -217,7 +219,6 @@ definitions:
               - "record is a duplicate"
               - "out-dated"
               - "inaccurate"
-              - "record retention policy"
       
       date_of_record_retirement:
         description: is the date when the record was retired
@@ -240,13 +241,16 @@ definitions:
 
   meter_condition_definition:
     properties:
+
       meter:
-        description: is a selection of a pre-defined meter.
-        $ref: MaximoMeterObject
-      numeric_frequency_value:    
+        description: is a selection of a pre-defined meter object.
+        $ref: "./41_meter.yml"
+      
+      numeric_interval_value:    
         oneOf:
           - type: null
           - type: number
+      
       characteristic_trigger_value:    
         oneOf:
           - type: null
@@ -256,10 +260,12 @@ definitions:
 
   compliance_requirement:
     properties:
+      
       name:
         type: string
         $comment: |
           For example, 'ANSI Z358.1-2014 on weekly inspection of self-contained emergency wash equipment'.
+      
       requirement_detail:
         description: provides all relevant descriptions
         type: string
@@ -277,6 +283,7 @@ definitions:
               - ANSI Z358.1-2014 4.5 states the standards to apply for ht check
             perform_every:
               - year
+        
         requirement_compliance_class:
           description: indicates the level of compliance, with legislative being the top 
           $ref: "#/compliance_class"

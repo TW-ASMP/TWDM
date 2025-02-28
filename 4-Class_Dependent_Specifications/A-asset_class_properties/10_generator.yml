@@ -4,40 +4,33 @@ title: generator
 $id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/4-Class_Dependent_Specifications/10_generator.yml
 type: object
 
-$comment: >
-
 properties:
 
   fire_life-safety_elevator:
-    
     oneOf:
     - type: null
     - type: boolean
     description: Indicates if the device directly supports any part of the fire suppression or any life safety systems
 
-  mobile:
-  
+  is_mobile:
     oneOf:
       - type: null
       - type: boolean
     description: Indicates if the generator is mobile
 
-  power_rated:
-  
+  power_rating:
     oneOf:
       - type: null
       - type: number
     description: Indicates the power rating in kilo watts
 
   voltage_rating:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the capacity rating for the generator in Volts
 
   drive_type:
-  
     oneOf:
       - type: null
       - type: string
@@ -47,22 +40,19 @@ properties:
       - "engine, natural gas"
       - "turbine"
 
-  brushless:
-  
+  is_brushless:
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the presence of brushes within the generator
 
-  test_load:
-  
+  has_test_load:
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the presence of an electrical connection to attach a test load
 
-  drive_coupling:
-  
+  drive_coupling_type:
     oneOf:
       - type: null
       - type: string
@@ -75,8 +65,7 @@ properties:
       - "chain drive"
       - "hydraulic"
 
-  sealed_bearings:
-  
+  bearings_are_sealed:
     oneOf:
       - type: null
       - type: boolean

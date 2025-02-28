@@ -9,7 +9,6 @@ $comment: >
 properties:
 
   type:
-
     oneOf:
       - type: null
       - type: string
@@ -25,21 +24,18 @@ properties:
       - "DC, Permanent Magnet"
     
   voltage:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the voltage of the motor in Volts
 
   horse_power:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the horse power of the motor
 
-  NEMA_frame:
-
+  NEMA_frame_type:
     oneOf:
       - type: null
       - type: string
@@ -124,8 +120,7 @@ properties:
       - "L182ACY"
       - "L186AT"
 
-  NEMA_enclosure:
-
+  NEMA_enclosure_type:
     oneOf:
       - type: null
       - type: string
@@ -139,8 +134,7 @@ properties:
       - EXPL
       - HAZ
     
-  sealed_bearings:
-
+  bearings_are_sealed:
     oneOf:
       - type: null
       - type: boolean

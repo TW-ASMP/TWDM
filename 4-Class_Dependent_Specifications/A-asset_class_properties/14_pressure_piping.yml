@@ -8,29 +8,25 @@ $comment: >
 
 properties:
 
-  max_size:
-
+  max_pipe_size_in_inches:
     oneOf:
       - type: null
       - type: number
     description: Indicates the maximum pipe size in inches
 
   max_pressure:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the maximum working pressure within the pressure piping in kPa
 
   max_temperature:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the maximum medium temperature within the pressure piping in degrees celsius
 
   contained_medium:
-  
     oneOf:
       - type: null
       - type: string
@@ -45,7 +41,6 @@ properties:
       - "Ozone"
 
   special_application:
-  
     oneOf:
       - type: null
       - type: string
@@ -59,7 +54,6 @@ properties:
       - "buried water piping"
 
   TSSA_CRN:
-  
     oneOf:
       - type: null
       - type: string

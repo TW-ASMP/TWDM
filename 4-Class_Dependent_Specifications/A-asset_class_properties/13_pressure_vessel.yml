@@ -9,7 +9,6 @@ $comment: >
 properties:
 
   contained_medium:
-  
     oneOf:
       - type: null
       - type: string
@@ -24,21 +23,18 @@ properties:
       - "ozone"
 
   capacity:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the size capacity of the pressure vessel in Litres
 
   max_pressure:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the maximum operating pressure for the pressure vessel in psi
 
   TSSA_CRN:
-  
     oneOf:
       - type: null
       - type: string

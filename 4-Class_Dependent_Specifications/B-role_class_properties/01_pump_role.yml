@@ -1,0 +1,31 @@
+---
+$schema: "http://json-schema.org/draft-07/schema#"
+title: pump role
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/4-Class_Dependent_Specifications/B-role_class_properties/01_pump_role.yml
+type: object
+
+properties:
+
+  requires_variable_speed:
+    oneOf:
+      - type: null
+      - type: boolean
+    description: indicates the the pump serving in the role must 
+  
+  required_max_flow:
+    oneOf:
+      - type: null
+      - type: number
+    description: indicates the maximum flow rate required to serve the role
+  
+  required_total_dynamic_head:
+    oneOf:
+      - type: null
+      - type: number
+    description: Indicates the pressure head for the pump in metres
+
+  must_be_submersible:
+    oneOf:
+      - type: null
+      - type: boolean
+    description: Indicates if the pump is submersible

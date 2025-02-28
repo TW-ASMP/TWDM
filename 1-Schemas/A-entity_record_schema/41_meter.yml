@@ -1,9 +1,75 @@
 $schema: "http://json-schema.org/draft-07/schema#"
-title: Meter
-$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/A-entity_record_schema/41_meter.yml
-
+title: Maximo Meter
+description: A JSON Schema representing a Meter object in IBM Maximo.
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/1-Schemas/A-entity_record_schema/41_meter.yml
+type: object
 properties:
+  
+  Id:
+    type:
+      - string
+      - "null"
+    description: Unique identifier for the meter record.
+  
+  description:
+    type:
+      - string
+      - "null"
+    description: optional description or notes about the meter.
+  
+  asset:
+    oneOf: 
+      - $ref: "./01_asset.yml"
+      - type: null
+    description: identifier of the asset associated with this meter.
+  
+  role:
+    oneOf: 
+      - $ref: "./02_role.yml"
+      - type: null
+    description: identifier of the role associated with this meter.
+
+  meter_name:
+    type:
+      - string
+      - "null"
+    description: name of the meter.
+  
+  meter_type:
+    type:
+      - string
+      - "null"
+    enum:
+      - HOURS
+      - CYCLES
+      - MILES
+      - KILOMETERS
+      - ...
+    description: type of meter measurement.
+    $comment: the enum values is not meant to be comprehensive
+  
+  unit_of_measure:
+    type:
+      - string
+      - "null"
+    description: unit of measure for the meter (e.g., hours, cycles).
+  
+  current_reading:
+    type:
+      - number
+      - "null"
+    description: is the current meter reading.
+  
+  last_reading:
+    type:
+      - number
+      - "null"
+    description: is the latest know meter reading
+
+# RECORD PROPERTIES
 
   duplicate_record_of:
+    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def" 
 
-    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
+  record_retirement_information:
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"

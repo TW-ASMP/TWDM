@@ -56,7 +56,6 @@ properties:
 
 # INVENTORY MANAGEMENT FLAGS
 
-          
   rotating:
 
     $ref: "./00_common_definitions.yml#/definitions/rotating_property_def" 

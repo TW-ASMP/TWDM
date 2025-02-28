@@ -8,29 +8,25 @@ $comment: >
 
 properties:
 
-  fire_life-safety_elevator:
-  
+  powers_safety_load:
     oneOf:
       - type: null
       - type: boolean
-    description: Indicates if the device directly supports any part of the fire suppression or any life safety systems
+    description: Indicates if the device directly supports any part of the fire suppression system, life safety system, or elevator of a high building systems
 
   battery_capacity:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the power rating in kilo watt hours
 
-  voltage_output:
-  
+  voltage_rating:
     oneOf:
       - type: null
       - type: number
     description: Indicates the output voltage of the UPS in Volts
 
   battery_type:
-  
     oneOf:
       - type: null
       - type: string
@@ -41,8 +37,7 @@ properties:
       - "NiCad"
       - "Li-ion"
 
-  integrated_charger:
-  
+  has_integrated_charger:
     oneOf:
       - type: null
       - type: boolean

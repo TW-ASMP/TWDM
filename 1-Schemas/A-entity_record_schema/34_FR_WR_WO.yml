@@ -590,6 +590,7 @@ properties:
               - type: array
                 items:
                   type: string
+          
           photographs:
             description: photographs in the failure report. 
             oneOf:
@@ -643,7 +644,9 @@ properties:
     description: documents or photographs that provide further supplementary information.
     oneOf:
       - type: null
-      - type: Maximo_DOCLINKS
+      - type: array
+        items:
+          $ref: "./00_common_definitions.yml/attachment_def"
     
     implementation:
       MX_mapping: 

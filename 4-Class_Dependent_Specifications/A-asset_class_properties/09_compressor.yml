@@ -9,21 +9,18 @@ $comment: >
 properties:
 
   rated_pressure:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the capacity rating for the compressor in kPa
 
   rated_flow:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the capacity rating for the compressor in SCMH
 
   drive_coupling:
-  
     oneOf:
       - type: null
       - type: string
@@ -36,8 +33,7 @@ properties:
       - "chain drive"
       - "hydraulic"
 
-  sealed_bearings:
-  
+  bearings_are_sealed:
     oneOf:
       - type: null
       - type: boolean

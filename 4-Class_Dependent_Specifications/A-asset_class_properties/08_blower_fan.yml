@@ -8,22 +8,19 @@ $comment: >
 
 properties:
 
-  cfm_rating:
-  
+  CFM_rating:
     oneOf:
       - type: null
       - type: number
     description: Indicates the capacity rating for the HVAC unit in CFM
 
   static_pressure:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the static pressure for the HVAC unit in inch water column 
 
-  drive_coupling:
-  
+  drive_coupling_type:
     oneOf:
       - type: null
       - type: string
@@ -36,8 +33,7 @@ properties:
       - "chain drive"
       - "hydraulic"
 
-  sealed_bearings:
-  
+  bearings_are_sealed:
     oneOf:
       - type: null
       - type: boolean

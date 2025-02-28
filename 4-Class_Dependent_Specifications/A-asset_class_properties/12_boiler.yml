@@ -9,7 +9,6 @@ $comment: >
 properties:
 
   energy_source:
-  
     oneOf:
       - type: null
       - type: string
@@ -22,7 +21,6 @@ properties:
       - "fuel oil"
 
   boiled_medium:
-  
     oneOf:
       - type: null
       - type: string
@@ -33,42 +31,36 @@ properties:
       - Glycol
 
   heat_rate:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the rated heat rate in the boiler in kilo Watts
 
   max_pressure:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the maximum operating pressure for the boiler in psi
 
   max_temperature:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the maximum operating temperature for the boiler in degrees celsius
 
   heated_surface:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the heating surface area of the boiler in meters squared
 
   capacity:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the size capacity of the boiler in Litres
 
   TSSA_CRN:
-  
     oneOf:
       - type: null
       - type: string

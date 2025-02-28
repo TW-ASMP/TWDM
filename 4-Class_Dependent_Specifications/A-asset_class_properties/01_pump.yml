@@ -4,31 +4,9 @@ title: pump
 $id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/4-Class_Dependent_Specifications/01_pump.yml
 type: object
 
-$comment: >
-
 properties:
 
-  orientation:
-
-    oneOf:
-      - type: null
-      - type: string
-    description: Indicates how the pump is oriented in 3D space
-    enum:
-      - "horizontal"
-      - "vertical"
-      - "angled"
-      - "inverted"
-
-  variable_speed:
-
-    oneOf:
-      - type: null
-      - type: boolean
-    description: Indicates the if the pump has variable speed control 
-
   pump_type:
-
     oneOf:
       - type: null
       - type: string  
@@ -43,36 +21,48 @@ properties:
       - "screw pump"
       - "gear pump"
 
-  max_RPM:
+  orientation:
+    oneOf:
+      - type: null
+      - type: string
+    description: Indicates how the pump is oriented in 3D space
+    enum:
+      - "horizontal"
+      - "vertical"
+      - "angled"
+      - "inverted"
 
+  variable_speed:
+    oneOf:
+      - type: null
+      - type: boolean
+    description: Indicates the if the pump has variable speed control 
+
+  max_RPM:
     oneOf:
       - type: null
       - type: number
     description: Indicates the maximum RPM for the pump
 
   max_flow:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the maximum flow rate at the maximum RPM for the pump in L/s
   
   pump_head:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the pressure head for the pump in metres
 
   submersible:
-
     oneOf:
       - type: null
       - type: boolean
     description: Indicates if the pump is submersible
 
-  drive_coupling:
-
+  drive_coupling_type:
     oneOf:
       - type: null
       - type: string
@@ -85,8 +75,7 @@ properties:
       - "chain drive"
       - "hydraulic"
 
-  drive:
-
+  drive_type:
     oneOf:
       - type: null
       - type: string
@@ -95,8 +84,7 @@ properties:
       - "electric motor"
       - "engine"
 
-  sealed_bearings:
-
+  bearings_are_sealed:
     oneOf:
       - type: null
       - type: boolean

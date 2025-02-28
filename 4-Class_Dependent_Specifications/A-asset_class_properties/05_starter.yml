@@ -7,35 +7,30 @@ type: object
 properties:
 
   voltage_rating:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the continuous voltage rating for the starter in Volts
 
   current_rating:
-
     oneOf:
       - type: null
       - type: number
     description: Indicates the continuous current rating for the starter in Amps
 
   has_VFD_function:
-
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the presence of a variable frequency drive within the starter
 
   has_soft_starting_function:
-
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the function of a soft starter in  the starter
 
   main_contactor_type:
-
     oneOf:
       - type: null
       - type: string
