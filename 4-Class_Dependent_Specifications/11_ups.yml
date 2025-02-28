@@ -1,24 +1,19 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: ups
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/4-Class_Dependent_Specifications/11_ups.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/4-Class_Dependent_Specifications/11_UPS.yml
 type: object
 
 $comment: >
 
 properties:
 
-
-  fls:
+  fire_life-safety_elevator:
   
     oneOf:
       - type: null
       - type: boolean
-    description: Indicates if the UPS directly supports any part of the fire supression or any life safety systems
-
-    $comment: 
-
-  #========================
+    description: Indicates if the device directly supports any part of the fire suppression or any life safety systems
 
   battery_capacity:
   
@@ -27,20 +22,12 @@ properties:
       - type: number
     description: Indicates the power rating in kilo watt hours
 
-    $comment: 
-
-  #========================
-
   voltage_output:
   
     oneOf:
       - type: null
       - type: number
     description: Indicates the output voltage of the UPS in Volts
-
-    $comment: 
-
-  #========================
 
   battery_type:
   
@@ -49,22 +36,15 @@ properties:
       - type: string
     description: Indicates the type of drive 
     enum:
-      - "Sealed / Valve Regulated Lead Acid"
-      - "Flooded / Vented Lead Acid"
+      - "sealed / valve regulated lead acid"
+      - "flooded / vented lead acid"
       - "NiCad"
       - "Li-ion"
 
-    $comment: 
-
-  #========================
-
-  intergrated_charger:
+  integrated_charger:
   
     oneOf:
       - type: null
       - type: boolean
     description: Indicates that the UPS is physically integrated with charger
 
-    $comment: 
-
-  #========================

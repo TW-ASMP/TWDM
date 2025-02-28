@@ -1,7 +1,7 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: instrumentation
-$id: "https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/4-Class_Dependent_Specifications/15_instrumentation.yml"
+$id: "https://raw.githubusercontent.com/TW-ASMP/TWDM/main/4-Class_Dependent_Specifications/15_instrumentation.yml"
 type: object
 
 properties:
@@ -12,39 +12,39 @@ properties:
       - type: string
     description: Indicates the parameter that is being measured
     enum:
-      - "Density"
-      - "Flow Rate"
-      - "Humidity"
-      - "Level"
-      - "Current"
-      - "Power"
-      - "Position"
-      - "Pressure"
-      - "Speed"
-      - "Temperature"
-      - "Torque"
-      - "UV"
-      - "Vibration"
-      - "Weight"
-      - "Specific Gravity"
-      - "Ammonia"
-      - "Carbon Monoxide"
-      - "Chloramination"
-      - "Chlorine"
-      - "Dissolved Oxygen"
-      - "Fluoride"
-      - "Methane/LEL"
-      - "Total Hydrocarbon"
-      - "ORP"
-      - "Ozone"
-      - "Particulate"
-      - "PH"
-      - "Sulphite"
-      - "Sulphur Dioxide"
-      - "Suspended Solids"
-      - "Turbidity"
+      - "density"
+      - "flow rate"
+      - "humidity"
+      - "level"
+      - "current"
+      - "power"
+      - "position"
+      - "pressure"
+      - "speed"
+      - "temperature"
+      - "torque"
+      - "uv"
+      - "vibration"
+      - "weight"
+      - "specific gravity"
+      - "ammonia"
+      - "carbon monoxide"
+      - "chlorination"
+      - "chlorine"
+      - "dissolved oxygen"
+      - "fluoride"
+      - "methane/lel"
+      - "total hydrocarbon"
+      - "orp"
+      - "ozone"
+      - "particulate"
+      - "ph"
+      - "sulphide"
+      - "sulphur dioxide"
+      - "suspended solids"
+      - "turbidity"
 
-  uom:
+  UOM:
     oneOf:
       - type: null
       - type: string
@@ -156,7 +156,7 @@ allOf:
             - "Millimeter (mm)"	
             - "Feet (ft)"	
             - "Degree (°)"	
-            - "Randians (rad)"	
+            - "Radians (rad)"	
             - "Unitless"
 
   - if:
@@ -201,7 +201,6 @@ allOf:
             - "Degree Celsius (°C)"
             - "Degree Fahrenheit (°F)"
 
-
   - if:
       properties:
         parameter:
@@ -234,7 +233,7 @@ allOf:
           enum:
             - "Meters Per Second (m/s)"	
             - "Centimeters Per Second (cm/s)"	
-            - "Feet Per Seconf (ft/s)"	
+            - "Feet Per Second (ft/s)"	
             - "Inch Per Second (in/s)"	
             - "Meters Per Second Square (m/s2)"	
             - "Centimeters Per Second Square (cm/s2)"	
@@ -296,7 +295,7 @@ allOf:
   - if:
       properties:
         parameter:
-          const: "Chloramination"
+          const: "Chlorination"
     then:
       properties:
         uom:
@@ -305,7 +304,6 @@ allOf:
             - "Milligrams Per Liter (mg/L)"	
             - "Parts Per Million (ppm)"	
             - "Parts Per Billion (ppb)"
-
 
   - if:
       properties:
@@ -336,7 +334,7 @@ allOf:
   - if:
       properties:
         parameter:
-          const: "Fluride"
+          const: "Fluoride"
     then:
       properties:
         uom:
@@ -425,7 +423,7 @@ allOf:
   - if:
       properties:
         parameter:
-          const: "Sulphite"
+          const: "Sulphide"
     then:
       properties:
         uom:
@@ -465,7 +463,7 @@ allOf:
   - if:
       properties:
         parameter:
-          const: "Turbity"
+          const: "Turbidity"
     then:
       properties:
         uom:

@@ -1,7 +1,7 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: breaker
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/4-Class_Dependent_Specifications/04_breaker.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/4-Class_Dependent_Specifications/04_breaker.yml
 type: object
 
 $comment: >
@@ -9,56 +9,41 @@ $comment: >
 properties:
 
   type:
-  
+
     oneOf:
       - type: null
       - type: string
     description: Indicates the breaker type
     enum:
-      - "Insulated Case"
-      - "Metal Clad or Enclosed"
-      - "Molded Case"
-
-    $comment: 
-
-  #========================
+      - "insulated case"
+      - "metal clad or enclosed"
+      - "molded case"
 
   max_voltage:
-  
+
     oneOf:
       - type: null
       - type: number
     description: Indicates what the maximum continuous voltage rating for the breaker in Volts
 
-    $comment: 
-
-  #========================
-
   max_amperage:
-  
+
     oneOf:
       - type: null
       - type: number
     description: Indicates what the maximum continuous current rating for the breaker in Amps
 
-    $comment: |
+  main_contactor_type:
 
-  #========================
-
-  main_contactor:
-  
     oneOf:
       - type: null
       - type: string
-    description: Indicates the ansi type for the valve
+    description: Indicates the ANSI type for the valve
     enum:
-      - "Air Insulated"
-      - "Air Insulated, Air Blast"
-      - "Vacuum Insulated"
-      - "Oil Insultated"
-      - "Gas Insultated"
+      - "air insulated"
+      - "air insulated, air blast"
+      - "vacuum insulated"
+      - "oil insulated"
+      - "gas insulated"
 
-    $comment: 
-
-  #========================
   

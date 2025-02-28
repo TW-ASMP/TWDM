@@ -1,31 +1,31 @@
 $schema: http://json-schema.org/draft-07/schema#
 title: Person
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/1-Schemas/A-entity_record_schema/08_person.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/08_person.yml
 type: object
 
 properties:
 
   employee_number:
-  #---------------------------------
+
     type: string
 
   first_name:
-  #---------------------------------
+
     type: string
   
   last_name:
-  #---------------------------------
+
     type: string
   
   display_name:
-  #---------------------------------
+
     description: Full name displayed (usually a combination of first and last names)
     oneOf:
       - type: null
       - type: string
 
   section:
-  #---------------------------------
+
     description: Indicates which section within a division that the person works for
     type: string
     oneOf:
@@ -33,14 +33,14 @@ properties:
       - type: string
 
   unit:
-  #---------------------------------
+
     description: Indicates which business-unit within a section that the person works for
     oneOf:
       - type: null
       - type: string
   
   status:
-  #---------------------------------
+
     type: string
     enum:
       - active
@@ -48,7 +48,7 @@ properties:
       - departed 
   
   person_roles:
-  #---------------------------------
+
     description: The role, associated with a certain type of system access, that the person plays in the system. 
     oneOf:
       - type: null
@@ -59,7 +59,7 @@ properties:
   # NOTE: persons' association to trade in documented in the trade object    
 
   qualifications:
-  #---------------------------------
+
     description: The qualifications that the person gained through training or certification. 
     oneOf:
       - type: null
@@ -69,30 +69,32 @@ properties:
           properties:
 
             qualification:
-            ##---------------------------------
+
               $ref: "./09_qualification.yml"
             
             start_date:
-            ##---------------------------------------
+
               description: the first effective day
               oneOf: 
                 - type: null
-                - type: number
+                - type: string
+                  format: date
             
             expiration_date:
-            ##---------------------------------------
+
               description: the last effective date
               oneOf: 
                 - type: null
-                - type: number
-
+                - type: string
+                  format: date
+  
   external_contractor:
-  #---------------------------------
+
     description: Indicates whether the person is not an employee of the City
     type: boolean
   
   contract:
-  #---------------------------------
+
     description: identifies the contracting company that the person works for
     oneOf:
       - type: null
@@ -100,16 +102,26 @@ properties:
         $ref: "./13_service_contract.yml"
   
   contact:
-  #---------------------------------
+
     properties:
       
       email_address:
-      ##-----------------------------------------------  
+
         description: Email address of the person
         type: string
         format: email
 
       phone:
-      ##-----------------------------------------------
+
         description: Contact phone number of the person
         type: string
+
+  # RECORD PROPERTIES
+
+  duplicate_record_of:
+
+    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
+  
+  record_retirement_information:
+    
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"

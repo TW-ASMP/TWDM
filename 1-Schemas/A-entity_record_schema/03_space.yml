@@ -1,7 +1,7 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: space
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/1-Schemas/A-entity_record_schema/03_space.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/03_space.yml
 type: object
 
 properties:
@@ -46,31 +46,27 @@ properties:
 
   class:
 
-    $ref: spaceClassObject
-    $comment: |
-      see space_classification.md file
+    $ref: "../B-entity_class_object_schema/03_space_class.yml"
 
-  specifications:
+  specification_data:
+    
     type: object
-
-    type: object
-    description: is a set of properties applicable to the class. 
+    description: is a set of specification property data. (The applicable properties are dependent on the definition made in the chosen class.)
 
   inferred_classes:
 
     oneOf: 
       - type: array
         items:
-          type: string
+          $ref: "../B-entity_class_object_schema/03_space_class.yml"
       - type: null
     read-only: TRUE
-    $comment: |
-      See the comment for inferred class name(s) made in the \TWmaximoConfig\1-Schemas\A-entity_record_schema/01_asset_schema.yml
-      
-      #[]REQ 41Vru1Rrxe: This data field should be visible to the users, but should not be editable by the user
 
   service_address_or_coordinate: 
-    oneOf: [$ref: .IBM_Maximo_object/MaximoServiceAddressObject, type: null]
+    
+    oneOf: 
+      - $ref: MaximoServiceAddressObject
+      - type: null
     $comment: this is referencing Maximo's native service address object
 
   status:
@@ -121,15 +117,14 @@ properties:
       - F
       - G
 
+  # RECORD PROPERTIES
 
-  duplicate record of:
 
-    oneOf: 
-      - type: array
-        items:
-          $ref: "./03_space.yml"
-      - type: null
+  duplicate_record_of:
+
+    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
   
-  record retirement information:
-    $ref: "./00_common_definitions.yml#/definitions/record retirement definition"
+  record_retirement_information:
+    
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
   

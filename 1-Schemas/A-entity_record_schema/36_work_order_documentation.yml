@@ -1,6 +1,7 @@
+---
 $schema: http://json-schema.org/draft-07/schema#
 title: Work Order Documentation
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/1-Schemas/A-entity_record_schema/36_work_documentation.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/1-Schemas/A-entity_record_schema/36_work_documentation.yml
 type: object
 properties:
 
@@ -12,7 +13,7 @@ properties:
 
 
   # OPERATIONAL STATUS INFORMATION 
-  #================================
+
   # Note: in a work order containing children work orders, these information only have to be filled in at the parent level.  [] rule 
 
   asset_offline_at_start:
@@ -27,9 +28,7 @@ properties:
     type: boolean
     $comment: 
 
-
   # ACTUAL WORK ORDER RESOURCE USAGE 
-  #================================
   
   revised_description_of_actual_work:
 
@@ -67,7 +66,6 @@ properties:
         items:
           $ref: "./00_common_definitions.yml#/definitions/tool_requirements_definition"
 
-  
   actual_services_usage:
 
     description: identifies (contracted) service that was actually needed complete the work.
@@ -76,7 +74,6 @@ properties:
       - type: array
         items:
           $ref: "./00_common_definitions.yml#/definitions/service_requirement_definition"
-
 
   actual_trades_involvement:
   
@@ -89,7 +86,7 @@ properties:
 
 
   # CHILDREN WORK-ORDER DOCUMENTATION
-  #================================
+
   # The user is able to account for additional work done, by adding new children_work_documentation items. These items would refer any work order.  [] todo: need to define a procedure for creating a new work documentation. 
 
   children_work_documentations:
@@ -103,5 +100,12 @@ properties:
 
 
   # FAILURE REPORTS AND FOLLOWUP REQUESTS
-  #================================
+
   # Note: the failures are reported on follow-up work requests. The linkage between a followup work order and work order documentation is found on the work order schema
+
+
+  # RECORD PROPERTIES
+
+  duplicate_record_of:
+
+    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"

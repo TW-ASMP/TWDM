@@ -1,20 +1,20 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: generic class object
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml
 type: object
 
 # This set of properties are used in all classification objects (e.g., asset, org-chart group, etc.)
 
 properties:
 
-  #====================
+
 
   class_name:
     type: string
     description: a noun or short noun-phrase name of the class
 
-  #====================
+
 
   synonym_names:
     oneOf: 
@@ -24,20 +24,20 @@ properties:
           type: string
     description: other synonymous names that may be used by a user in search 
 
-  #====================
+
 
   class_definition:
     oneOf:
       - type: null
       - type: string
 
-  #====================
+
 
   appliable_to_individual:
     type: boolean
     $comment: |
       a "FALSE" value indicates that the class is meant to be a structural part of the classifcation tree, and cannot be used to classify any entity (i.e. asset, role, space, etc).
-  #====================
+
   
   retired:
     type: boolean

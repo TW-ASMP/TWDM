@@ -1,16 +1,24 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: common properties of all entities
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/A-entity_record_schema/00_common_definitions.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/A-entity_record_schema/00_common_definitions.yml
   
 
 definitions:
 
-  # INVENTORY
-  #=================================
+# ATTACHMENTS
+
+  attachment_def:
+    description: 
+    oneOf: 
+      - type: null
+      - type: array
+        items:
+          $ref: Maximo_DOCLINKS
+  
+# INVENTORY
 
   rotating_property_def:
-  #---------------------------------------
     type: boolean
     $comment: |
       A rotating item is a trackable item, represented also as an asset in Maximo. When the value of this field is true, we must serialize every instance of the item. This commitment is beyond what we can presently achieve at TW. The more pragmatic starting point considered in 2024 is as follows:
@@ -27,66 +35,47 @@ definitions:
         $comment: 
         status: specified
 
-
   manufacturer_and_model_def:
-  #--------------------------
     type: object
     properties:
-
       manufacturer:
-      ##--------------------------
         $ref: MaximoCompanyObject
-      
       model_and_sub-model:
-      ##--------------------------
         oneOf:
         - type: null
         - type: string
         description: For example, "Multilin 869"
-      
       product_version_or_model_year:
-      ##--------------------------
         oneOf:
         - type: null
         - type: string
         description: Identifies the specific version of the product model. For example "v2" or "2023".
-      
       manufacturer_PN:
-      ##--------------------------
         oneOf:
         - type: null
         - type: string
         description: The manufacturer designator identifying the exact product item.
 
-
-  # FAILURE
-  #=================================
+# FAILURE
 
   failure_code:
-
     type: object
     properties:
-      
       code:
         type: string
-      
       name:        
         type: string
-
       description:        
         type: string
-
       failure_code_type:
         type: string
         enum:
           - problem
           - cause
           - remedy
-      
       site:
         type: object
         $ref: MaximoSiteObject
-      
       failure_classes:
         oneOf:
           - type: null
@@ -94,123 +83,76 @@ definitions:
             items:
               type: object
               $ref: MaximoFailureClass
-      
       status:
         type: string
         enum:
           - draft
           - approved
         
-  #=================================
-  # JOB PLAN RESOURCE
-  #=================================
+# RESOURCE FOR PLAN AND WORK
 
   item_requirement_definition:
-  #--------------------------
     properties:
-
       item_reference:
         $ref: "./05_item_master.yml"
-      
       required_quantity:
         type: number
-      
       unit:
         $ref: "#/definitions/unit_of_measure"
       
   tool_requirements_definition:
-  #----------------------------
     properties:
-
       tool_reference: # reference for both stocked and un-stocked tool
         $ref: "./06_tool_master.yml"
-
       required_quantity:
         type: number
 
   service_requirement_definition:
-  #------------------------------
     properties:
-    
       service_reference:
         $ref: "./07_service_item_master.yml"
-      
       required_quantity:
         type: number
-
       unit:
         type: string
-        enum: >
+        enum: 
           - hour
           - instance
 
   trade_requirement_definition:
-  #------------------------------
     properties:
-
       trade_type:
         $ref: "../B-entity_class_object_schema/08_trade_type.yml"
-      
       required_quantity:
         type: number
-
       qualification_requirement:
         oneOf: 
         - type: null
         - type: array
           items:
             $ref: "../B-entity_class_object_schema/09_qualification.yml"
-      
-  #=================================
-  # UNIT OF MEASURE
-  #=================================
+
+# UNIT OF MEASURE
 
   unit_of_measure:
-
     description: Represents a unit of measure (UOM) used in inventory management to track quantities of items.
-    
     properties:
-      
-      code:
-        
+      name:
+        description: is the full name of the unit of measure.
+        type: string
+        $comment: e.g., "Each", "kilogram"
+      abbreviation:
         description: is the unique identifier or code for the unit of measure.
         type: string
         $comment: e.g., "EA", "kg"
       
-      name:
-        
-        description: is the full name of the unit of measure.
-        type: string
-        $comment: e.g., "Each", "kilogram"
-      
-  #========================
-  # Record Retirement
-  #========================
-
-  record retirement definition:
-    
-    properties:
-
-      record retired:
-        type: Boolean
-      
-      reason for retirement:
-        oneOf: [type: string, type: null]
-        updated by system: true
-        sort order: 20-20
-        $comment: the value should be written by the system, from a asset or record retirement transaction. 
+# FREQ DEFINITION
 
   frequency_interval_definition:
-
     properties:
-
       frequency_quantity:
-        
         type: number
-
-
       unit_of_time:
-        
         type: string
         enum:
           - minute
@@ -219,112 +161,128 @@ definitions:
           - month
           - year
 
-  #========================
-  # Record Duplication 
-  #========================
+# RECORD RETIREMENT
+
+  record_retirement_def:
+    properties:
+      record_retired:
+        type: Boolean
+      
+      retired_by:
+        oneOf:
+          - type: null
+          - $ref: "./08_person.yml"
+     
+      reason_for_retirement:
+        read-only: true
+        oneOf: 
+          - type: null
+          - type: string
+            enum:
+              - "record is a duplicate"
+              - "referent was removed or had departed"
+              - "referent is lost"
+              - "record added by mistake - no referent ever existed"
+      
+      date_of_actual_removal_or_departure:
+        description: is the date that the entity referent of the record was removed or had departed
+        oneOf:
+          - type: null
+          - type: string
+            format: "date" 
+      
+      date_of_record_retirement:
+        description: is the date when the record was retired
+        oneOf:
+          - type: null
+          - type: string
+            format: "date" 
   
-  duplicate record of:
-  
+  content_entity_record_retirement_def:
+    properties:
+      record_retired:
+        type: Boolean
+      
+      retired_by:
+        oneOf:
+          - type: null
+          - $ref: "./08_person.yml"
+      
+      reason_for_retirement:
+        read-only: true
+        oneOf: 
+          - type: null
+          - type: string
+            enum:
+              - "record is a duplicate"
+              - "out-dated"
+              - "inaccurate"
+              - "record retention policy"
+      
+      date_of_record_retirement:
+        description: is the date when the record was retired
+        oneOf:
+          - type: null
+          - type: string
+            format: "date" 
+        
+# DUPLICATION HANDLING
+
+  duplicate_record_def:
     oneOf: 
+      - type: null
       - type: array
         items:
-          $ref: "./01_asset.yml"
-      - type: null
-
-  #========================
-
-  record retirement information:
-    $ref: "./00_common_definitions.yml#/definitions/record retirement definition"
-
-  #========================================
-  # 
-  #========================================
+          type: object
+          $comment: the object may other asset, role, space, ... records, depending on the context of where this property is used. 
+  
+# METERS
 
   meter_condition_definition:
-    
     properties:
-
       meter:
-
         description: is a selection of a pre-defined meter.
-        $ref: default_WMS_meter_object
-          
+        $ref: MaximoMeterObject
       numeric_frequency_value:    
-        
         oneOf:
           - type: null
           - type: number
-          
       characteristic_trigger_value:    
-        
         oneOf:
           - type: null
           - type: string
 
-
-  reference_attachment:
-    
-    properties:
-
-      document:
-      document_content_class:
-
-        type: string
-        enum:
-          - maintenance manual
-          - asset photograph
-          - 
-
-  #========================================
-  # Compliance Requirement Definition
-  #========================================
+# COMPLIANCE REQUIREMENT DEFINITION
 
   compliance_requirement:
-    
     properties:
-
       name:
-        
         type: string
         $comment: |
           For example, 'ANSI Z358.1-2014 on weekly inspection of self-contained emergency wash equipment'.
-
       requirement_detail:
-        
         description: provides all relevant descriptions
         type: string
         $comment: |
           The following is an example of the requirement detail text for a compliance requirement.
-            
             applicable_asset_class:
               - emergency eye-wash
-
             requirement_source(s):
               - ANSI Z358.1-2014 / Emergency Eyewash & Shower Standard / 4 Emergency Showers / 4.6 Maintenance and Training
                 ...
               - ANSI Z358.1-2014 / Emergency Eyewash & Shower Standard / 4 Emergency Showers / 4.5 Installation
                 ...
-            
             source_content_guide:
               - ANSI Z358.1-2014 4.6 states the requirement to check that shower still meets standards
               - ANSI Z358.1-2014 4.5 states the standards to apply for ht check
-            
             perform_every:
               - year
-        
         requirement_compliance_class:
-          
           description: indicates the level of compliance, with legislative being the top 
           $ref: "#/compliance_class"
   
   compliance_class:
-    
     type: string
     enum:
       - legislative
       - corporate policy
-
-
-  ###########################################
-  # Common Work Entity Definition
-  ###########################################

@@ -1,181 +1,127 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: role
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/1-Schemas/A-entity_record_schema/02_asset_role_schema.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/02_asset_role_schema.yml
 type: object
 
 properties:
 
   ID:
-  #---------------------------------------
     type: string
-    description: Also known as the "tag number" or "entity number" in Avantis's vocabulary. (Avantis is the a WMS).
-    #[] to do ID for pumping stations an chambers will be from the GIS. 
-    rule_spec: 
-      - name: ID of Linear Assets Represented as Role in Maximo
-        spec_ID: Vku-67dDxx
-        type: triggered action
-        specification:
-          trigger: replication creation of assetY record from the TWAG
-          action: apply Facility ID from TWAG as ID 
-        status: false
-    
+    description: is the unique ID of the role known as the "tag number" or "entity number" in Avantis's vocabulary. (Avantis is the a WMS).
+
   name:
-  #---------------------------------------
     type: string
-    description: A structured and ideally unique description of the role.
-    const: > #[]
-      ${properties.class.properties."class name"};
-      childOf: ${properties."parent entity".properties."role number"};
-      serving: ${properties."client role served".properties."role number"};
-    # MT []: would you like me to move this into individual roles?
+    description: is a structured description of the role. 
 
   parent:
-  #---------------------------------------
-    $ref: "./02_asset_role.yml"
-    description: References the role that is served by the larger asset, which physically subsumes the asset serving this role.
+    $ref: "./02_role.yml"
+    description: references the role that is served by the larger asset, which physically subsumes the asset serving this role.
+
+  GIS_object_ID:
+    type: string
+    integration: GIS
+    description: is unique ID of the GIS record representing the same pumping station, chamber, or ... as this *role* record in Maximo.
   
   class:
-  #---------------------------------------
-    $ref: B-entity_class_object_schema/02_asset_role_class.yml
-    description: The class denote the broad types of asset that may play the role (e.g., "breaker role"), and sometimes, more specifically, it also denotes the useful function provided by that asset in the role to the larger system (e.g., the "tie-breaker role" provides tie-breaking function to the electrical distribution system).
-
-  specifications:
-  #---------------------------------------
-    type: object
-    description: is a set of properties applicable to the class. 
+    $ref: "B-entity_class_object_schema/02_role_classification.md"
+    description: denotes the broad types of asset that may play the role (e.g., "breaker role"). It also denotes the useful function provided by an asset in the role to the larger system (e.g., the "tie-breaker role" provides tie-breaking function).
 
   inferred_classes:
-  #---------------------------------------
     oneOf: 
+      - type: null
       - type: array
         items:
-          type: string
-      - type: null
+          $ref: "B-entity_class_object_schema/02_role_classification.md"
     items:
       type: string
     read-only: true
-    description: See the description for inferred classe names(s) made in the \TWmaximoConfig\1-Schemas\A-entity_record_schema/01_asset_schema.yml
-    $comment: |
-      See the comment for inferred classe names(s) made in the \TWmaximoConfig\1-Schemas\A-entity_record_schema/01_asset_schema.yml
+    description: indicates the complex classes to which this asset is an instance.
 
+  specification_data:
+    type: object
+    $ref: "."
+    description: is a set of functional performance specification data. (The applicable specifications are dependent on the definition made in the chosen class.)
+  
   role_status:
-  #---------------------------------------
     type: string
     enum:
       - specified
       - active
       - eliminated
-    description: |
-      This is the basic life-cycle status of a role. Specified means the role is conceived and exists in some specification or design documentation. Active means the necessary supports exist for an asset to serve in the role and function of the asset being utilized. Eliminated represents a negation of either or both conditions of the active status.
-    rule_spec: |
-      #[]RULE VkiDyJcSxg: Before a role can be eliminated, all children, as well as the descendants of the role in the hierarchy must also be eliminated. 
-        $comment: a procedure should to be created to allow the recursive elimination of a role and all of its children. 
-      #[]RULE VygDC0Frxl: When a role is "eliminated", it must no longer be visible in any view of the role hierarchy. (Its entire branch must not be available either, because all of its descendants would be eliminated as well.)
-        []Review with To ASMP: with this rule, we no longer need to have a hierarchy branched for retired roles.   
-      #[]RULE EkP5qy5Sxl: If change auditing cannot be turned on, then when a role record status is "eliminated", all the specification in the record's datafields must be frozen.
-
-  role technical requirement description:
-  #---------------------------------------
-    type: string
-    description: A free text description of the role's performance requirements that must be satisfied by the asset. For example, the lifting capacity in kilograms for a crane.
+    description: is the life-cycle status of a role.
     $comment: |
-      Eventually, this information should be replaced by formalized properties associated with specific classes. For example, for the motor role class, there would be a requirement for a minimum amount of horsepower or torque. 
-
-  serving_asset_in_asset_role:
-  #---------------------------------------
-    $ref: "./02_asset_role.yml"
-    description: Identifies the asset this role is serving. For example, given a motor starter role, the value in this data field identifies the role of the motor controlled by that motor starter. 
+      "specified" means the role is conceived and exists in some specification or design documentation; "active" means the necessary supports exist for an asset to serve in the role and function of the asset being utilized; "eliminated" represents a negation of either or both conditions of the active status.
   
-  asset_installation_location:
-  #---------------------------------------
+  installation_location:
     oneOf: 
       - $ref: "./03_space.yml"
       - type: null
-    description: References the space in which the asset serving the role would be installed.
+    description: refers to the space in which the asset serving the role would be installed.
+
+  serving:
+    $ref: "./02_role.yml"
+    description: identifies the asset this role is serving (by its role). For example, given a motor starter role, the value in this data field identifies the role of the motor controlled by that motor starter. 
   
   service_address_or_coordinate:
-    oneOf: [$ref: MaximoServiceAddressObject, type: null]
-    description: A geo-coordinate or the nearest street address of the asset.
+    oneOf: 
+      - $ref: MaximoServiceAddressObject
+      - type: null
+    description: is the geo-coordinate or the nearest street address of the asset.
 
+# OWNER, OPERATOR, MAINTAINER GROUP
+  
   operator_group:
-  #---------------------------------------
-  inherit operator group value:
-    type: boolean
-    default value: true
+    oneOf:
+      - type: null 
+      - $ref: "./04_org-chart_group.yml"
+    description: group responsible for the operation of the asset in the role.
 
-  inherit_operator_group_from_parent:
-  #---------------------------------------
+  maintenance_group:
+    oneOf: 
+      - type: null
+      - $ref: "./04_org-chart_group.yml"
+    description: group responsible for the overall maintenance of the asset - for example, a unit, work area, or crew.
+
+  #note:
+    # on: the absence of of a owned_by_the_group property for roles
+    # content: assets that are occupying a role are presumed to be owned by the City. 
+  
+  inherit_operator_group_value:
     type: boolean
     default_value: true
 
-  maintenance_group:
-  #---------------------------------------
-    oneOf: [$ref: "./04_org_or_group.yml", type: null]
-    description: Group responsible for the preventive and reactive maintenance of the asset in the role. For example, a unit, work area, or crew. 
+  inherit_operator_group_from_parent:
+    type: boolean
+    default_value: true
 
   inherit_maintenance_group_from_parent:
-  #---------------------------------------
     type: boolean
     default_value: true
 
   operational_criticality:
-  #---------------------------------------
-    oneOf: [$ref:'#/definitions/criticality rating definition', type: null] # see section 3. LOCAL OBJECT DEFINITION 
+    oneOf:
+      - $ref: "#/definitions/criticalityRatingDef"
+      - type: null
     description: A role bears high operational criticality if the loss of the asset in the role will either reduce throughput or product quality (but not product safety) of the larger system.
 
-  protective function criticality:
-  #---------------------------------------
-    oneOf: [$ref:'#/definitions/criticalityRatingDef', type: null] # see section 3. LOCAL OBJECT DEFINITION
+  protective_function_criticality:
+    oneOf:
+      - $ref: "#/definitions/criticalityRatingDef"
+      - type: null
     description: A role bears protective function criticality if the loss of one of its protective functions (i.e., regulatory/control/protection or containment function) will either result in a consequential release of hazard or the loss of a capability to mitigate a greater level hazard.
 
-  duplicate record of:
-  #---------------------------------------
-    oneOf: 
-      - type: array
-        items:
-          $ref: "./02_asset_role.yml"
-      - type: null
+# RECORD PROPERTIES
 
-  record retirement information:
-  #---------------------------------------
-    $ref: "./00_common_definitions.yml#/definitions/record retirement definition"
+  duplicate_record_of:
+    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def" 
+
+  record_retirement_information:
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
   
-
-  #========================
-  # [] REMOVE THE FOLLOWING AFTER RULE ABOUT ID IS REVISED
-  # GIS object ID:
-  #   type: string
-  #   description: This is the ID of the equivalent object (asset or role) in GIS. This value suggests the original record was created in GIS and copied to WMS through the data integration link.
-
-
-
-#############################################################
-# 2. DATA INTEGRITY RULES
-#############################################################
-  allOf:
-    - if:
-      oneOf:
-        - assetRoleClass:
-            properties:
-                className:
-                  const: pumping station
-        - assetRoleClass:
-            properties:
-                className:
-                  const: water treatment plant
-        - assetRoleClass:
-            properties:
-                className:
-                  const: large chamber
-      then:
-        required: GIS object ID
   
-  #[]RULE:
-  # IN COMMON LANGUAGE: At any given time, each role may only have a single asset assigned to it (i.e., associated with the role via the asset's "assigned_to_asset_role" property).
-
 #############################################################
-# 3. LOCAL OBJECT DEFINITION
+# LOCAL OBJECT DEFINITION
 #############################################################
 
 definitions:
@@ -198,9 +144,51 @@ definitions:
       - rating: 5
         description: TBD
 
-$comment: |
-  OPEN AND TODO ITEMS:
-    [x] To have discussion on what we put in for criticality
-    [] explicitly specify an unoccupied role
-    [] expression of role equivalence
-    [] RULE: certain GIS assets, such as pumping stations, or treatment facilities must be mapped over as roles
+
+#############################################################
+# RULES
+#############################################################
+
+rule_spec:
+
+  - name: ID of Linear Assets Represented as Role in Maximo
+    spec_ID: Vku-67dDxx
+    involves_prop: [ID]
+    type: [triggered action]
+    specification:
+      trigger: replication creation of assetY record from the TWAG
+      action: apply Facility ID from TWAG as ID 
+    status: false
+
+  - name: ID of Linear Assets Represented as Role in Maximo
+    spec_ID: Vku-67dDxx
+    involves_prop: [ID]
+    type: [triggered action]
+    specification:
+      - if:
+        oneOf:
+          - assetRoleClass:
+              properties:
+                  className:
+                    const: pumping station
+          - assetRoleClass:
+              properties:
+                  className:
+                    const: water treatment plant
+          - assetRoleClass:
+              properties:
+                  className:
+                    const: large chamber
+        then:
+          required: GIS_object_ID
+    status: false
+
+    #[]RULE VkiDyJcSxg: Before a role can be eliminated, all children, as well as the descendants of the role in the hierarchy must also be eliminated. $comment: a procedure should to be created to allow the recursive elimination of a role and all of its children.
+
+    #[]RULE VygDC0Frxl: When a role is "eliminated", it must no longer be visible in any view of the role hierarchy. (Its entire branch must not be available either, because all of its descendants would be eliminated as well.)
+    #[]Review with To ASMP: with this rule, we no longer need to have a hierarchy branched for retired roles.
+
+    #[]RULE EkP5qy5Sxl: If change auditing cannot be turned on, then when a role record status is "eliminated", all the specification in the record's data fields must be frozen.
+
+    #[]RULE:
+    # IN COMMON LANGUAGE: At any given time, each role may only have a single asset assigned to it (i.e., associated with the role via the asset's "assigned_to_asset_role" property).

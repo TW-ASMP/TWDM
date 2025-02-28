@@ -1,7 +1,7 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: blower_fan
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/4-Class_Dependent_Specifications/08_blower_fan.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/4-Class_Dependent_Specifications/08_blower_fan.yml
 type: object
 
 $comment: >
@@ -13,22 +13,14 @@ properties:
     oneOf:
       - type: null
       - type: number
-    description: Indicates the capacity rating for the hvac unit in CFM
-
-    $comment: 
-
-  #========================
+    description: Indicates the capacity rating for the HVAC unit in CFM
 
   static_pressure:
   
     oneOf:
       - type: null
       - type: number
-    description: Indicates the static pressure for the hvac unit in inch water column 
-
-    $comment: 
-
-  #========================
+    description: Indicates the static pressure for the HVAC unit in inch water column 
 
   drive_coupling:
   
@@ -37,16 +29,12 @@ properties:
       - type: string
     description: Indicates the type of drive coupling
     enum:
-      - "Direct Drive"
-      - "Belt Drive"
-      - "Gear Drive"
-      - "Flexible"
-      - "Chain Drive"
-      - "Hydraulic"
-
-    $comment: 
-
-  #========================
+      - "direct drive"
+      - "belt drive"
+      - "gear drive"
+      - "flexible"
+      - "chain drive"
+      - "hydraulic"
 
   sealed_bearings:
   
@@ -55,6 +43,4 @@ properties:
       - type: boolean
     description: Indicates the presence of sealed of shielded bearings
 
-    $comment: 
 
-  #========================

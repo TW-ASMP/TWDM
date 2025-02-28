@@ -1,26 +1,26 @@
 $schema: http://json-schema.org/draft-07/schema#
 title: Trade
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/1-Schemas/A-entity_record_schema/10_trade.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/10_trade.yml
 type: object
 
 properties:
 
   code:
-  #---------------------------------
+
     description: Unique identifier for the craft
     type: string
   
   name:
-  #---------------------------------
+
     description: a short name given by the creator of the record.
     type: string
 
   organization:
-  #---------------------------------
+
     description: a short name given by the creator of the record.
     
   skill_levels:
-  #---------------------------------
+
     type: array
     description: List of skill levels within this craft
     items:
@@ -28,17 +28,17 @@ properties:
       properties:
         
         skill_level:
-        #---------------------------------
+      
           type: string
           description: Skill level associated with the craft (e.g., APPRENTICE, JOURNEYMAN, MASTER)
 
         hourly_rate:
-        #--------------------------------- 
+       
           description: Standard hourly rate for this skill level
           type: number
 
         qualifications:
-        #---------------------------------
+      
           description: qualifications required to hold 
           oneOf:
             - type: null
@@ -47,7 +47,7 @@ properties:
                 type: object
 
   association_to_persons:
-  #---------------------------------
+
     description: The primary craft or skill associated with the person, if the person plays the role of a trade person. 
     oneOf:
       - type: null
@@ -57,17 +57,23 @@ properties:
           properties:
 
             trade:
-            ##------------------------------------ 
+
               $ref: "./10_trade.yml"
 
             skill_level:
-            ##------------------------------------
+
               type: string
               $comment: load the list of skilled trades       
 
   status:
-  #---------------------------------
+
     type: string
     enum:
       - active
       - inactive
+  
+  # RECORD PROPERTIES
+  
+  duplicate_record_of:
+
+    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"

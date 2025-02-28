@@ -1,7 +1,7 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: motor
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/4-Class_Dependent_Specifications/02_motor.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/4-Class_Dependent_Specifications/02_motor.yml
 type: object
 
 $comment: >
@@ -9,7 +9,7 @@ $comment: >
 properties:
 
   type:
-  
+
     oneOf:
       - type: null
       - type: string
@@ -23,37 +23,23 @@ properties:
       - "DC, Separately Excited"
       - "DC, Self Excited"
       - "DC, Permanent Magnet"
-
-
-    $comment: |
-
-  #========================
-
     
   voltage:
-  
+
     oneOf:
       - type: null
       - type: number
     description: Indicates the voltage of the motor in Volts
 
-    $comment: |
-
-  #========================
-
   horse_power:
-  
+
     oneOf:
       - type: null
       - type: number
     description: Indicates the horse power of the motor
 
-    $comment: |
+  NEMA_frame:
 
-  #========================
-  
-  nema_frame:
-  
     oneOf:
       - type: null
       - type: string
@@ -138,14 +124,8 @@ properties:
       - "L182ACY"
       - "L186AT"
 
+  NEMA_enclosure:
 
-    $comment: |
-
-  #========================
-
-
-  nema_enclosure:
-  
     oneOf:
       - type: null
       - type: string
@@ -158,19 +138,11 @@ properties:
       - TEWD
       - EXPL
       - HAZ
-
-
-    $comment: |
-
-  #========================
-
+    
   sealed_bearings:
-  
+
     oneOf:
       - type: null
       - type: boolean
     description: Indicates if the motor has sealed bearings
 
-    $comment: |
-
-  #========================

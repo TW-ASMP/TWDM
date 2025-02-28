@@ -1,7 +1,7 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: compressor
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/4-Class_Dependent_Specifications/09_compressor.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/4-Class_Dependent_Specifications/09_compressor.yml
 type: object
 
 $comment: >
@@ -15,20 +15,12 @@ properties:
       - type: number
     description: Indicates the capacity rating for the compressor in kPa
 
-    $comment: 
-
-  #========================
-
   rated_flow:
   
     oneOf:
       - type: null
       - type: number
     description: Indicates the capacity rating for the compressor in SCMH
-
-    $comment: 
-
-  #========================
 
   drive_coupling:
   
@@ -37,16 +29,12 @@ properties:
       - type: string
     description: Indicates the type of drive coupling
     enum:
-      - "Direct Drive"
-      - "Belt Drive"
-      - "Gear Drive"
-      - "Flexible"
-      - "Chain Drive"
-      - "Hydraulic"
-
-    $comment: 
-
-  #========================
+      - "direct drive"
+      - "belt drive"
+      - "gear drive"
+      - "flexible"
+      - "chain drive"
+      - "hydraulic"
 
   sealed_bearings:
   
@@ -54,7 +42,3 @@ properties:
       - type: null
       - type: boolean
     description: Indicates the presence of sealed of shielded bearings
-
-    $comment: 
-
-  #========================

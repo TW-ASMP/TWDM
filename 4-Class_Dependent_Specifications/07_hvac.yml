@@ -1,7 +1,7 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
-title: hvac
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/4-Class_Dependent_Specifications/07_hvac.yml
+title: HVAC
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/4-Class_Dependent_Specifications/07_HVAC.yml
 type: object
 
 $comment: >
@@ -13,57 +13,37 @@ properties:
     oneOf:
       - type: null
       - type: number
-    description: Indicates the capacity rating for the hvac unit in CFM
-
-    $comment: 
-
-  #========================
+    description: Indicates the capacity rating for the HVAC unit in CFM
 
   static_pressure:
   
     oneOf:
       - type: null
       - type: number
-    description: Indicates the static pressure for the hvac unit in inch water column 
+    description: Indicates the static pressure for the HVAC unit in inch water column 
 
-    $comment: 
-
-  #========================
-
-  heating:
+  has_heating_function:
   
     oneOf:
       - type: null
       - type: boolean
-    description: Indicates the presence of a heating function in the hvac unit such as heating coil or gasburner
+    description: Indicates the presence of a heating function in the HVAC unit such as heating coil or gas burner
 
-    $comment: 
-
-  #========================
-
-  cooling:
+  has_cooling_function:
   
     oneOf:
       - type: null
       - type: boolean
-    description: Indicates the presence of a cooling function in the hvac unit such as cooling coil
+    description: Indicates the presence of a cooling function in the HVAC unit such as cooling coil
 
-    $comment: 
-
-  #========================
-
-  dehumidifier:
+  has_dehumidification_function:
   
     oneOf:
       - type: null
       - type: boolean
     description: Indicates the presence of a dehumidifier
 
-    $comment: 
-
-  #========================
-
-  maintainable_damper:
+  has_maintainable_damper:
   
     oneOf:
       - type: null
@@ -71,16 +51,14 @@ properties:
     description: Indicates the presence of a maintainable damper
     $comment: 
 
-  #========================
-
-  belts_present:
+  uses_belt:
   
     oneOf:
       - type: null
       - type: boolean
-    description: Indicates the presence of replacable belts
+    description: Indicates the presence of replaceable belts
 
     $comment: 
 
-  #========================
+
   

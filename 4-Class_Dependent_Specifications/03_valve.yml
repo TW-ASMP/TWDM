@@ -1,7 +1,7 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: valve
-$id: https://raw.githubusercontent.com/TW-ASMP/TWmaximoConfig/main/4-Class_Dependent_Specifications/03_valve.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/4-Class_Dependent_Specifications/03_valve.yml
 type: object
 
 $comment: >
@@ -9,7 +9,7 @@ $comment: >
 properties:
 
   type:
-  
+
     oneOf:
       - type: null
       - type: string
@@ -25,46 +25,35 @@ properties:
       - "Needle Valve"
       - "Pinch Valve"
       - "Plug Valve"
-
-    $comment: may be redundent to lablel them valve in the valve type
-
-  #========================
+    $comment: may be redundant to label them valve in the valve type
 
   special_type:
-  
+
     oneOf:
       - type: null
       - type: string
-    description: Indicates what type of specialised valve it is if it is a specialised valve 
+    description: Indicates what type of specialized valve it is if it is a specialized valve 
     enum:
       - "Air release valve"
       - "Backflow Preventer"
       - "Check"
       - "Pressure Relief Valve"
       - "Solenoid"
-
-
-    $comment: may be redundent to lablel them valve in the valve type
-
-  #========================
+    $comment: may be redundant to label them valve in the valve type
 
   size:
-  
+
     oneOf:
       - type: null
       - type: number
     description: Indicates the valve size in inches
 
-    $comment: |
+  ANSI_type:
 
-  #========================
-
-  ansi_type:
-  
     oneOf:
       - type: null
       - type: string
-    description: Indicates the ansi type for the valve
+    description: Indicates the ANSI type for the valve
     enum:
       - 150
       - 300
@@ -75,38 +64,26 @@ properties:
       - 2500
       - 4500
 
-    $comment: 
+  ANSI_class:
 
-  #========================
-  
-  ansi_class:
-  
     oneOf:
       - type: null
       - type: string
-    description: Indicates the ansi class for the valve
+    description: Indicates the ANSI class for the valve
     enum:
       - "A - Standard"
       - "B - Special"
       - "Limited"
 
-    $comment: 
-
-  #========================
-
   horse_power:
-  
+
     oneOf:
       - type: null
       - type: number
     description: Indicates the horse power of the motor
 
-    $comment: |
+  NEMA_frame:
 
-  #========================
-  
-  nema_frame:
-  
     oneOf:
       - type: null
       - type: string
@@ -191,14 +168,8 @@ properties:
       - "L182ACY"
       - "L186AT"
 
+  NEMA_enclosure:
 
-    $comment: |
-
-  #========================
-
-
-  nema_enclosure:
-  
     oneOf:
       - type: null
       - type: string
@@ -212,49 +183,29 @@ properties:
       - EXPL
       - HAZ
 
-
-    $comment: |
-
-  #========================
-
   sealed_bearings:
-  
+
     oneOf:
       - type: null
       - type: boolean
     description: Indicates if the motor has sealed bearings
 
-    $comment: |
+  CWP:
 
-  #========================
-
-
-  cwp:
-  
     oneOf:
       - type: null
       - type: number
     description: Indicates the cold working pressure of the valve in psi
 
-    $comment: |
-
-  #========================
-
-  
   nominal_pressure:
-  
+
     oneOf:
       - type: null
       - type: number
     description: Indicates the nominal pressure of the valve in psi
-
-    $comment: |
-
-  #========================
-
   
   valve_body:
-  
+
     oneOf:
       - type: null
       - type: string
@@ -267,12 +218,8 @@ properties:
       - "Composite"
       - "Titanium"
 
-    $comment: |
-
-  #========================
-
   actuator_type:
-  
+
     oneOf:
       - type: null
       - type: string
@@ -283,12 +230,8 @@ properties:
       - Hydraulic
       - Manual
 
-    $comment: |
-
-  #========================
-
   stem_seal:
-  
+
     oneOf:
       - type: null
       - type: string
@@ -299,8 +242,14 @@ properties:
       - "O-ring"
       - "Stuffing Box"
 
-    $comment: |
+  valve_turn_direction:
 
-  #========================
+    oneOf:
+      - type: null
+      - type: string
+    enum:
+      - "counter-clockwise"
+      - "clockwise"
+    $comment: This specification is specifically requested by DOS (via Silvia Sawada)
 
   
