@@ -6,59 +6,58 @@ type: object
 properties:
 
   work_order_reference:
-
     description: identifies the work order, whose actual that is being documented.
     read-only: true
     $ref: "../A-entity_record_schema/35_work_order.yml"
 
+# OPERATIONAL STATUS INFORMATION 
 
-  # OPERATIONAL STATUS INFORMATION 
-
-  # Note: in a work order containing children work orders, these information only have to be filled in at the parent level.  [] rule 
+  #Note: 
+    # content: in a work order containing children work orders, these information only have to be filled in at the parent level.  [] rule 
 
   asset_offline_at_start:
-
     description: indicates that the asset was offline when the work began
     type: boolean
     $comment: 
 
   asset_brought_back_online:
-
     description: is only applicable if the asset was offline when the work began; this entry indicates that the work, within the scope of this work order, brought the asset back online
     type: boolean
     $comment: 
 
-  # ACTUAL WORK ORDER RESOURCE USAGE 
+# ACTUAL WORK ORDER RESOURCE USAGE 
   
   revised_description_of_actual_work:
-
     description: is a revised and more accurate description of the actual work performed on the asset.
     type: string
 
   actual_start_time:
-
+    description: the date the work started
+    oneOf: 
+      - type: null
+      - type: string
+        format: date
 
   actual_completion_time:
-  
+    description: the date the work was actually completed
+    oneOf: 
+      - type: null
+      - type: string
+        format: date
   
   actual_wrench_time:
-
     description: is the actual time taken to complete the work order.
     $ref: "./00_common_definitions.yml#/definitions/frequency_interval_definition"
   
-
   actual_parts_and_material_usage:
-    
     description: identifies the parts and material used in completing the work. 
     oneOf:
       - type: null
       - type: array
         items:
           $ref: "./00_common_definitions.yml#/definitions/item_requirement_definition"
-  
 
   actual_tool_usage:
-  
     description: identifies the tools used to perform the work.
     oneOf:
       - type: null
@@ -67,7 +66,6 @@ properties:
           $ref: "./00_common_definitions.yml#/definitions/tool_requirements_definition"
 
   actual_services_usage:
-
     description: identifies (contracted) service that was actually needed complete the work.
     oneOf:
       - type: null
@@ -76,7 +74,6 @@ properties:
           $ref: "./00_common_definitions.yml#/definitions/service_requirement_definition"
 
   actual_trades_involvement:
-  
     description: identifies the trade and qualifications needed to complete the work.
     oneOf:
     - type: null
@@ -84,13 +81,11 @@ properties:
       items:
         $ref: "./00_common_definitions.yml#/definitions/trade_requirement_definition"
 
-
-  # CHILDREN WORK-ORDER DOCUMENTATION
+# CHILDREN WORK-ORDER DOCUMENTATION
 
   # The user is able to account for additional work done, by adding new children_work_documentation items. These items would refer any work order.  [] todo: need to define a procedure for creating a new work documentation. 
 
   children_work_documentations:
-
     description: 
     oneOf:
       - type: null
@@ -98,14 +93,11 @@ properties:
         items:
           $ref: "../A-entity_record_schema/36_work_documentation.yml"
 
-
-  # FAILURE REPORTS AND FOLLOWUP REQUESTS
+# FAILURE REPORTS AND FOLLOWUP REQUESTS
 
   # Note: the failures are reported on follow-up work requests. The linkage between a followup work order and work order documentation is found on the work order schema
 
-
-  # RECORD PROPERTIES
+# RECORD PROPERTIES
 
   duplicate_record_of:
-
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"

@@ -6,26 +6,21 @@ type: object
 properties:
 
   employee_number:
-
     type: string
 
   first_name:
-
     type: string
   
   last_name:
-
     type: string
   
   display_name:
-
     description: Full name displayed (usually a combination of first and last names)
     oneOf:
       - type: null
       - type: string
 
   section:
-
     description: Indicates which section within a division that the person works for
     type: string
     oneOf:
@@ -33,14 +28,12 @@ properties:
       - type: string
 
   unit:
-
     description: Indicates which business-unit within a section that the person works for
     oneOf:
       - type: null
       - type: string
   
   status:
-
     type: string
     enum:
       - active
@@ -69,11 +62,9 @@ properties:
           properties:
 
             qualification:
-
               $ref: "./09_qualification.yml"
             
             start_date:
-
               description: the first effective day
               oneOf: 
                 - type: null
@@ -81,7 +72,6 @@ properties:
                   format: date
             
             expiration_date:
-
               description: the last effective date
               oneOf: 
                 - type: null
@@ -89,12 +79,10 @@ properties:
                   format: date
   
   external_contractor:
-
     description: Indicates whether the person is not an employee of the City
     type: boolean
   
   contract:
-
     description: identifies the contracting company that the person works for
     oneOf:
       - type: null
@@ -106,22 +94,18 @@ properties:
     properties:
       
       email_address:
-
         description: Email address of the person
         type: string
         format: email
 
       phone:
-
         description: Contact phone number of the person
         type: string
 
   # RECORD PROPERTIES
 
   duplicate_record_of:
-
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
   
   record_retirement_information:
-    
     $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
