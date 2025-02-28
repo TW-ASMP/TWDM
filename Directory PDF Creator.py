@@ -138,3 +138,4 @@ def create_markdown_with_code_chunks(directory, output_file):
 directory_path = "."
 output_qmd_file = "output.qmd"
 create_markdown_with_code_chunks(directory_path, output_qmd_file)
+os.remove(output_qmd_file)
