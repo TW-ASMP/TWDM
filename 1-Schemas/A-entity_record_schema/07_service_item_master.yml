@@ -5,7 +5,7 @@ type: object
 
 properties:
 
-  # RECORD PROPERTIES
+  # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
 
@@ -13,6 +13,6 @@ properties:
 
   record_retirement_information:
     
-    $ref: "./00_common_definitions.yml#/definitions/content_entity_record_retirement_def"
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
 
 # Rest to be specified in the future

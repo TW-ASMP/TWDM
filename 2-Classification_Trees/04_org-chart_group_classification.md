@@ -1,5 +1,7 @@
 ## Top-Level Org/Group Classification
 
+The following is a sample of the Toronto Water's org-chart group classification.
+
 * Level of Government*
     * provincial government
     * regional government

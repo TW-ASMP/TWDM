@@ -32,13 +32,13 @@ properties:
       - type: string
     description: Indicates the medium within the pressure piping
     enum:
-      - "Water"
-      - "Steam"
-      - "Glycol"
-      - "Refrigerant"
-      - "Compressed Air"
-      - "Digester Gas"
-      - "Ozone"
+      - "water"
+      - "steam"
+      - "glycol"
+      - "refrigerant"
+      - "compressed air"
+      - "digester gas"
+      - "ozone"
 
   special_application:
     oneOf:

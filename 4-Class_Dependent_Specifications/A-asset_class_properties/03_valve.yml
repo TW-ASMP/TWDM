@@ -14,16 +14,16 @@ properties:
       - type: string
     description: Indicates the valve type
     enum:
-      - "Ball"
-      - "Butterfly"
-      - "Cone"
-      - "Diaphragm"
-      - "Gate Valve"
-      - "Globe Valve"
-      - "Knife Valve"
-      - "Needle Valve"
-      - "Pinch Valve"
-      - "Plug Valve"
+      - "ball"
+      - "butterfly"
+      - "cone"
+      - "diaphragm"
+      - "gate valve"
+      - "globe valve"
+      - "knife valve"
+      - "needle valve"
+      - "pinch valve"
+      - "plug valve"
     $comment: may be redundant to label them valve in the valve type
 
   special_type:
@@ -32,11 +32,11 @@ properties:
       - type: string
     description: Indicates what type of specialized valve it is if it is a specialized valve 
     enum:
-      - "Air release valve"
-      - "Backflow Preventer"
-      - "Check"
-      - "Pressure Relief Valve"
-      - "Solenoid"
+      - "air release valve"
+      - "backflow preventer"
+      - "check"
+      - "pressure relief valve"
+      - "solenoid"
     $comment: may be redundant to label them valve in the valve type
 
   size:

@@ -1,7 +1,7 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
-title: pump role
-$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/4-Class_Dependent_Specifications/B-role_class_properties/01_pump_role.yml
+title: pump functional-location
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/4-Class_Dependent_Specifications/B-functional-location_class_properties/01_pump_functional-location.yml
 type: object
 
 properties:
@@ -10,13 +10,13 @@ properties:
     oneOf:
       - type: null
       - type: boolean
-    description: indicates the the pump serving in the role must 
+    description: indicates the the pump serving in the functional-location must 
   
   required_max_flow:
     oneOf:
       - type: null
       - type: number
-    description: indicates the maximum flow rate required to serve the role
+    description: indicates the maximum flow rate required to serve the functional-location
   
   required_total_dynamic_head:
     oneOf:

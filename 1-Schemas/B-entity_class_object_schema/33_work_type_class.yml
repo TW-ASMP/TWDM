@@ -1,7 +1,6 @@
----
-title: discrete activity classification object
-$id: discreteActivityClassObject
-$schema: "http://json-schema.org/draft-07/schema#"
+title: work type object
+$id: workOrderClassObject
+$schema: 'http://json-schema.org/draft-07/schema'
 type: object
 
 properties:
@@ -11,4 +10,4 @@ properties:
     #inherit the definitions and rules from th "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
     
   parent_class:
-    $ref: B-entity_class_object_schema/32_discrete_activity_class.yml
+    $ref: B-entity_class_object_schema/33_work_type_class.yml

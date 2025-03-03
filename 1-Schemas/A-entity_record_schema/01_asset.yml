@@ -16,7 +16,7 @@ properties:
     type: string 
     description: The human readable short description of the asset.
     $comment: |
-        Assumption: an non-is a specific commercial product is always built on site for a specific purpose, and would permanently occupy a role. An example is an aeration tank. 
+        Assumption: an non-is a specific commercial product is always built on site for a specific purpose, and would permanently occupy a functional-location. An example is an aeration tank. 
         
   class:
     $ref: "../B-entity_class_object_schema/01_asset_item_tool_class.yml"
@@ -59,13 +59,13 @@ properties:
 
   operating_state:
     type: string
-    description: Indicates whether the asset is available for doing the work that it is assigned at a given moment. Only applies to asset that is assigned to a role, user-group, or user.
+    description: Indicates whether the asset is available for doing the work that it is assigned at a given moment. Only applies to asset that is assigned to a functional-location, user-group, or user.
     enum:
       - available (up) 
       - unavailable (down)  
       - not applicable
     $comment: |
-      To data architect and implementer: the "not applicable" value is important, because when we are reporting on equipment uptime, we need to know about the periods in which the operating state is not applicable. For example, if the asset is not assigned to any role, org-chart_group, or anyone.
+      To data architect and implementer: the "not applicable" value is important, because when we are reporting on equipment uptime, we need to know about the periods in which the operating state is not applicable. For example, if the asset is not assigned to any functional-location, org-chart_group, or anyone.
 
 # OWNER, OPERATOR, MAINTAINER GROUP
 
@@ -105,31 +105,31 @@ properties:
       - type: null
     description:
     enum:
-      - to a role
+      - to a functional-location
       - to a user group
       - to a single user
       - not assigned
     $comment: |
-      This property is added to assist with the interpretation of the null value in the "assigned_to_asset_role", "assigned_to_tool_user_group", or "assigned_to_tool_user_group" property. If the value here is "not assigned", then we know the asset is not assigned to anything. If the value here is null, we do not know whether this asset is assigned to anything. 
+      This property is added to assist with the interpretation of the null value in the "assigned_to_asset_functional-location", "assigned_to_tool_user_group", or "assigned_to_tool_user_group" property. If the value here is "not assigned", then we know the asset is not assigned to anything. If the value here is null, we do not know whether this asset is assigned to anything. 
 
-  assigned_to_asset_role:
+  assigned_to_asset_functional-location:
 
     oneOf: 
-      - $ref: "./02_role.yml"
+      - $ref: "./02_functional-location.yml"
       - type: null
-    description: Role that the asset is designated to play. This value persists even if the asset is temporarily removed from the location of the role (for reasons such as repair).
+    description: functional-location that the asset is designated to play. This value persists even if the asset is temporarily removed from the location of the functional-location (for reasons such as repair).
 
   assigned_to_tool_user_group:
     oneOf: 
       - $ref: "./04_org-chart_group.yml"
       - type: null
-    description: A group of people, such as a facility, work area, or crew to whom the asset is assigned for use. Indicates the assignment of an asset (usually a tool) that does not have a system role.
+    description: A group of people, such as a facility, work area, or crew to whom the asset is assigned for use. Indicates the assignment of an asset (usually a tool) that does not have a system functional-location.
   
   assigned_to_tool_user:
     oneOf: 
       - $ref: "./08_person.yml" 
       - type: null
-    description: Indicates the assignment of an asset (usually a tool) that does not have a system role.
+    description: Indicates the assignment of an asset (usually a tool) that does not have a system functional-location.
 
 # LOCATION
 
@@ -150,7 +150,7 @@ properties:
       - $ref: "./01_asset.yml"
       - type: null
     description: >
-      Indicates the larger discrete asset or defined collection of assets, to which this asset is a part of.  NOTE: this property is not meant to be used for specifying the system hierarchy parent. That property is found on the role record, not the asset record.
+      Indicates the larger discrete asset or defined collection of assets, to which this asset is a part of.  NOTE: this property is not meant to be used for specifying the system hierarchy parent. That property is found on the functional-location record, not the asset record.
     $comment: |
       This field is commonly used when the asset is a part of a skid, structural tank, or switchgear cabinet, in which the asset parent in the system hierarchy should be the line entity. As such we will using this field to track that the asset is also a part of a physical assembly. We would also be using this field to capture a serialized rotating component as a part of another discrete asset. This field can also be used to indicate an asset membership in a Defined Collection of Assets. 
 
@@ -231,7 +231,7 @@ properties:
                 $ref: "./00_common_definitions.yml/attachment_def"
       - type: null
 
-# RECORD PROPERTIES
+# COMMON RECORD PROPERTIES
 
   duplicate_record_of:
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
@@ -288,7 +288,7 @@ rule_spec:
       elif asset_x.properties."is_a_commercially_available_product" = FALSE
         asset_x.properties.name is the semi-colon delimited concatenation of:
           - asset_x.properties.class.properties."class name"
-          - asset_x.properties."assigned_to_asset_role".properties.name
+          - asset_x.properties."assigned_to_asset_functional-location".properties.name
       # NOTE: actual script should contain additional condition handle formatting of the name text when there is missing data in any concatenated property.
     status: 
       checked: 2024-08-15 
@@ -300,10 +300,10 @@ rule_spec:
     specification: |
       Assertion Part:
         For all assets "asset_x",
-          the value of (asset_x.class.properties.only used as a part asset) must be FALSE
+          the value of (asset_x.class.properties.only_used_as_a_part asset) must be FALSE
       UI Part:
         In all asset classification search or selection screens, eliminate or filter out all classes "class_y",
-          where (class_y.properties.only used as a part asset) is TRUE
+          where (class_y.properties.only_used_as_a_part asset) is TRUE
     checked_on: 2024-08-15
 
   - name: Valid Values of owned_by_the_group Property
@@ -317,15 +317,15 @@ rule_spec:
       - The UI must only present the valid range of values to the users for selection, and the valid range of values must be presented as a hierarchy.
     checked_on: 2024-08-19
 
-  - name: Inheriting The Asset's Maintenance And Operator Group Values From Its Role
+  - name: Inheriting The Asset's Maintenance And Operator Group Values From Its functional-location
     involves_prop: [operator_group, maintenance_group]
     spec_ID: VJ1QRgIclg
     specification: |
-      - if the value of asset_x.properties.assigned_to_asset_role is role_y, then  
+      - if the value of asset_x.properties.assigned_to_asset_functional-location is functional-location_y, then  
           inherit the value of 
             - asset_x.properties.maintenance_group
             - asset_x.properties.operator_group
-          from the same properties of role_y
+          from the same properties of functional-location_y
     checked_on: 2024-08-20
 
   - name: Rendering of assignment_type Data Field.
@@ -340,20 +340,20 @@ rule_spec:
     spec_ID: NyrzGKwuel
     type: [validation, assertion, UI]
     description: |
-      If asset_x.properties."assignment_type" = "to a role", then 
-        - asset_x.properties."assigned_to_asset_role" must NOT = null;
+      If asset_x.properties."assignment_type" = "to a functional-location", then 
+        - asset_x.properties."assigned_to_asset_functional-location" must NOT = null;
         - asset_x.properties."assigned_to_tool_user" must = null
         - asset_x.properties."assigned_to_tool_user_group" must = null
       elif .properties."assignment_type" = "to a user group", then
         - asset_x.properties."assigned_to_tool_user_group" must NOT = null;
-        - asset_x.properties."assigned_to_asset_role" must = null
+        - asset_x.properties."assigned_to_asset_functional-location" must = null
         - asset_x.properties."assigned_to_tool_user" must = null          
       elif asset_x.properties."assignment_type" = "to a single user", then
         - asset_x.properties."assigned_to_tool_user" must NOT = null;
-        - asset_x.properties."assigned_to_asset_role" must = null
+        - asset_x.properties."assigned_to_asset_functional-location" must = null
         - asset_x.properties."assigned_to_tool_user_group" must = null
       elif asset_x.properties."assignment_type" = null, then
-        - asset_x.properties."assigned_to_asset_role" must = null
+        - asset_x.properties."assigned_to_asset_functional-location" must = null
         - asset_x.properties."assigned_to_tool_user" must = null
         - asset_x.properties."assigned_to_tool_user_group" must = null
       Also, in the UI screen, disable the properties that should = null
@@ -468,12 +468,12 @@ rule_spec:
           - (asset_x.properties."warranty start date")
         then the value of (asset_x.properties."operating_state") CANNOT be "available (up)"
 
-  - name: asset can be assigned exclusively to either a role, user, or user group
+  - name: asset can be assigned exclusively to either a functional-location, user, or user group
     spec_ID: EkD-ZmIceg
     type: [validation]
     specification: | 
       only one of the following properties can have value (i.e., not null) at any given time. (It is also okay for all of them to be null) 
-          - asset_x.properties."assigned_to_asset_role"
+          - asset_x.properties."assigned_to_asset_functional-location"
           - asset_x.properties."assigned_to_tool_user"
           - asset_x.properties."assigned_to_tool_user_group"
 
@@ -483,11 +483,11 @@ rule_spec:
     type: [validation, assertion]
     specification: | 
       if an asset does not have a value in any of the following properties (i.e., all nulls), 
-          - asset_x.properties."assigned_to_asset_role"
+          - asset_x.properties."assigned_to_asset_functional-location"
           - asset_x.properties."assigned_to_tool_user"
           - asset_x.properties."assigned_to_tool_user_group"           
         then the value of (asset_x.properties."operating_state") must be "not assigned work". The opposite must also be true.
-    errorMessage: "An asset NOT assigned to a role, user, or user group should not be operating and therefore would not have an operating_state"
+    errorMessage: "An asset NOT assigned to a functional-location, user, or user group should not be operating and therefore would not have an operating_state"
 
   - name: Consistency Between Asset's Physical Status, Operating State, And Assignments
     spec_ID: NyG2nzL5xg
@@ -498,34 +498,34 @@ rule_spec:
           - "in possession"  
         then the following properties would take on the stated values
           asset_x.properties."operating_state" = "not applicable"
-          asset_x.properties."assigned_to_asset_role" = null
+          asset_x.properties."assigned_to_asset_functional-location" = null
           asset_x.properties."assigned_to_tool_user" = null
           asset_x.properties."assigned_to_tool_user_group" = null
 
-  - name: Asset Can Only Be Assigned To A Discrete Asset Role
+  - name: Asset Can Only Be Assigned To A Discrete Asset functional-location
     spec_ID: 4yBXuH8qle
     type: [validation]
     specification: |
-      if (asset_x.properties."assigned_to_asset_role") is NOT null
-          then (asset_x.properties."assigned_to_asset_role".properties.class.properties."discrete asset role") = TRUE
-    errorMessage: an asset can only be assigned to a discrete asset role
+      if (asset_x.properties."assigned_to_asset_functional-location") is NOT null
+          then (asset_x.properties."assigned_to_asset_functional-location".properties.class.properties."discrete asset functional-location") = TRUE
+    errorMessage: an asset can only be assigned to a discrete asset functional-location
 
-  - name: inheriting the asset location information from its role
+  - name: inheriting the asset location information from its functional-location
     spec_ID: NJdGTHLqeg
     type: [assertion]
     specification: |
         For an asset, asset_x, if 
           all of the following are true:
             - asset_x.properties."operating_state" = "installed"
-            - asset_x.properties."assigned_to_asset_role" is NOT null
+            - asset_x.properties."assigned_to_asset_functional-location" is NOT null
           and one of the following is true
-            - asset_x.properties."assigned_to_asset_role".properties."asset_installation_location" is NOT null
-            - asset_x.properties."assigned_to_asset_role".properties."service_address_or_coordinate" is NOT null
+            - asset_x.properties."assigned_to_asset_functional-location".properties."asset_installation_location" is NOT null
+            - asset_x.properties."assigned_to_asset_functional-location".properties."service_address_or_coordinate" is NOT null
         then
             (asset_x.properties."installation_or_parking_location") would be set to the value of 
-              (asset_x.properties."assigned_to_asset_role".properties."asset_installation_location")
+              (asset_x.properties."assigned_to_asset_functional-location".properties."asset_installation_location")
             (asset_x.properties."service_address_or_coordinate") would be set to the value of 
-              (asset_x.properties."assigned_to_asset_role".properties."service_address_or_coordinate")
+              (asset_x.properties."assigned_to_asset_functional-location".properties."service_address_or_coordinate")
   
   - name: over-write of manufacturer and model information
     spec_ID: 01J5RPPEKJCP11NBRW3A4XCKF7

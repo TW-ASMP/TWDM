@@ -15,6 +15,6 @@
     - Spaces in Independent Buildings
 
 ## The Significance in the Usage of Plurals
-Where a plural noun is used, for example: Spaces in Drinking Water Treatment Plants, the entity represents a set of things. In the case of the example - the set spaces within the drinking water treatment plants in TW.
+Where a plural noun is used, for example: Spaces in Drinking Water Treatment Plants, the entity represents a set of things. In the case of the example - the set physical-locations within the drinking water treatment plants in TW.
 
 ## Notes

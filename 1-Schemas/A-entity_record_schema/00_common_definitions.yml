@@ -161,7 +161,7 @@ definitions:
           - month
           - year
 
-# RECORD RETIREMENT
+# RECORD STATUS AND RETIREMENT
 
   record_retirement_def:
     properties:
@@ -176,49 +176,24 @@ definitions:
      
       reason_for_retirement:
         read-only: true
+        #note: reason for requirement should be 
         oneOf: 
           - type: null
           - type: string
             enum:
               - "record is a duplicate"
-              - "removed or had departed"
-              - "lost"
+              - "what record represents is gone"
+              - "what record represents is lost"
               - "record added by mistake"
-      
+              - "information out-dated"
+              - "information inaccurate"
+
       date_of_actual_removal_or_departure:
         description: is the date that the entity referent of the record was removed or had departed
         oneOf:
           - type: null
           - type: string
             format: "date" 
-      
-      date_of_record_retirement:
-        description: is the date when the record was retired
-        oneOf:
-          - type: null
-          - type: string
-            format: "date" 
-  
-  content_entity_record_retirement_def:
-    properties:
-
-      record_is_active:
-        type: Boolean
-      
-      retired_by:
-        oneOf:
-          - type: null
-          - $ref: "./08_person.yml"
-      
-      reason_for_retirement:
-        read-only: true
-        oneOf: 
-          - type: null
-          - type: string
-            enum:
-              - "record is a duplicate"
-              - "out-dated"
-              - "inaccurate"
       
       date_of_record_retirement:
         description: is the date when the record was retired
@@ -235,7 +210,7 @@ definitions:
       - type: array
         items:
           type: object
-          $comment: the object may other asset, role, space, ... records, depending on the context of where this property is used. 
+          $comment: the object may other asset, functional-location, physical-location, ... records, depending on the context of where this property is used. 
   
 # METERS
 

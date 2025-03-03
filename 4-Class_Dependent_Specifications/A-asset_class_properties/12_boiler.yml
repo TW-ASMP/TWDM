@@ -26,9 +26,9 @@ properties:
       - type: string
     description: Indicates the boiled/heated medium within the boiler
     enum:
-      - Water
-      - Steam
-      - Glycol
+      - water
+      - steam
+      - glycol
 
   heat_rate:
     oneOf:

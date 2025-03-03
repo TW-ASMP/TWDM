@@ -15,13 +15,13 @@ properties:
     description: Indicates the motor type
     enum:
       - "AC"
-      - "AC, Squirrel Cage Induction"
-      - "AC, Wound Rotor Induction"
-      - "AC, Synchronous"
+      - "AC, squirrel cage induction"
+      - "AC, wound rotor induction"
+      - "AC, synchronous"
       - "DC"
-      - "DC, Separately Excited"
-      - "DC, Self Excited"
-      - "DC, Permanent Magnet"
+      - "DC, separately excited"
+      - "DC, self excited"
+      - "DC, permanent magnet"
     
   voltage:
     oneOf:

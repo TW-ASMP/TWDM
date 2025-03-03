@@ -63,11 +63,11 @@ properties:
 
 # WORK SPECIFICATION AT A HIGH-LEVEL
 
-  role_to_work_on:
-    description: indicates role at which the specified must be performed.
+  functional-location_to_work_on:
+    description: indicates functional-location at which the specified must be performed.
     oneOf:
       - type: null
-      - $ref: "../A-entity_record_schema/02_role.yml"
+      - $ref: "../A-entity_record_schema/02_functional-location.yml"
 
   asset:
     description: indicates the asset that is being maintained.
@@ -88,7 +88,7 @@ properties:
     $comment: PMs should be organized into a PM-set when they are meant to be performed at different times.  For example the PMs for substation line 1 and line 2 maintenance are performed on alternating years. They can be organize into a PM-Set named Main Substation Maintenance. PMs should be organized under a parent PM if they are parts of the same larger continuous process - represented by the parent - such as the winter shutdown maintenance of island treatment plant. 
 
   route:
-    description: a sequential list of work, composed of job plans paired with an asset/role. 
+    description: a sequential list of work, composed of job plans paired with an asset/functional-location. 
     oneOf:
       - type: null
       - type: object
@@ -99,10 +99,10 @@ properties:
             oneOf:
               - type: null
               - $ref: "./01_asset.yml"
-          role:
+          functional-location:
             oneOf: 
               - type: null
-              - $ref: "./02_role.yml"
+              - $ref: "./02_functional-location.yml"
           job_plan:
             oneOf:
               - type: null
@@ -174,13 +174,13 @@ properties:
     work_entity_harmonization: WR(x), WO(_), JP(_)
   
   
-  # RECORD PROPERTIES
+  # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    $ref: "./00_common_definitions.yml#/definitions/content_entity_record_retirement_def"
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
 
 ##########################################################
 # LOCAL OBJECT DEFINITIONS

@@ -48,7 +48,7 @@ properties:
         specification: |
           Maximo item classification list would include all class instances of B-entity_class_object_schema/01_asset_item_tool_class_object_schema.yml, regardless of the values
             - properties.tool
-            - properties.only used as a part asset
+            - properties.only_used_as_a_part asset
         status: specified
         checked_on: 2024-08-15
 
@@ -82,7 +82,7 @@ properties:
 
     description: Supplementary description, in addition to the class value and class-dependent specification values, necessary to differentiate a commodity.
     type: string
-    $comment: Toronto Water is not using the UNSPSC or any other commodity taxonomy code for item identification, as Toronto Water's classification system plays the same role and can be mapped to other taxonomies. 
+    $comment: Toronto Water is not using the UNSPSC or any other commodity taxonomy code for item identification, as Toronto Water's classification system plays the same functional-location and can be mapped to other taxonomies. 
 
 
   # COMMERCIAL PRODUCT DESCRIPTION
@@ -119,7 +119,7 @@ properties:
 
   item_format:
 
-    description: Describes the format of the individual units (forming the inventory count)- for example, "can" "role", "sheet", "object", "box", "bag",....
+    description: Describes the format of the individual units (forming the inventory count)- for example, "can" "functional-location", "sheet", "object", "box", "bag",....
     type: string
 
   specification_data:
@@ -227,7 +227,7 @@ properties:
               description: the existing contracts that can be used for order the product
               $ref: MaximoContractObject
 
-  # RECORD PROPERTIES
+  # COMMON RECORD PROPERTIES
 
 
   duplicate_record_of:
@@ -236,4 +236,4 @@ properties:
 
   record_retirement_information:
     
-    $ref: "./00_common_definitions.yml#/definitions/content_entity_record_retirement_def"
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"

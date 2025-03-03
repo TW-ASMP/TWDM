@@ -51,7 +51,7 @@ properties:
     description: indicates that this org-chart group maps to a particular org-chart group (a native Maximo object)
     $ref: MaximoCrewObject
 
-  # RECORD PROPERTIES
+  # COMMON RECORD PROPERTIES
 
 
   duplicate_record_of:

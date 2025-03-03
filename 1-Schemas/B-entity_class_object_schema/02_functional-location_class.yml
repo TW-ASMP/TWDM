@@ -1,0 +1,65 @@
+---
+$schema: "http://json-schema.org/draft-07/schema#"
+title: functional-location classification object
+$id: B-entity_class_object_schema/02_functional-location_classification.md
+type: object
+
+#############################################################
+# 1. Properties
+#############################################################
+
+properties:
+
+  allOf:
+    - $ref: "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
+    #inherit the definitions and rules from th "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
+
+  parent_class:
+    $ref: B-entity_class_object_schema/02_functional-location_class.yml
+    sort order: 1-30
+
+  discrete_asset_functional-location:
+    oneOf: [type: boolean, type: null]
+    read-only: true
+    description: a functional-location that can be occupied by a single discrete asset.
+
+  functional_structure_functional-location:
+    oneOf: [type: boolean, type: null]
+    read-only: true
+    description: a functional-location that cannot be occupied any discrete asset, but can be the parent to other functional-locations.
+
+  defined_set_of_functional-locations:
+    oneOf: [type: boolean, type: null]
+    read-only: true  
+    description: a functional-location that can be occupied by a collection of discrete assets. 
+
+  compatible_asset_occupant_classes:
+    oneOf: 
+      - type: array
+        items:
+          $ref: "./01_asset.yml"
+      - type: null
+    $comment: |
+      []RULE NJQ6BwsVee: A asset must be an instance of one of classes listed in this field to be allowed to occupy a functional-location under this class. 
+
+#############################################################
+# RULES
+#############################################################
+
+rule_spec:
+  - name: Is an functional-location, functional structure functional-location, or defined set of functional-locations       
+    spec_ID: NyD4XGbuex
+    specification: |
+      if functional-locationClassX is a descendent of "Discrete Asset functional-location" in the functional-location classification hierarchy:
+        set functional-locationClassX.properties."a discrete asset functional-location" to TRUE
+        set functional-locationClassX.properties."a functional structure functional-location" to FALSE
+        set functional-locationClassX.properties."a defined ser of functional-location" to FALSE
+      elif functional-locationClassX is a descendent of "functional structure functional-location" in the functional-location classification hierarchy: 
+        set functional-locationClassX.properties."a discrete asset functional-location" to FALSE
+        set functional-locationClassX.properties."a functional structure functional-location" to TRUE
+        set functional-locationClassX.properties."a defined ser of functional-location" to FALSE
+      elif functional-locationClassX is a descendent of "Defined Set of functional-locations" in the functional-location classification hierarchy:
+        set functional-locationClassX.properties."a discrete asset functional-location" to FALSE
+        set functional-locationClassX.properties."a functional structure functional-location" to FALSE
+        set functional-locationClassX.properties."a defined ser of functional-location" to TRUE        
+    status: specified

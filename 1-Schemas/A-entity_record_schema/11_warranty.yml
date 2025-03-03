@@ -39,13 +39,13 @@ properties:
     description: indicates that the vendor is responsible for providing and/or covering the cost of parts
     type: boolean
 
-  covers_asset_roles:
-    description: the list of roles or more specifically the assets installed in the roles covered by the warranty
+  covers_asset_functional-locations:
+    description: the list of functional-locations or more specifically the assets installed in the functional-locations covered by the warranty
     oneOf: 
       - type: null
       - type: array
         items:
-          $ref: "./02_role.yml"
+          $ref: "./02_functional-location.yml"
   
   covers_assets:
     description: the list of assets covered by the warranty (any parts in the inventory covered by the warranty must be associated with an asset record)
@@ -63,10 +63,10 @@ properties:
         items:
           $ref: "./00_common_definitions.yml/attachment_def"
 
-# RECORD PROPERTIES
+# COMMON RECORD PROPERTIES
 
   duplicate_record_of:
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    $ref: "./00_common_definitions.yml#/definitions/content_entity_record_retirement_def"
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"

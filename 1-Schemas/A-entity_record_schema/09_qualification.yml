@@ -32,11 +32,11 @@ properties:
       - type: null
       - $ref: "./04_org-chart_group.yml"
 
-# RECORD PROPERTIES
+# COMMON RECORD PROPERTIES
   
   duplicate_record_of:
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    $ref: "./00_common_definitions.yml#/definitions/content_entity_record_retirement_def"
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
   

@@ -1,5 +1,7 @@
 ## Work Type [^2]
 
+The following is the complete set of Toronto Water's work type classification.
+
 * corrective
 * emergency [^1]
 * investigative

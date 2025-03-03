@@ -1,4 +1,7 @@
 ## Top-Level Discrete Activity Classification
+
+The following is is the complete set of Toronto Water's discrete activity classification.
+
 * Condition Evaluation*
   * quick check
   * inspection and evaluation
@@ -35,13 +38,11 @@
   * takedown of setup
   * travel
 * design or redesign
-  * creation of new role
-  * removal of existing role
+  * creation of new functional-location
+  * removal of existing functional-location
 * Asset Data*
   * record information correction
   * record retirement
-
-
 
 ## Requirements for Implementer
 
@@ -59,5 +60,5 @@
 
 ### Footnotes
 [^1]: more will be added before the final implementation. 
-[^2]: the physical modification of a building or a structure may result in the creation and removal of a space, hence it is singled out. 
+[^2]: the physical modification of a building or a structure may result in the creation and removal of a physical-location, hence it is singled out. 
 [^3]: the process by which a asset's ownership is transferred from a capital project to Toronto Water. 

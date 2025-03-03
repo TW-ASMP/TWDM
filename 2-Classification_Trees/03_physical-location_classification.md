@@ -1,5 +1,7 @@
 ## Top-Level Space Classification and Examples
 
+The following is a sample of the Toronto Water's physical-location classification.  
+
 * Discrete Space*
     * building or structure interior
     * room interior
@@ -10,13 +12,13 @@
     * tunnel interior
     * equipment cabinet interior
     * storage cabinet interior
-    * facility site space
+    * facility site physical-location
     * facility site section
     * building or structure exterior
     * vehicle interior
 * Collection of Spaces*
-    * spaces of a building or structure [^1]
-    * define set of spaces
+    * physical-locations of a building or structure [^1]
+    * define set of physical-locations
 
 ## Requirements for Implementer
 
@@ -24,4 +26,4 @@
 
 ## Notes
 ### Footnotes
-[^1]: a collection of indoor and outdoor spaces inside and around a structure. []TODO #TW "add to the TWONTO".  
+[^1]: a collection of indoor and outdoor physical-locations inside and around a structure. []TODO #TW "add to the TWONTO".  

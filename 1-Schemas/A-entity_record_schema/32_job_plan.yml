@@ -33,16 +33,16 @@ properties:
         items:
           $ref: "../B-entity_class_object_schema/01_asset_item_tool_class.yml"
 
-  specific_to_asset_role_classes:
-    description: identifies the role classes - more specifically, the assets installed in these roles - for which this job plan is customized.
+  specific_to_asset_functional-location_classes:
+    description: identifies the functional-location classes - more specifically, the assets installed in these functional-locations - for which this job plan is customized.
     type:
       oneOf:
       - type: null
       - type: array
         items:
-          $ref: "../B-entity_class_object_schema/02_role_classification.md"
+          $ref: "../B-entity_class_object_schema/02_functional-location_classification.md"
     $comment: >
-      Examples of a role class include the tie-breaker and effluent turbidity meter role class. 
+      Examples of a functional-location class include the tie-breaker and effluent turbidity meter functional-location class. 
 
   specific_to_operational_units:
     description: identifies the Toronto Water site(s), defined as a org-chart group in this schema, for which the job plan is specifically customized.
@@ -65,14 +65,14 @@ properties:
             - an org-chart group, and
             - whose .class = unit (a subclass of Group in the City)
 
-  specific_to_asset_roles:
-    description: identifies the roles for which the job plan is specifically customized.
+  specific_to_asset_functional-locations:
+    description: identifies the functional-locations for which the job plan is specifically customized.
     type:
       oneOf:
       - type: null
       - type: array
         items:
-          $ref: "../A-entity_record_schema/02_role.yml"
+          $ref: "../A-entity_record_schema/02_functional-location.yml"
 
   specific_to_commercial_products: 
     description: identifies the the commercial products for which the job plan is specifically written/customized.
@@ -109,7 +109,7 @@ properties:
             $ref: "./00_common_definitions.yml#/definitions/failure_code"
 
   RCM_failure_modes:
-    description: identifies the functional failure mode ID, with respect to a specific role, mitigated by the work specified in this job plan.
+    description: identifies the functional failure mode ID, with respect to a specific functional-location, mitigated by the work specified in this job plan.
     oneOf:
       - type: null
       - type: array
@@ -282,10 +282,10 @@ properties:
         items:  #URL strings
           type: string
 
-# RECORD PROPERTIES
+# COMMON RECORD PROPERTIES
 
   duplicate_record_of:
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    $ref: "./00_common_definitions.yml#/definitions/content_entity_record_retirement_def"
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"

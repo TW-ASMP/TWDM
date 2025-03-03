@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The data model in this repository represents a comprehensive asset management information structure, covering assets, roles, space, request, work, and plan object etc., and the relations between them.  We developed this data model in response to the need for a coherent framework - big picture view - of the future state of our Work Management System.  
+The data model in this repository represents a comprehensive asset management information structure, covering assets, functional-locations, physical-location, request, work, and plan object etc., and the relations between them.  We developed this data model in response to the need for a coherent framework - big picture view - of the future state of our Work Management System.  
 
 Beyond the big picture, a set of precisely formulated and internally consistent metadata is fused into the model, in the form of class definitions and dropdown values. This set of information has been developed and refined over the last couple of years to address actual asset and work management challenges (or "use-cases" in the context of solution implementation).
 

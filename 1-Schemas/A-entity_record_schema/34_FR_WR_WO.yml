@@ -72,21 +72,21 @@ properties:
   
   # THE OBJECT
 
-  role_to_work_on:
+  functional-location_to_work_on:
 
-    description: indicates role at which the specified work is to be performed.
+    description: indicates functional-location at which the specified work is to be performed.
     oneOf:
       - type: null
-      - $ref: "../A-entity_record_schema/02_role.yml"
+      - $ref: "../A-entity_record_schema/02_functional-location.yml"
       #[] should have name and description, like asset_to_work_on
     
     rule_spec:
-      - name: mutual exclusion of asset_to_work_on and role_to_work_on values  
+      - name: mutual exclusion of asset_to_work_on and functional-location_to_work_on values  
         spec_ID: 01JFK49T43T1TF3HBTBTDPMN5Y
         form: short
         specification: |
           one, but only one, of the following properties can have a non-null value:
-            - role_to_work_on
+            - functional-location_to_work_on
             - asset_to_work_on
           
   asset_to_work_on:
@@ -108,9 +108,9 @@ properties:
       $comment: |
         multiple fields may need to represented.  
   
-  asset_or_asset_role_criticality:
+  asset_or_asset_functional-location_criticality:
 
-    description: is the criticality values inherited from the asset or role being worked on.
+    description: is the criticality values inherited from the asset or functional-location being worked on.
     read-only: true
     oneOf:
       - type: null
@@ -133,7 +133,7 @@ properties:
 
   route:
 
-    description: a sequential list of work, composed of job plans paired with an asset/role. 
+    description: a sequential list of work, composed of job plans paired with an asset/functional-location. 
     oneOf:
       - type: null
       - type: object
@@ -147,10 +147,10 @@ properties:
               - type: null
               - $ref: "./01_asset.yml"
 
-          role:
+          functional-location:
             oneOf: 
               - type: null
-              - $ref: "./02_role.yml"
+              - $ref: "./02_functional-location.yml"
 
           job_plan:
             $ref: "./32_job_plan.yml"
@@ -312,7 +312,7 @@ properties:
     $ref: "./04_org-chart_group.yml"
 
     rule_spec:
-      name: Inherit the maintenance_group value from either the asset or the role
+      name: Inherit the maintenance_group value from either the asset or the functional-location
       spec_ID: 01JFK43CJBC495TB7Y3H3VP172
       form: very short
 
@@ -359,7 +359,7 @@ properties:
 
   asset_covered_by_warranty_contract:
 
-    description: indicates that the asset (or the asset in the role) is currently covered by a warranty contract.
+    description: indicates that the asset (or the asset in the functional-location) is currently covered by a warranty contract.
     type: boolean
 
     implementation:
@@ -384,7 +384,7 @@ properties:
 
   asset_covered_by_service_contract:
 
-    description: indicates that the asset (or the asset in the role) is currently covered by a service contract.
+    description: indicates that the asset (or the asset in the functional-location) is currently covered by a service contract.
     type: boolean
 
   send_work_to_service_contractor:
@@ -652,7 +652,7 @@ properties:
       MX_mapping: 
   
   
-  # RECORD PROPERTIES
+  # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
 
@@ -660,5 +660,5 @@ properties:
 
   record_retirement_information:
     
-    $ref: "./00_common_definitions.yml#/definitions/content_entity_record_retirement_def"
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
   

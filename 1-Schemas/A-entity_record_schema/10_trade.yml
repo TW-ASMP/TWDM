@@ -61,7 +61,7 @@ properties:
       - active
       - inactive
   
-# RECORD PROPERTIES
+# COMMON RECORD PROPERTIES
   
   duplicate_record_of:
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"

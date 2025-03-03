@@ -25,7 +25,7 @@ properties:
     oneOf:
       - type: null
       - type: string
-    description: Indicates how the pump is oriented in 3D space
+    description: Indicates how the pump is oriented in 3D physical-location
     enum:
       - "horizontal"
       - "vertical"

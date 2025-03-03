@@ -1,7 +1,6 @@
 # Organizations in TW and Interact with TW
 
 ## The Hierarchy
-
 * Region of Durham
 * York Region
 * Peel Region

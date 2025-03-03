@@ -1,6 +1,6 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
-title: role classification object
+title: functional-location classification object
 $id: orgGroupClassObject
 type: object
 
@@ -11,5 +11,4 @@ properties:
   #inherit the definitions and rules from th "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
   
   parent_class:
-    $ref: orgGroupClassObject
-
+    $ref: B-entity_class_object_schema/04_org_class.yml

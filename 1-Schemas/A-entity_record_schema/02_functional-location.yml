@@ -1,0 +1,211 @@
+---
+$schema: "http://json-schema.org/draft-07/schema#"
+title: functional-location
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/02_asset_functional-location_schema.yml
+type: object
+
+properties:
+
+  ID:
+    type: string
+    description: is the unique ID of the functional-location known as the "tag number" or "entity number" in Avantis's vocabulary. (Avantis is the a WMS).
+
+  name:
+    type: string
+    description: is a structured description of the functional-location. 
+
+  parent:
+    $ref: "./02_functional-location.yml"
+    description: references the functional-location that is served by the larger asset, which physically subsumes the asset serving this functional-location.
+
+  GIS_object_ID:
+    type: string
+    integration: GIS
+    description: is unique ID of the GIS record representing the same pumping station, chamber, or ... as this *functional-location* record in Maximo.
+  
+  class:
+    $ref: "B-entity_class_object_schema/02_functional-location_classification.md"
+    description: denotes the broad types of asset that may play the functional-location (e.g., "breaker functional-location"). It also denotes the useful function provided by an asset in the functional-location to the larger system (e.g., the "tie-breaker functional-location" provides tie-breaking function).
+
+  inferred_classes:
+    oneOf: 
+      - type: null
+      - type: array
+        items:
+          $ref: "B-entity_class_object_schema/02_functional-location_classification.md"
+    items:
+      type: string
+    read-only: true
+    description: indicates the complex classes to which this asset is an instance.
+
+  specification_data:
+    type: object
+    $ref: "."
+    description: is a set of functional performance specification data. (The applicable specifications are dependent on the definition made in the chosen class.)
+  
+  functional-location_status:
+    type: string
+    enum:
+      - specified
+      - active
+      - eliminated
+    description: is the life-cycle status of a functional-location.
+    $comment: |
+      "specified" means the functional-location is conceived and exists in some specification or design documentation; "active" means the necessary supports exist for an asset to serve in the functional-location and function of the asset being utilized; "eliminated" represents a negation of either or both conditions of the active status.
+  
+  installation_location:
+    oneOf: 
+      - $ref: "./03_space.yml"
+      - type: null
+    description: refers to the physical-location in which the asset serving the functional-location would be installed.
+
+  service_relations:    
+    description: identifies the asset, by the functional-location it is occupying, that this functional-location is serving. For example, given a motor starter functional-location, the value in this data field identifies the functional-location of the motor controlled by that motor starter.
+    oneOf:
+    - type: null
+    - type: object 
+      properties:
+
+        serving:
+          $ref: "./02_functional-location.yml"
+
+        service_type:
+          oneOf:
+          - type: null
+          - type: string
+            enum:
+              - "powers"
+              - "supplies material"
+              - "supplies energy"
+              - "controls or regulates"
+            $comment: the list is not exhaustive.
+
+  service_address_or_coordinate:
+      oneOf: 
+        - $ref: MaximoServiceAddressObject
+        - type: null
+      description: is the geo-coordinate or the nearest street address of the asset.
+
+# OWNER, OPERATOR, MAINTAINER GROUP
+  
+  operator_group:
+    oneOf:
+      - type: null 
+      - $ref: "./04_org-chart_group.yml"
+    description: group responsible for the operation of the asset in the functional-location.
+
+  maintenance_group:
+    oneOf: 
+      - type: null
+      - $ref: "./04_org-chart_group.yml"
+    description: group responsible for the overall maintenance of the asset - for example, a unit, work area, or crew.
+
+  #note:
+    # on: the absence of of a owned_by_the_group property for functional-locations
+    # content: assets that are occupying a functional-location are presumed to be owned by the City. 
+  
+  inherit_operator_group_value:
+    type: boolean
+    default_value: true
+
+  inherit_operator_group_from_parent:
+    type: boolean
+    default_value: true
+
+  inherit_maintenance_group_from_parent:
+    type: boolean
+    default_value: true
+
+  operational_criticality:
+    oneOf:
+      - $ref: "#/definitions/criticalityRatingDef"
+      - type: null
+    description: A functional-location bears high operational criticality if the loss of the asset in the functional-location will either reduce throughput or product quality (but not product safety) of the larger system.
+
+  protective_function_criticality:
+    oneOf:
+      - $ref: "#/definitions/criticalityRatingDef"
+      - type: null
+    description: A functional-location bears protective function criticality if the loss of one of its protective functions (i.e., regulatory/control/protection or containment function) will either result in a consequential release of hazard or the loss of a capability to mitigate a greater level hazard.
+
+# COMMON RECORD PROPERTIES
+
+  duplicate_record_of:
+    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def" 
+
+  record_retirement_information:
+    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
+  
+  
+#############################################################
+# LOCAL OBJECT DEFINITION
+#############################################################
+
+definitions:
+  criticality rating definition:
+    type: object
+    properties:
+      rating:
+        type: integer
+      description:
+        type: string
+    enum:
+      - rating: 1
+        description: TBD
+      - rating: 2
+        description: TBD
+      - rating: 3
+        description: TBD
+      - rating: 4
+        description: TBD
+      - rating: 5
+        description: TBD
+
+
+#############################################################
+# RULES
+#############################################################
+
+rule_spec:
+
+  - name: ID of Linear Assets Represented as functional-location in Maximo
+    spec_ID: Vku-67dDxx
+    involves_prop: [ID]
+    type: [triggered action]
+    specification:
+      trigger: replication creation of assetY record from the TWAG
+      action: apply Facility ID from TWAG as ID 
+    status: false
+
+  - name: ID of Linear Assets Represented as functional-location in Maximo
+    spec_ID: Vku-67dDxx
+    involves_prop: [ID]
+    type: [triggered action]
+    specification:
+      - if:
+        oneOf:
+          - assetfunctional-locationClass:
+              properties:
+                  className:
+                    const: pumping station
+          - assetfunctional-locationClass:
+              properties:
+                  className:
+                    const: water treatment plant
+          - assetfunctional-locationClass:
+              properties:
+                  className:
+                    const: large chamber
+        then:
+          required: GIS_object_ID
+    status: false
+
+    #[]RULE VkiDyJcSxg: Before a functional-location can be eliminated, all children, as well as the descendants of the functional-location in the hierarchy must also be eliminated. $comment: a procedure should to be created to allow the recursive elimination of a functional-location and all of its children.
+
+    #[]RULE VygDC0Frxl: When a functional-location is "eliminated", it must no longer be visible in any view of the functional-location hierarchy. (Its entire branch must not be available either, because all of its descendants would be eliminated as well.)
+    #[]Review with To ASMP: with this rule, we no longer need to have a hierarchy branched for retired functional-locations.
+
+    #[]RULE EkP5qy5Sxl: If change auditing cannot be turned on, then when a functional-location record status is "eliminated", all the specification in the record's data fields must be frozen.
+
+    #[]RULE:
+    # IN COMMON LANGUAGE: At any given time, each functional-location may only have a single asset assigned to it (i.e., associated with the functional-location via the asset's "assigned_to_asset_functional-location" property).

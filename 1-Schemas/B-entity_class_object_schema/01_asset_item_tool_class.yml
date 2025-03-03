@@ -14,18 +14,16 @@ properties:
     - $ref: "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
     #inherit the definitions and rules from th "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
     
-
   parent_class:
-    $ref: B-entity_class_object_schema/01_asset_item_tool_class_object_schema.yml
+    $ref: B-entity_class_object_schema/01_asset_item_tool_class.yml
 
-
-  only used as a part:
+  only_used_as_a_part:
     oneOf: 
       - type: boolean
       - type: null
     description: A true value indicates that all instances of this class is always used as a part of another asset, and would never be given an asset tag. E.g., bearing.
     rule_spec:
-      - name: Do not include only used as a part in the asset classification  
+      - name: Do not include only_used_as_a_part in the asset classification  
         spec_ID: NJ1E1ZbOgg
         status: TBS
     $comment: A false or null value materially mean the same thing. 
