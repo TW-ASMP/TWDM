@@ -1,7 +1,7 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
 title: functional-location classification object
-$id: orgGroupClassObject
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/B-entity_class_object_schema/04_org-chart_group_class.yml
 type: object
 
 properties:
