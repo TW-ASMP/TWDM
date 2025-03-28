@@ -51,15 +51,15 @@ rule_spec:
     spec_ID: NyD4XGbuex
     specification: |
       if functional-locationClassX is a descendent of "Discrete Asset functional-location" in the functional-location classification hierarchy:
-        set functional-locationClassX.properties."a discrete asset functional-location" to TRUE
+        set functional-locationClassX.properties."a discrete asset functional-location" to true
         set functional-locationClassX.properties."a functional structure functional-location" to FALSE
         set functional-locationClassX.properties."a defined ser of functional-location" to FALSE
       elif functional-locationClassX is a descendent of "functional structure functional-location" in the functional-location classification hierarchy: 
         set functional-locationClassX.properties."a discrete asset functional-location" to FALSE
-        set functional-locationClassX.properties."a functional structure functional-location" to TRUE
+        set functional-locationClassX.properties."a functional structure functional-location" to true
         set functional-locationClassX.properties."a defined ser of functional-location" to FALSE
       elif functional-locationClassX is a descendent of "Defined Set of functional-locations" in the functional-location classification hierarchy:
         set functional-locationClassX.properties."a discrete asset functional-location" to FALSE
         set functional-locationClassX.properties."a functional structure functional-location" to FALSE
-        set functional-locationClassX.properties."a defined ser of functional-location" to TRUE        
+        set functional-locationClassX.properties."a defined ser of functional-location" to true        
     status: specified

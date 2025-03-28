@@ -98,7 +98,7 @@ properties:
     oneOf:
       - type: null
       - $ref: "./32_job_plan.yml"
-    integration: PM library
+    integration: [PM library]
   
   failure_codes:  
       description: denotes a physical-based failure condition (e.g., shaft misalignment). 
@@ -115,7 +115,7 @@ properties:
       - type: array
         items: 
           type: string
-    integration: PM Library
+    integration: [PM Library]
     $comment: >
       - For the 2026-27 implementation, this data field will start-out as a free-text. In the future, the value will come from a solution such as OnePM.
 
@@ -236,7 +236,7 @@ properties:
 
   compliance_requirement:
     description: identifies the compliance requirement object
-    integration: data-hub
+    integration: [data-hub]
     oneOf: 
       - type: null
       - type: array
@@ -285,7 +285,9 @@ properties:
 # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
+    P3-MVP: true
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
+    P3-MVP: true
     $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"

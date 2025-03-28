@@ -6,6 +6,7 @@ type: object
 properties:
   
   ID:
+    
     description: the unique identifier for the contract
     type: string  
 
@@ -61,7 +62,9 @@ properties:
   # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
+    P3-MVP: true
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
+    P3-MVP: true
     $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
