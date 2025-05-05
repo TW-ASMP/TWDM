@@ -28,5 +28,8 @@ properties:
         status: TBS
     $comment: A false or null value materially mean the same thing. 
 
-
-  
+  defined_class:
+    oneOf: 
+      - type: boolean
+      - type: null
+    description: Indicates a class that is only applicable when certain conditions of operating context and specifications are met.

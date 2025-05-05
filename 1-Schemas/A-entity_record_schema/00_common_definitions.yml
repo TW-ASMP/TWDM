@@ -25,29 +25,8 @@ definitions:
     $comment: |
       A rotating item is a trackable item, represented also as an asset in Maximo. When the value of this field is true, we must serialize every instance of the item. This commitment is beyond what we can presently achieve at TW. The more pragmatic starting point considered in 2024 is as follows:
         1) for the initial implementation, specify all items as non-rotating
-        2) an non-rotating item definition, containing the mfr, model, and ordering_options, can be associated with any asset, through the the asset's item_product_master_record property.
+        2) an non-rotating item definition, containing the mfr, model, and ordering_options, can be associated with any asset, through the the asset's product_item_master_record property.
         2) in the future, if we wish to convert the non-rotating item definition to a rotating item definition, we would serialize all the assets associated to the item definition, and convert them to rotating assets.
-
-  manufacturer_and_model_def:
-    type: object
-    properties:
-      manufacturer:
-        $ref: MaximoCompanyObject
-      model_and_sub-model:
-        oneOf:
-        - type: null
-        - type: string
-        description: For example, "Multilin 869"
-      product_version_or_model_year:
-        oneOf:
-        - type: null
-        - type: string
-        description: Identifies the specific version of the product model. For example "v2" or "2023".
-      manufacturer_PN:
-        oneOf:
-        - type: null
-        - type: string
-        description: The manufacturer designator identifying the exact product item.
 
 # FAILURE
 
@@ -229,7 +208,6 @@ definitions:
 
   compliance_requirement:
     properties:
-      
       name:
         type: string
         $comment: |

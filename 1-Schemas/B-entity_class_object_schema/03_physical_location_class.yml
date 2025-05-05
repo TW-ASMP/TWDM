@@ -1,5 +1,5 @@
 title: functional-location classification object
-$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/B-entity_class_object_schema/03_physical_location_class.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/B-entity_class_object_schema/03_physical-location_class.yml
 $schema: "http://json-schema.org/draft-07/schema#"
 type: object
 
@@ -10,4 +10,4 @@ properties:
     #inherit the definitions and rules from th "/1-Schemas/B-entity_class_object_schema/00_common_class_definitions.yml"
 
   parent_class:
-    $ref: B-entity_class_object_schema/03_space_class.yml
+    $ref: B-entity_class_object_schema/03_physical-location_class.yml

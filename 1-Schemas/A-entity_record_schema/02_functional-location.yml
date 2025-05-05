@@ -7,33 +7,33 @@ type: object
 properties:
 
   ID:
-    P3-MVP: true
+    P3_MVP: true
     type: string
-    description: is the unique ID of the functional-location known as the "tag number" or "entity number" in Avantis's vocabulary. (Avantis is the a WMS).
+    description: is the unique ID of the functional-location known as the "tag number" or "entity number" in Avantis's vocabulary. (Avantis is the a WMS). For example THC-DIG-V-0110.
 
   name:
-    P3-MVP: true
+    P3_MVP: true
     type: string
     description: is a structured description of the functional-location. 
 
   parent:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./02_functional-location.yml"
     description: references the functional-location that is served by the larger asset, which physically subsumes the asset serving this functional-location.
 
-  GIS_object_ID:
-    P3-MVP: true
-    type: string
-    integration: [GIS]
-    description: is unique ID of the GIS record representing the same pumping station, chamber, or ... as this *functional-location* record in Maximo.
+  # GIS_object_ID:
+  #   P3_MVP: true
+  #   type: string
+  #   integration: [GIS]
+  #   description: is unique ID of the GIS record representing the same pumping station, chamber, or ... as this *functional-location* record in Maximo.
   
   class:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "B-entity_class_object_schema/02_functional-location_classification.md"
     description: denotes the broad types of asset that may play the functional-location (e.g., "breaker functional-location"). It also denotes the useful function provided by an asset in the functional-location to the larger system (e.g., the "tie-breaker functional-location" provides tie-breaking function).
 
   inferred_classes:
-    P3-MVP: false
+    P3_MVP: false
     oneOf: 
       - type: null
       - type: array
@@ -45,13 +45,13 @@ properties:
     description: indicates the complex classes to which this asset is an instance.
 
   specification_data:
-    P3-MVP: true
+    P3_MVP: true
     type: object
     $ref: "."
     description: is a set of functional performance specification data. (The applicable specifications are dependent on the definition made in the chosen class.)
   
   functional-location_status:
-    P3-MVP: true
+    P3_MVP: true
     type: string
     enum:
       - specified
@@ -62,14 +62,14 @@ properties:
       "specified" means the functional-location is conceived and exists in some specification or design documentation; "active" means the necessary supports exist for an asset to serve in the functional-location and function of the asset being utilized; "eliminated" represents a negation of either or both conditions of the active status.
   
   installation_location:
-    P3-MVP: true
+    P3_MVP: true
     oneOf: 
-      - $ref: "./03_space.yml"
+      - $ref: "./03_physical-location.yml"
       - type: null
     description: refers to the physical-location in which the asset serving the functional-location would be installed.
 
   service_relations:
-    P3-MVP: false
+    P3_MVP: false
     description: identifies the asset, by the functional-location it is occupying, that this functional-location is serving. For example, given a motor starter functional-location, the value in this data field identifies the functional-location of the motor controlled by that motor starter.
     oneOf:
     - type: null
@@ -89,7 +89,7 @@ properties:
               - "controls or regulates"
             $comment: the list is not exhaustive.
 
-  service_address_or_coordinate:
+  service_address:
     oneOf: 
       - $ref: MaximoServiceAddressObject
       - type: null
@@ -97,55 +97,62 @@ properties:
 
 # OWNER, OPERATOR, MAINTAINER GROUP
   
-  operator_group:
-    P3-MVP: true
+  operated_by:
+    P3_MVP: true
     description: is the group responsible for the operation of the asset in the functional-location.
     oneOf:
       - type: null 
       - $ref: "./04_org-chart_group.yml"
 
-  maintenance_group:
-    P3-MVP: true
+  maintained_by:
+    P3_MVP: true
     description: is the group responsible for the overall maintenance of the asset - for example, a unit, work area, or crew.
     oneOf: 
       - type: null
       - $ref: "./04_org-chart_group.yml"
 
   #note:
-    # on: the absence of of a owned_by_the_group property for functional-locations
+    # on: the absence of of a owned_by property for functional-locations
     # content: assets that are occupying a functional-location are presumed to be owned by the City. 
   
-  inherit_operator_group_value:
-    P3-MVP: false
+  inherit_operated_by_value:
+    P3_MVP: false
     type: boolean
     default_value: true
 
-  inherit_operator_group_from_parent:
-    P3-MVP: false
+  inherit_operated_by_from_parent:
+    P3_MVP: false
     type: boolean
     default_value: true
 
-  inherit_maintenance_group_from_parent:
-    P3-MVP: false    
+  inherit_maintained_by_from_parent:
+    P3_MVP: false    
     type: boolean
     default_value: true
 
   criticality:
-    P3-MVP: true
+    P3_MVP: true
     description: the overall criticality of an asset 
     oneOf:
       - $ref: "#/definitions/criticalityRatingDef"
       - type: null
 
+  GL_functional_area:
+    oneOf:
+      - string
+      - type: null
+    description: identifies the purpose or service the expense supports.
+    P3_MVP: true  
+  
   operational_criticality:
-    P3-MVP: false
+    P3_MVP: false
     description: functional-location bears high operational criticality if the loss of the asset in the functional-location will either reduce throughput or product quality (but not product safety) of the larger system.
     oneOf:
       - $ref: "#/definitions/criticalityRatingDef"
       - type: null
 
   protective_function_criticality:
-    P3-MVP: false
+    P3_MVP: false
     oneOf:
       - $ref: "#/definitions/criticalityRatingDef"
       - type: null
@@ -154,11 +161,11 @@ properties:
 # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def" 
 
   record_retirement_information:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
   
   

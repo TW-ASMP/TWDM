@@ -71,11 +71,11 @@ properties:
 #==============================
 
   duplicate_record_of:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
 
 $comment: ASMP does not expect the tool item master to be widely used during the initial adoption of Maximo - we expect that most tools would initially be represented as un-stocked.  

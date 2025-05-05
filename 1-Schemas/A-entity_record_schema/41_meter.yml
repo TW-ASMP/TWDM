@@ -69,9 +69,9 @@ properties:
 # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def" 
 
   record_retirement_information:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"

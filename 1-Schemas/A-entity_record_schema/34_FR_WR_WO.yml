@@ -184,23 +184,31 @@ properties:
       - type: array
         items:
           properties:
+            
             cause_code:
+            
               description: denotes a physical-based failure condition (e.g., shaft misalignment). 
               $ref: "./00_common_definitions.yml#/definitions/failure_code"
               $comment: one failure code per request
+            
               rule_spec: 
+            
                 - name: Which Cause Codes to Show
                   spec_ID: 01JFH2F04P28B4EB2HNWA68KN9
                   form: short
                   specification: |
                     - type must be "cause"
                     - [] more tbd
+            
               action_spec:
+            
                 - name: Creating a New Failure Code
                   spec_ID: 01JFH2NE68W0NCSBKKSYPZRA2Z
                   form: short
                   specification: User must be able to specify new failure codes,
+            
             basis_of_selection:
+            
               description: indicates how the failure code was derived
               type: string
               enum:
@@ -226,9 +234,7 @@ properties:
     implementation:
       WR_only: true  
   
-
   # WORK DETAIL
-
 
   work_title:
 
@@ -294,13 +300,13 @@ properties:
     implementation:
       $comment: WO.SITEID
 
-  maintenance_group:
+  maintained_by:
 
     description: indicates a sub-group of the operational unit, that is led by a supervisor who is accountable for performing the work. 
     $ref: "./04_org-chart_group.yml"
 
     rule_spec:
-      name: Inherit the maintenance_group value from either the asset or the functional-location
+      name: Inherit the maintained_by value from either the asset or the functional-location
       spec_ID: 01JFK43CJBC495TB7Y3H3VP172
       form: very short
 
@@ -641,7 +647,7 @@ properties:
   # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:

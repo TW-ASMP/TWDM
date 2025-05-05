@@ -210,9 +210,7 @@ properties:
       - type: null
       - type: object
         properties:
-        
           relation_to_event:
-
             type: string  
             enum:
               - before
@@ -220,9 +218,7 @@ properties:
               - after
               - at the start of
               - at the end of
-        
           description_of_event:
-
             description: a free-text description of a event or process, such as "an  elevator failure".
             type: string
     
@@ -236,7 +232,7 @@ properties:
 
   compliance_requirement:
     description: identifies the compliance requirement object
-    integration: [data-hub]
+    integration: [data hub]
     oneOf: 
       - type: null
       - type: array
@@ -285,9 +281,9 @@ properties:
 # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"

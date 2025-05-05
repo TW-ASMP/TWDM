@@ -6,25 +6,25 @@ type: object
 properties:
 
   employee_number:
-    P3-MVP: true
+    P3_MVP: true
     type: string
 
   first_name:
-    P3-MVP: true
+    P3_MVP: true
     type: string
   
   last_name:
     type: string
   
   display_name:
-    P3-MVP: true
+    P3_MVP: true
     description: Full name displayed (usually a combination of first and last names)
     oneOf:
       - type: null
       - type: string
 
   section:
-    P3-MVP: true
+    P3_MVP: true
     description: Indicates which section within a division that the person works for
     type: string
     oneOf:
@@ -32,14 +32,14 @@ properties:
       - type: string
 
   unit:
-    P3-MVP: true
+    P3_MVP: true
     description: Indicates which business-unit within a section that the person works for
     oneOf:
       - type: null
       - type: string
   
   status:
-    P3-MVP: true
+    P3_MVP: true
     type: string
     enum:
       - active
@@ -47,7 +47,7 @@ properties:
       - departed 
   
   person_roles:
-    P3-MVP: true
+    P3_MVP: true
     description: The role, associated with a certain type of system access, that the person plays in the system. 
     oneOf:
       - type: null
@@ -58,7 +58,7 @@ properties:
   # NOTE: persons' association to trade in documented in the trade object    
 
   qualifications:
-    P3-MVP: true
+    P3_MVP: true
     description: The qualifications that the person gained through training or certification. 
     oneOf:
       - type: null
@@ -85,12 +85,12 @@ properties:
                   format: date
   
   external_contractor:
-    P3-MVP: false
+    P3_MVP: false
     description: Indicates whether the person is not an employee of the City
     type: boolean
   
   contract:
-    P3-MVP: false
+    P3_MVP: false
     description: identifies the contracting company that the person works for
     oneOf:
       - type: null
@@ -98,7 +98,7 @@ properties:
         $ref: "./13_service_contract.yml"
   
   contact:
-    P3-MVP: true
+    P3_MVP: true
     properties:
       email_address:
         description: Email address of the person
@@ -112,9 +112,9 @@ properties:
   # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
   
   record_retirement_information:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"

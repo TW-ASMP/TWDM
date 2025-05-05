@@ -6,59 +6,74 @@ type: object
 properties:
 
   ID:
-    P3-MVP: true
+    P3_MVP: true
     type: string
     description: is the unique ID 
   
-  org-chart_group_name:
-    P3-MVP: true
+  name:
+    P3_MVP: true
     type: string 
 
-  parent_org-chart_group:
-    P3-MVP: true
+  parent:
+    P3_MVP: true
     oneOf:
       - $ref: "./04_org-chart_group.yml"
       - type: null
 
   class:
-    P3-MVP: true
+    P3_MVP: true
     $ref: B-entity_class_object_schema/04_org_class.yml
 
   specification_data:
-    P3-MVP: true
+    P3_MVP: true
     type: object
     description: is a set of specification property data. (The applicable properties are dependent on the definition made in the chosen class.)
 
   leader:
-    P3-MVP: true
     oneOf:
-      - $ref: "./07_person.yml"
+      - $ref: "./08_person.yml"
       - type: null
-    description:
+    description: indicates the person who lead the group
+    P3_MVP: true
+  
+  GL_cost_centre:
+    oneOf:
+      - string
+      - type: null
+    description: identifies the organizational unit incurring or managing the expense
+    P3_MVP: true
+    $comment: For example, TW4095 is the cost centre for Work Area 1 of Highland Creek Wastewater Treatment Plant.
+
+  base_location:
+    oneOf: 
+      - $ref: "./03_physical-location.yml"
+      - type: null
+    description: 
+    P3_MVP: true
 
   equivalent_to_Maximo_site:
-    P3-MVP: true
+    P3_MVP: true
     description: indicates that this org-chart group maps to a particular site (a native Maximo object)
     $ref: MaximoSiteObject
 
   equivalent_to_Maximo_org:
-    P3-MVP: true
+    P3_MVP: true
     description: indicates that this org-chart group maps to a particular org-chart group (a native Maximo object)
     $ref: MaximoOrgObject
 
-  equivalent_to_Maximo_crew:
-    P3-MVP: true
-    description: indicates that this org-chart group maps to a particular org-chart group (a native Maximo object)
-    $ref: MaximoCrewObject
+  # equivalent_to_Maximo_crew:
+  #   P3_MVP: true
+  #   description: indicates that this org-chart group maps to a particular org-chart group (a native Maximo object)
+  #   $ref: MaximoCrewObject
 
   # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    P3-MVP: true
+    P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
 
 
