@@ -165,7 +165,7 @@ properties:
     - type: null
     - type: array
       items:
-        $ref: "./00_common_definitions.yml#/definitions trade_requirement_definition"
+        $ref: "./00_common_definitions.yml#/definitions/trade_requirement_definition"
 
   service_requirements:
     description: identifies (contracted) service needed to complete the work.
@@ -184,6 +184,10 @@ properties:
     - type: array
       items:
         $ref: "./32_job_plan.yml"
+    dev_meta:
+      P3_MVP: false 
+      P1_label: 
+      DB: 
 
   must_be_followed_by:
     description: identifies activities (specified in other job plans) that must be performed in the same work order after the activity specified in this PM can be performed.
@@ -192,6 +196,10 @@ properties:
     - type: array
       items:
         $ref: "./32_job_plan.yml"
+    dev_meta:
+      P3_MVP: false 
+      P1_label: 
+      DB: 
 
 # WORK TRIGGER CONDITION NOTES
 
@@ -243,7 +251,8 @@ properties:
     description: indicates the level of compliance, with legislative being the top class
     $ref: "./00_common_definitions.yml#/definitions/compliance_class"
 
-  mitigates_safety_risk_to_staff:
+  directly_mitigates_safety_risk_to_staff:
+    P3_MVP: false
     oneOf: 
     - type: null
     - type: string
@@ -252,7 +261,8 @@ properties:
       - no
       - unspecified
 
-  mitigates_safety_or_health_risk_to_public:
+  directly_mitigates_risk_to_public:
+    P3_MVP: false
     oneOf: 
     - type: null
     - type: string
@@ -261,7 +271,8 @@ properties:
       - no
       - unspecified
   
-  mitigates_environmental_risk:
+  directly_mitigates_environmental_risk:
+    P3_MVP: false
     oneOf: 
     - type: null
     - type: string
@@ -287,3 +298,8 @@ properties:
   record_retirement_information:
     P3_MVP: true
     $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
+
+
+#############################################################
+# RULES
+#############################################################
