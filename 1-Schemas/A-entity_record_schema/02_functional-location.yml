@@ -198,7 +198,7 @@ definitions:
 # RULES
 #############################################################
 
-rule_spec:
+RULE_SPEC:
 
   - name: ID of Linear Assets Represented as functional-location in Maximo
     spec_ID: Vku-67dDxx

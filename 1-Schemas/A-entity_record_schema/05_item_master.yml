@@ -17,12 +17,12 @@ properties:
     P3_MVP: true
     description: A human readable short description of the item.
     type: string
-    rule_spec:
+    RULE_SPEC:
       - name: item master record naming
         P3_MVP: TBD
         form: long
         spec_ID: VkYgCtRPlx
-        type: assertion
+        type: automatic_assertion
         specification: |
           if (item_x.properties.commodity_or_commercial_product) = "commodity", then  
             the value of item_x.properties.name would be the semi-colon delimited concatenation of the following property values:
@@ -43,7 +43,7 @@ properties:
     description: indicates the class to which this asset is an instance.
     $ref: "../B-entity_class_object_schema/01_asset_item_tool_class.yml"
     $comment: A value from the item classification (a superset of the asset class).
-    rule_spec:
+    RULE_SPEC:
       - name: item classification list includes all classes
         spec_ID: EynXVZ-dxg
         specification: |
@@ -74,6 +74,22 @@ properties:
     enum:
       - commodity
       - commercial product
+    RULE_SPEC:
+      - name: a commercial product item record must have manufacturer's information
+        spec_ID: 01K1E8JE4G5T00RQP63S0BPJBV
+        type: [constraint_or_validation] 
+        specification: |
+          If commodity_or_commercial_product = "commercial product", then the following properties must NOT be null:
+            - manufacturer_company_name
+            - make_and_model
+        status: check 07/30
+      - name: a commodity item cannot be subset of another commodity item
+        spec_ID: 01K1E9YNYCMZQ5SNTF14723TND
+        type: [constraint_or_validation] 
+        specification: |
+          If commodity_or_commercial_product = "commodity", then the subset_of_commodity_item property value must be NULL.
+        remark: This rule is instated to avoid complexity, such as circularity, in the manufacturer make and model data.
+        status: check 07/30
 
   # GENERIC COMMODITY DESCRIPTION
   
@@ -85,38 +101,33 @@ properties:
 
   # COMMERCIAL PRODUCT DESCRIPTION
 
-    manufacturer_name:
-      $ref: MaximoCompanyObject
+  manufacturer_company_name:
+    oneOf:
+    - type: null
+    - type: string
+    description: The commercial entity that has manufactured the product or for whom the product was manufacturer.
 
-    model_and_sub-model:
-      oneOf:
-      - type: null
-      - type: string
-      description: For example, "Multilin 869"
+  make_and_model:
+    oneOf:
+    - type: null
+    - type: string
+    description: The complete brand, model, and sub-model description. For example, "GE Multilin 869"
+    dev_note: 
+      P3_MVP: true 
+      P1_label: 
+      DB: 
 
-    product_version_or_model_year:
-      oneOf:
-      - type: null
-      - type: string
-      description: Identifies the specific version of the product model. For example "v2" or "2023".
-
-    manufacturer_PN:
-      oneOf:
-      - type: null
-      - type: string
-        description: The manufacturer designator identifying the exact product item.
+  product_version_or_model_year:
+    oneOf:
+    - type: null
+    - type: string
+    description: Identifies the specific version of the product model. For example "v2" or "2023".
+    dev_note: 
+      P3_MVP: true 
+      P1_label: 
+      DB: 
   
-  commercial_product_description:
-    P3_MVP: true
-    description: A description concatenated from the text components of the manufacturer and model information.
-    oneOf: 
-      - type: null
-      - type: string
-    rule_spec:
-      - name: Concatenation of commercial product description
-        status: TBD
-  
-  instant_of_generic_commodity:
+  subset_of_commodity_item:
     P3_MVP: true
     description: Indicates the commercial product is also a type of generic commodities.  
     oneOf: 
@@ -124,6 +135,10 @@ properties:
       - type: array
         items:
           $ref: "./05_item_master.yml"
+    dev_note: 
+      P3_MVP: false
+      P1_label: 
+      DB: 
 
   # OTHER ITEMS DESCRIPTIONS
 
@@ -146,15 +161,15 @@ properties:
     P3_MVP: false
     description: Describes how the quantity of the item is measured, when it is issued out, such as "feet", "kg", "sheet".
     type: string
-    rule_spec:
+    RULE_SPEC:
       - name: Unit of issue for assets and parts (non-material items)
         spec_ID: 01JK1VER5T6HK314XPB4W5T27V
-        type: validation
+        type: constraint_or_validation
         form: short
         description: if the item is not an material item, its unit of issue would be "individual item"
       - name: Default value of  unit_of_issue
         spec_ID: 01JK7AM2RA8S8EPAH57W33SJ79
-        type: assertion
+        type: automatic_assertion
         form: short
         description: When an item record is created, the default unit of issue is the same as the item format. 
 
@@ -162,10 +177,10 @@ properties:
     P3_MVP: false
     description: indicates how many units of issue is in the item.
     type: number
-    rule_spec:
+    RULE_SPEC:
       - name: Default quantity in units
         spec_ID: 01JK7AFSHFQ2W8G5JD3B9XSWBV
-        type: assertion
+        type: automatic_assertion
         form: short
         description: When an item record is created, the default value of quantity_in_units_of_issue is 1. 
   
@@ -178,10 +193,10 @@ properties:
       - type: array
         items:
           $ref: "./04_item_master.yml"
-    rule_spec:
+    RULE_SPEC:
       - name: Range must be a commercial product as well
         spec_ID: 01JF81079K178X9B4NSG23AA0Z
-        type: validation
+        type: constraint_or_validation
         specification: 
         status: TBD
   
@@ -205,7 +220,7 @@ properties:
                 number_in_package:
                   description: indicate the number of items that are in the package
                   type: number
-              rule_spec:
+              RULE_SPEC:
                 - name: Default order packaging format
                   description: Default order packaging format is "individual unit"
                   form: short

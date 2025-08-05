@@ -238,5 +238,5 @@ definitions:
   compliance_class:
     type: string
     enum:
-      - legislative
+      - regulatory
       - corporate policy

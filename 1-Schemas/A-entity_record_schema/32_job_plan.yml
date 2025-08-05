@@ -56,10 +56,10 @@ properties:
       Examples of operational group include
         TAB - Ashbridges Bay Wastewater Treatment Plants
         COL - Waste and Storm Water Collection
-    rule_spec: >
+    RULE_SPEC: >
       - name: job plan's specific_to_operational_units property must be an unit level org-chart group
         spec_ID: 01JD2V5X97J1Y45JWDW4SV1FJ4
-        type: [validation]
+        type: [constraint_or_validation]
         specification: |
           Given an job plan, JP_x, all values of JP_x.specific_to_operational_units must be
             - an org-chart group, and
@@ -82,10 +82,10 @@ properties:
       - type: array
         items:
           $ref: "../A-entity_record_schema/05_item_master.yml"
-    rule_spec: >
+    RULE_SPEC: >
       - name: Valid Commercial Product Item reference in a Job Plan
         spec_ID: 01JD2V5X97J1Y45JWDW4SV1FJ4
-        type: [validation]
+        type: [constraint_or_validation]
         specification: |
            Given an job plan, JP_x, all values of JP_x.specific_to_commercial_products must be
             - a item master record, and
@@ -184,7 +184,7 @@ properties:
     - type: array
       items:
         $ref: "./32_job_plan.yml"
-    dev_meta:
+    dev_note:
       P3_MVP: false 
       P1_label: 
       DB: 
@@ -196,7 +196,7 @@ properties:
     - type: array
       items:
         $ref: "./32_job_plan.yml"
-    dev_meta:
+    dev_note:
       P3_MVP: false 
       P1_label: 
       DB: 
@@ -251,35 +251,6 @@ properties:
     description: indicates the level of compliance, with legislative being the top class
     $ref: "./00_common_definitions.yml#/definitions/compliance_class"
 
-  directly_mitigates_safety_risk_to_staff:
-    P3_MVP: false
-    oneOf: 
-    - type: null
-    - type: string
-    enum:
-      - yes
-      - no
-      - unspecified
-
-  directly_mitigates_risk_to_public:
-    P3_MVP: false
-    oneOf: 
-    - type: null
-    - type: string
-    enum:
-      - yes
-      - no
-      - unspecified
-  
-  directly_mitigates_environmental_risk:
-    P3_MVP: false
-    oneOf: 
-    - type: null
-    - type: string
-    enum:
-      - yes
-      - no
-      - unspecified
 
   safe_work_plan_link:
     description: identifies a safety work plan by a permanent URL to the document (e.g., corporate Safe Procedure or Toronto Water Safe Operating Procedures)

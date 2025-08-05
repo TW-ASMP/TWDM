@@ -8,7 +8,7 @@ The following is the complete set of Toronto Water's work type classification.
 * preventive
 * informational
 * project
-  * contractor support
+* capital project support
 
 ## Notes
 [^1]: An emergency work order is technically a corrective work that must be done urgently; may also involve an investigative component (not unlike other corrective work orders).

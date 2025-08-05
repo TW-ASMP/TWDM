@@ -169,6 +169,8 @@ properties:
   
   # LEGISLATIVE DESIGNATION
 
+  regulated:
+    
   compliance_level:
     $ref: "./00_common_definitions.yml#/definitions/compliance_class"
     work_entity_harmonization: WR(x), WO(_), JP(_)

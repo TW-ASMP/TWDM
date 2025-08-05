@@ -11,17 +11,6 @@ properties:
     type: string
     implementation:
       MX_mapping: WONUM
-
-  311_ticket_ID:
-    implementation:
-      MX_mapping: COTTICKETID
-    $comment:
-      [] to confirm the fieldname with Debbie
-    
-  311_request_number:
-    implementation:
-      $comment: |
-        [] Waiting on Debbie to confirm database mapping. There is some uncertainty of this should be either  COTREQUESTNUMBER or EXTERNALREFID
   
   record_type:
     description: indicates whether this record is a work request, work order, or a reported problem.
@@ -31,7 +20,7 @@ properties:
       # - issue                   # issue reporting removed from phase3 MVP
       - work request
       - work order
-    rule_spec:
+    RULE_SPEC:
       - name: inference of record_type from status
         status: []
     $comment: |
@@ -54,7 +43,7 @@ properties:
       - ready to schedule                   # WO 
       - scheduled                           # WO
       - in progress                         # WO
-      - completed                           # WO
+      - completed                           # WO at
       - closed                              # WO
       - WO cancelled                        # WO
     implementation:
@@ -83,7 +72,7 @@ properties:
   #     - type: null
   #     - $ref: "../A-entity_record_schema/02_functional-location.yml"
   #     #[] should have name and description, like asset_to_work_on
-  #   rule_spec:
+  #   RULE_SPEC:
   #     - name: mutual exclusion of asset_to_work_on and functional-location_to_work_on values  
   #       spec_ID: 01JFK49T43T1TF3HBTBTDPMN5Y
   #       form: short
@@ -122,12 +111,6 @@ properties:
           description:
             type: string
 
-  issue_found_at_address:
-    description: indicates the service address in or around which a failed asset requiring maintenance is located.
-    oneOf:
-      - type: null
-      - $ref: MaximoServiceAddressObject
-
   route:
     description: a sequential list of work, composed of job plans paired with an asset/functional-location. 
     oneOf:
@@ -161,7 +144,7 @@ properties:
     implementation:
       WR_only: true
 
-  observed_problems:
+  symptom_code:
     description: is what's also known as a common symptom code (e.g., making noise, cannot start, not running).
     oneOf:
       - type: null
@@ -170,14 +153,14 @@ properties:
           $ref: "./00_common_definitions.yml#/definitions/failure_code"
     implementation:
       WR_only: true
-    rule_spec: 
+    RULE_SPEC: 
       - name: Which problem codes to show 
         spec_ID: 01JFH3ERR08WHJ0E4WRK166WRT
         form: short
         specification: []
     $comment: multiple values are allowed
 
-  physical_causes:
+  failure_code:
     oneOf:
       - type: null
       - type: array
@@ -188,7 +171,7 @@ properties:
               $ref: "./00_common_definitions.yml#/definitions/failure_code"
               $comment: one failure code per request
             
-              rule_spec: 
+              RULE_SPEC: 
                 - name: Which Cause Codes to Show
                   spec_ID: 01JFH2F04P28B4EB2HNWA68KN9
                   form: short
@@ -265,7 +248,7 @@ properties:
     description: is the classification at the work order level
     $ref: "../B-entity_class_object_schema/33_work_type.yml"
     
-    rule_spec:
+    RULE_SPEC:
       name: Failure Reporting Leads to Investigation or Repair
       form: short
       involves_prop: [work_type]
@@ -277,7 +260,7 @@ properties:
     $ref: "../B-entity_class_object_schema/33_work_type.yml"
     not_on_WR: true
 
-  site:
+  owned_by:
     description: indicates Toronto Water's operational unit, on the org-chart group hierarchy, such as Waste and Storm Water Pumping (symbol - WASP) or Humber Wastewater Treatment Plant (symbol - THR).
     $ref: "./04_org-chart_group.yml"
     
@@ -288,7 +271,7 @@ properties:
     description: indicates a sub-group of the operational unit, that is led by a supervisor who is accountable for performing the work. 
     $ref: "./04_org-chart_group.yml"
 
-    rule_spec:
+    RULE_SPEC:
       name: Inherit the maintained_by value from either the asset or the functional-location
       spec_ID: 01JFK43CJBC495TB7Y3H3VP172
       form: very short
@@ -302,7 +285,7 @@ properties:
       - yes
       - no
       - unknown
-    rule_spec:
+    RULE_SPEC:
       - name: Default value of requires_asset_offline is null
         req_spec_ID: 01JFK2J0HWVWKDK4WWK5RZCXWY  
         form: very short
@@ -340,20 +323,9 @@ properties:
     implementation:
       MX_mapping: WO.WARRANTYEXPDATE
 
-  send_work_to_warranty_contractor:
-    description: a true (or yes) value indicates that the specified work should be performed by the warranty contractor.
-    type: boolean
-    todo []: rule - enable this field, only if asset_covered_by_warranty_contract is true
-
   asset_covered_by_service_contract:
     description: indicates that the asset (or the asset in the functional-location) is currently covered by a service contract.
     type: boolean
-
-  send_work_to_service_contractor:
-    description: a true (or yes) value indicates that the specified work should be performed by a the selected service contractor.
-    oneOf:
-      - type: null
-      - $ref: "../A-entity_record_schema/07_service_item_master.yml"
   
   supports_a_capital_project:
     description: indicate that the specified work supports the work being done be a capital project consultant or contractor.
@@ -414,7 +386,7 @@ properties:
       - type: string
         format: date
     
-  work_requested_date:
+  request_creation_date:
     description: is the date when the work request was submitted.
     oneOf:
       - type: null
@@ -498,7 +470,7 @@ properties:
       - type: null
       - $ref: "../A-entity_record_schema/33_PM.yml"
     WO_only: true
-    rule_spec:
+    RULE_SPEC:
       name: Work Type of Descendant Work Orders
       form: short
       id: 01JFVDM89RVDCE7VBVM7FDQHRD
@@ -528,39 +500,6 @@ properties:
               - type: array
                 items:
                   $ref: "./00_common_definitions.yml/attachment_def"
-
-  directly_mitigates_safety_risk_to_staff:
-    P3_MVP: false
-    description: indicates the work has impact on workers' safety
-    oneOf: 
-    - type: null
-    - type: string
-    enum:
-      - yes
-      - no
-      - unspecified
-
-  directly_mitigates_risk_to_public:
-    P3_MVP: false
-    description: indicates that the work has a direct impact on the well-being of the public
-    oneOf: 
-    - type: null
-    - type: string
-    enum:
-      - yes
-      - no
-      - unspecified
-  
-  directly_mitigates_environmental_risk:
-    P3_MVP: false
-    description: indicates that the work has impact on environmental protection
-    oneOf: 
-    - type: null
-    - type: string
-    enum:
-      - yes
-      - no
-      - unspecified
 
   # LEGISLATIVE DESIGNATION
 
