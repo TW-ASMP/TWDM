@@ -1,5 +1,4 @@
 $schema: "http://json-schema.org/draft-07/schema#"
-title: tool item master
 $id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/07_service_item_master.yml.yml
 type: object
 
@@ -8,11 +7,9 @@ properties:
   # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3-MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    P3-MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
 
 # Rest to be specified in the future

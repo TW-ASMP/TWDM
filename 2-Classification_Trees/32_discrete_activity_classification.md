@@ -37,6 +37,7 @@ The following is is the complete set of Toronto Water's discrete activity classi
   * setup
   * takedown of setup
   * travel
+  * break
 * design or redesign
   * creation of new functional-location
   * removal of existing functional-location
@@ -48,12 +49,12 @@ The following is is the complete set of Toronto Water's discrete activity classi
 
 ```yaml
   
-  rule_spec:
+  RULE_SPEC:
   - name: Valid Assignment of an Asset
     spec_ID: 01JDCNEFAED17CWF2K851ZAJKW
-    type: [assertion]
+    type: [automatic_assertion]
     description: |
-      classes names specified with an asterisk symbol shall have the their .property.can_be_applied_to_instances value set to false
+      classes names specified with an asterisk symbol shall have the their .property.applies_to_instances value set to false
 
 ```
 

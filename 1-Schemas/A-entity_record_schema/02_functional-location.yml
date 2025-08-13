@@ -1,57 +1,69 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
-title: functional-location
 $id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/02_asset_functional-location_schema.yml
 type: object
 
 properties:
 
   ID:
-    P3-MVP: true
+    description: is the unique ID of the functional-location known as the "tag number" or "entity number" in Avantis's vocabulary. (Avantis is the a WMS). For example THC-DIG-V-0110.
     type: string
-    description: is the unique ID of the functional-location known as the "tag number" or "entity number" in Avantis's vocabulary. (Avantis is the a WMS).
 
-  name:
-    P3-MVP: true
-    type: string
-    description: is a structured description of the functional-location. 
-
-  parent:
-    P3-MVP: true
-    $ref: "./02_functional-location.yml"
-    description: references the functional-location that is served by the larger asset, which physically subsumes the asset serving this functional-location.
-
-  GIS_object_ID:
-    P3-MVP: true
+  TWAG_ID:
+    description: the unique ID from TWAG.
+    P3_MVP: true
     type: string
     integration: [GIS]
-    description: is unique ID of the GIS record representing the same pumping station, chamber, or ... as this *functional-location* record in Maximo.
+
+  description: #[] rule for concatenation
+    description: is a structured description of the functional-location.
+    type: string
   
+  description_of_function:
+    description: a short description of the system function that the asset performs
+    type: string
+    maxLength: 50
+    dev_note:  
+      remark: only new assets created in Maximo must a description of function, assets imported from Avantis does not need this value. 
+
   class:
-    P3-MVP: true
-    $ref: "B-entity_class_object_schema/02_functional-location_classification.md"
-    description: denotes the broad types of asset that may play the functional-location (e.g., "breaker functional-location"). It also denotes the useful function provided by an asset in the functional-location to the larger system (e.g., the "tie-breaker functional-location" provides tie-breaking function).
+    description: denotes the broad types of asset that may play the functional-location (e.g., "breaker functional-location"). It can also denotes the useful function provided by an asset in the functional-location to the larger system (e.g., the "tie-breaker functional-location" provides tie-breaking function).
+    $ref: "../B-entity_class_object_schema/01_physical_entity_and_functional_location_class.yml"
+    RULE_SPEC:
+    - name: prevent asset class entries when classifying functional locations 
+      spec_ID: 01K2G2MBYJTH0J981M6MYVKRYF
+      type: [UI option constraint, validation] 
+      specification: |
+        For any functional location, "FL_x", it implies
+          OR(
+            - FL_x.class.properties.applies_to = "only functional locations"
+            - FL_x.class.properties.applies_to = "assets and functional locations"
+          )
 
-  inferred_classes:
-    P3-MVP: false
-    oneOf: 
-      - type: null
-      - type: array
-        items:
-          $ref: "B-entity_class_object_schema/02_functional-location_classification.md"
-    items:
-      type: string
-    read-only: true
-    description: indicates the complex classes to which this asset is an instance.
+  functional_location_type: #[]complete the rule
+    description:
+    type: string
+    enum:
+      - discrete asset
+      - system or structure 
+      - collection
+    RULE_SPEC: 
+    - name: only one asset can be assigned to a "discrete asset" or "system or structure" functional location
+      spec_ID: 
+      involves_prop: 
+      type: [validation] 
+      specification:
+        
+  parent:
+    description: references the functional-location that is served by the larger asset, which physically subsumes the asset serving this functional-location.
+    $ref: "#"
 
-  specification_data:
-    P3-MVP: true
-    type: object
-    $ref: "."
-    description: is a set of functional performance specification data. (The applicable specifications are dependent on the definition made in the chosen class.)
-  
-  functional-location_status:
-    P3-MVP: true
+  defined_class_or_category:
+    $ref: "./00_common_object_definition_components.yml/definitions/defined_class_or_category_def"
+
+# STATUS
+
+  status:
     type: string
     enum:
       - specified
@@ -61,105 +73,92 @@ properties:
     $comment: |
       "specified" means the functional-location is conceived and exists in some specification or design documentation; "active" means the necessary supports exist for an asset to serve in the functional-location and function of the asset being utilized; "eliminated" represents a negation of either or both conditions of the active status.
   
-  installation_location:
-    P3-MVP: true
-    oneOf: 
-      - $ref: "./03_space.yml"
-      - type: null
-    description: refers to the physical-location in which the asset serving the functional-location would be installed.
+  last_status_update:
+    description: the last time the status was updated
+    type: string
+    format: date
+  
+  up_and_available:
+    type: Boolean
+    description: Indicates whether the asset is available for doing the work that it is assigned at a given moment.
 
-  service_relations:
-    P3-MVP: false
-    description: identifies the asset, by the functional-location it is occupying, that this functional-location is serving. For example, given a motor starter functional-location, the value in this data field identifies the functional-location of the motor controlled by that motor starter.
-    oneOf:
-    - type: null
-    - type: object 
-      properties:
-        serving:
-          $ref: "./02_functional-location.yml"
+# LOCATION
 
-        service_type:
-          oneOf:
-          - type: null
-          - type: string
-            enum:
-              - "powers"
-              - "supplies material"
-              - "supplies energy"
-              - "controls or regulates"
-            $comment: the list is not exhaustive.
-
-  service_address_or_coordinate:
+  address:
     oneOf: 
       - $ref: MaximoServiceAddressObject
       - type: null
     description: is the geo-coordinate or the nearest street address of the asset.
-
-# OWNER, OPERATOR, MAINTAINER GROUP
   
-  operator_group:
-    P3-MVP: true
+  physical_location:
+    oneOf: 
+      - $ref: "./03_physical-location.yml"
+      - type: null
+    description: refers to the physical-location in which the asset serving the functional-location would be installed.
+
+  physical_location_description:
+    description: the legacy, free-text, physical location description
+    oneOf:
+      - type: null
+      - type: string
+    $comment: this description field would be eliminated after all assets/functional-locations have a physical location value.
+
+# OWNER, OPERATOR, MAINTAINER
+  
+  operations_unit:
+    oneOf:
+      - type: null 
+      - $ref: "./04_org-chart_group.yml"
+    description: The facility / unit operating the asset
+
+  operated_by:
     description: is the group responsible for the operation of the asset in the functional-location.
     oneOf:
       - type: null 
       - $ref: "./04_org-chart_group.yml"
+  
+  inherit_operated_by_from_parent:
+    type: boolean
+    default_value: true
 
-  maintenance_group:
-    P3-MVP: true
+  maintained_by:
     description: is the group responsible for the overall maintenance of the asset - for example, a unit, work area, or crew.
     oneOf: 
       - type: null
       - $ref: "./04_org-chart_group.yml"
 
-  #note:
-    # on: the absence of of a owned_by_the_group property for functional-locations
-    # content: assets that are occupying a functional-location are presumed to be owned by the City. 
+  inherit_maintained_by_from_parent: 
+    type: boolean
+    default_value: true
   
-  inherit_operator_group_value:
-    P3-MVP: false
-    type: boolean
-    default_value: true
-
-  inherit_operator_group_from_parent:
-    P3-MVP: false
-    type: boolean
-    default_value: true
-
-  inherit_maintenance_group_from_parent:
-    P3-MVP: false    
-    type: boolean
-    default_value: true
+  #owned_by:
+    # assets that are occupying a functional-location are presumed to be owned by the City. 
 
   criticality:
-    P3-MVP: true
     description: the overall criticality of an asset 
     oneOf:
       - $ref: "#/definitions/criticalityRatingDef"
       - type: null
 
-  operational_criticality:
-    P3-MVP: false
-    description: functional-location bears high operational criticality if the loss of the asset in the functional-location will either reduce throughput or product quality (but not product safety) of the larger system.
+  GL_functional_area: #[] question about the elimination of this from schema made to DM
     oneOf:
-      - $ref: "#/definitions/criticalityRatingDef"
+      - string
       - type: null
+    description: identifies the purpose or service the expense supports.
 
-  protective_function_criticality:
-    P3-MVP: false
-    oneOf:
-      - $ref: "#/definitions/criticalityRatingDef"
-      - type: null
-    description: A functional-location bears protective function criticality if the loss of one of its protective functions (i.e., regulatory/control/protection or containment function) will either result in a consequential release of hazard or the loss of a capability to mitigate a greater level hazard.
+  specification_data:
+    type: object
+    $ref: "."
+    description: is a set of functional performance specification data. (The applicable specifications are dependent on the definition made in the chosen class.)
+  
 
 # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3-MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def" 
+    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def" 
 
   record_retirement_information:
-    P3-MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
   
   
 #############################################################
@@ -191,7 +190,7 @@ definitions:
 # RULES
 #############################################################
 
-rule_spec:
+RULE_SPEC:
 
   - name: ID of Linear Assets Represented as functional-location in Maximo
     spec_ID: Vku-67dDxx

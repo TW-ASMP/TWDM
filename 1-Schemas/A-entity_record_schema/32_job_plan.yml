@@ -1,6 +1,5 @@
 ---
 $schema: http://json-schema.org/draft-07/schema#
-title: Job Plan
 $id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/32_job_plan.yml
 description: |
   A job plan is the the lowest level of work description to contain the full planning specifications. 
@@ -31,7 +30,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "../B-entity_class_object_schema/01_asset_item_tool_class.yml"
+          $ref: "../B-entity_class_object_schema/01_physical_entity_and_functional_location_class.yml"
 
   specific_to_asset_functional-location_classes:
     description: identifies the functional-location classes - more specifically, the assets installed in these functional-locations - for which this job plan is customized.
@@ -40,7 +39,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "../B-entity_class_object_schema/02_functional-location_classification.md"
+          $ref: "../B-entity_class_object_schema/01_physical_entity_and_functional_location_class.md"
     $comment: >
       Examples of a functional-location class include the tie-breaker and effluent turbidity meter functional-location class. 
 
@@ -56,10 +55,10 @@ properties:
       Examples of operational group include
         TAB - Ashbridges Bay Wastewater Treatment Plants
         COL - Waste and Storm Water Collection
-    rule_spec: >
+    RULE_SPEC: >
       - name: job plan's specific_to_operational_units property must be an unit level org-chart group
         spec_ID: 01JD2V5X97J1Y45JWDW4SV1FJ4
-        type: [validation]
+        type: [constraint_or_validation]
         specification: |
           Given an job plan, JP_x, all values of JP_x.specific_to_operational_units must be
             - an org-chart group, and
@@ -82,10 +81,10 @@ properties:
       - type: array
         items:
           $ref: "../A-entity_record_schema/05_item_master.yml"
-    rule_spec: >
+    RULE_SPEC: >
       - name: Valid Commercial Product Item reference in a Job Plan
         spec_ID: 01JD2V5X97J1Y45JWDW4SV1FJ4
-        type: [validation]
+        type: [constraint_or_validation]
         specification: |
            Given an job plan, JP_x, all values of JP_x.specific_to_commercial_products must be
             - a item master record, and
@@ -106,7 +105,7 @@ properties:
         - type: null
         - type: array
           items:
-            $ref: "./00_common_definitions.yml#/definitions/failure_code"
+            $ref: "./00_common_object_definition_components.yml#/definitions/failure_code"
 
   RCM_failure_modes:
     description: identifies the functional failure mode ID, with respect to a specific functional-location, mitigated by the work specified in this job plan.
@@ -141,7 +140,7 @@ properties:
 
   estimated_duration:
     description: is the estimated time to complete the activity in the job plan
-    $ref: "./00_common_definitions.yml#/definitions/frequency_interval_definition"
+    $ref: "./00_common_object_definition_components.yml#/definitions/frequency_interval_definition"
   
   parts_or_material_requirements:
     description: identifies the parts and material required to complete the work. 
@@ -149,7 +148,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_definitions.yml#/definitions/item_requirement_definition"
+          $ref: "./00_common_object_definition_components.yml#/definitions/item_requirement_definition"
   
   tool_requirements:
     description: identifies the tools required to complete the work.
@@ -157,7 +156,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_definitions.yml#/definitions/tool_requirements_definition"
+          $ref: "./00_common_object_definition_components.yml#/definitions/tool_requirements_definition"
 
   skill_and_trade_requirements:
     description: identifies the trades and qualifications of each trade needed to complete the work.
@@ -165,7 +164,7 @@ properties:
     - type: null
     - type: array
       items:
-        $ref: "./00_common_definitions.yml#/definitions trade_requirement_definition"
+        $ref: "./00_common_object_definition_components.yml#/definitions/trade_requirement_definition"
 
   service_requirements:
     description: identifies (contracted) service needed to complete the work.
@@ -173,7 +172,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_definitions.yml#/definitions/service_requirement_definition"
+          $ref: "./00_common_object_definition_components.yml#/definitions/service_requirement_definition"
 
 # RELATED ACTIVITIES
 
@@ -184,6 +183,10 @@ properties:
     - type: array
       items:
         $ref: "./32_job_plan.yml"
+    dev_note:
+      P3_MVP: false 
+      P1_label: 
+      DB: 
 
   must_be_followed_by:
     description: identifies activities (specified in other job plans) that must be performed in the same work order after the activity specified in this PM can be performed.
@@ -192,27 +195,29 @@ properties:
     - type: array
       items:
         $ref: "./32_job_plan.yml"
+    dev_note:
+      P3_MVP: false 
+      P1_label: 
+      DB: 
 
 # WORK TRIGGER CONDITION NOTES
 
   time-based_frequency:
     oneOf:
       - type: null
-      - $ref: "./00_common_definitions.yml#/definitions/frequency_interval_definition"
+      - $ref: "./00_common_object_definition_components.yml#/definitions/frequency_interval_definition"
 
   meter-based_frequency:
     oneOf:
       - type: null
-      - $ref: "./00_common_definitions.yml#/definitions/meter_condition_definition"
+      - $ref: "./00_common_object_definition_components.yml#/definitions/meter_condition_definition"
 
   description_of_event-based_trigger:
     oneOf:
       - type: null
       - type: object
         properties:
-        
           relation_to_event:
-
             type: string  
             enum:
               - before
@@ -220,9 +225,7 @@ properties:
               - after
               - at the start of
               - at the end of
-        
           description_of_event:
-
             description: a free-text description of a event or process, such as "an  elevator failure".
             type: string
     
@@ -236,43 +239,17 @@ properties:
 
   compliance_requirement:
     description: identifies the compliance requirement object
-    integration: [data-hub]
+    integration: [data hub]
     oneOf: 
       - type: null
       - type: array
         items:
-          $ref: "./00_common_definitions.yml#/definitions/compliance_requirement"
+          $ref: "./00_common_object_definition_components.yml#/definitions/compliance_requirement"
           
   compliance_class:
     description: indicates the level of compliance, with legislative being the top class
-    $ref: "./00_common_definitions.yml#/definitions/compliance_class"
+    $ref: "./00_common_object_definition_components.yml#/definitions/compliance_class"
 
-  mitigates_safety_risk_to_staff:
-    oneOf: 
-    - type: null
-    - type: string
-    enum:
-      - yes
-      - no
-      - unspecified
-
-  mitigates_safety_or_health_risk_to_public:
-    oneOf: 
-    - type: null
-    - type: string
-    enum:
-      - yes
-      - no
-      - unspecified
-  
-  mitigates_environmental_risk:
-    oneOf: 
-    - type: null
-    - type: string
-    enum:
-      - yes
-      - no
-      - unspecified
 
   safe_work_plan_link:
     description: identifies a safety work plan by a permanent URL to the document (e.g., corporate Safe Procedure or Toronto Water Safe Operating Procedures)
@@ -285,9 +262,12 @@ properties:
 # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3-MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    P3-MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
+
+
+#############################################################
+# RULES
+#############################################################

@@ -1,6 +1,7 @@
 # Organizations in TW and Interact with TW
 
 ## The Hierarchy
+* Federal Government
 * Region of Durham
 * York Region
 * Peel Region
@@ -10,12 +11,9 @@
 * Envave Energy
 * City of Toronto
     * Solid Waste
+    * CREM
     * Toronto Water
-        * Distribution & Collection Section
-            * DOS
-            * WASP
-            * Central Services
-            * Program Maintenance
+        * Distribution & Collection Section 
         * Water Treatment & Supply Section
         * Wastewater Treatment Section
             * Ashbridge's Bay Wastewater Treatment Plant

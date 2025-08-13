@@ -1,6 +1,5 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
-title: tool item master
 $id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/06_tool_master_schema.yml
 type: object
 
@@ -15,7 +14,7 @@ properties:
   name:
     type: string 
     description: The human readable short description of the tool.
-    rule_spec:
+    RULE_SPEC:
       - name: tool master name
         spec_ID: VJpSzGxdxg
         type: implication
@@ -36,13 +35,13 @@ properties:
         status: to be updated
 
   class:
-    $ref: "../B-entity_class_object_schema/01_asset_item_tool_class.yml"
+    $ref: "../B-entity_class_object_schema/01_physical_entity_and_functional_location_class.yml"
     description: This is a value from the classification, which is a superset of the asset class.
-    rule_spec:
+    RULE_SPEC:
       - name: Tool classification list does not include parts non tools
         spec_ID: V1ulHHWOgx
         specification: |
-          Tool classification list include all class instances of B-entity_class_object_schema/01_asset_item_tool_class_object_schema.yml, except ones whose .properties.tool value is FALSE
+          Tool classification list include all class instances of B-entity_class_object_schema/01_physical_entity_and_functional_location_class.yml, except ones whose .properties.tool value is FALSE
         status: specified
 
   specification_data:
@@ -53,7 +52,7 @@ properties:
 # INVENTORY MANAGEMENT FLAGS
 
   rotating:
-    $ref: "./00_common_definitions.yml#/definitions/rotating_property_def" 
+    $ref: "./00_common_object_definition_components.yml#/definitions/rotating_property_def" 
 
   mobile: 
     type: boolean
@@ -71,11 +70,9 @@ properties:
 #==============================
 
   duplicate_record_of:
-    P3-MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    P3-MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
 
 $comment: ASMP does not expect the tool item master to be widely used during the initial adoption of Maximo - we expect that most tools would initially be represented as un-stocked.  
