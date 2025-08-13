@@ -1,31 +1,25 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
-title: org-chart group
 $id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/04_org_schema.yml
 type: object
 properties:
 
   ID:
-    P3_MVP: true
     type: string
     description: is the unique ID 
   
   name:
-    P3_MVP: true
     type: string 
 
   parent:
-    P3_MVP: true
     oneOf:
-      - $ref: "./04_org-chart_group.yml"
+      - $ref: "#"
       - type: null
 
   class:
-    P3_MVP: true
     $ref: B-entity_class_object_schema/04_org_class.yml
 
   specification_data:
-    P3_MVP: true
     type: object
     description: is a set of specification property data. (The applicable properties are dependent on the definition made in the chosen class.)
 
@@ -34,14 +28,12 @@ properties:
       - $ref: "./08_person.yml"
       - type: null
     description: indicates the person who lead the group
-    P3_MVP: true
   
   GL_cost_centre:
     oneOf:
       - string
       - type: null
     description: identifies the organizational unit incurring or managing the expense
-    P3_MVP: true
     $comment: For example, TW4095 is the cost centre for Work Area 1 of Highland Creek Wastewater Treatment Plant.
 
   base_location:
@@ -49,15 +41,12 @@ properties:
       - $ref: "./03_physical-location.yml"
       - type: null
     description: 
-    P3_MVP: true
 
   equivalent_to_Maximo_site:
-    P3_MVP: true
     description: indicates that this org-chart group maps to a particular site (a native Maximo object)
     $ref: MaximoSiteObject
 
   equivalent_to_Maximo_org:
-    P3_MVP: true
     description: indicates that this org-chart group maps to a particular org-chart group (a native Maximo object)
     $ref: MaximoOrgObject
 
@@ -69,12 +58,10 @@ properties:
   # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3_MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    P3_MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
 
 
   

@@ -1,12 +1,10 @@
 $schema: http://json-schema.org/draft-07/schema#
-title: Warranty
-$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/12_warranty.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/11_warranty_service_contract.yml
 type: object
 
 properties:
   
   ID:
-    P3_MVP: true
     description: the unique identifier for the warranty contract
     type: string  
 
@@ -18,14 +16,14 @@ properties:
     description: identifies the vendor or provider of the warranty
     $ref: MaximoCompanyObject
 
-  warranty_start_date:
+  start_date:
     description: the first effective day of the warranty
     oneOf: 
       - type: null
       - type: string
         format: date
   
-  warranty_expiration_date:
+  expiration_date:
     description: the last effective date of the warranty
     oneOf: 
       - type: null
@@ -62,14 +60,12 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_definitions.yml/attachment_def"
+          $ref: "./00_common_object_definition_components.yml/attachment_def"
 
 # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3_MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    P3_MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"

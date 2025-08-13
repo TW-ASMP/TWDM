@@ -1,0 +1,102 @@
+---
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/B-entity_class_object_schema/01_physical_entity_and_functional_location_class.yml
+type: object
+
+# This set of properties are used in all classification objects (e.g., asset, org-chart group, etc.)
+
+properties:
+
+  name:
+    description: a noun or short noun-phrase name of the class
+    type: string
+  
+  parent_class:
+    oneOf:
+      - type: null
+      - $ref: B-entity_class_object_schema/01_physical_entity_and_functional_location_class.yml
+
+  class_description:
+    oneOf:
+      - type: null
+      - type: string
+
+  applies_to_instances:
+    description: indicates if the class can be used to classify any instance
+    type: boolean
+    $comment: |
+      a "FALSE" value indicates that the class is meant to be a structural part of the classification tree, and cannot be used to classify any entity (i.e. asset, functional-location, physical-location, etc).
+  
+  applies_to:
+    type: string
+    enum:
+      - only assets
+      - only functional locations
+      - assets and functional locations
+  
+  synonym_names:
+    description: other synonymous names that may be used by a user in search 
+    oneOf: 
+      - type: null
+      - type: array
+        items:
+          type: string
+
+  failure_class:
+    description: indicates the failure class that applies to every instance of this class
+    oneOf:
+      - type: null
+      - $ref: MaximoFailureClass
+  
+  is_a_defined_class_or_category:
+      description: Indicates a class that is only applicable when certain defined conditions of operating context and specifications are met.
+      type: boolean
+  
+  addon_properties:
+    anyOf:
+      - $ref: "#/$defs/asset_class_schema_addon"
+      - $ref: "#/$defs/functional_location_class_schema_addon"
+    
+  duplicate_record_of:
+    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
+
+  record_retirement_information:
+    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
+
+$defs:
+  
+  asset_class_schema_addon:
+
+    only_used_as_a_part:
+      description: A true value indicates that all instances of this class is always used as a part of another asset, and would never be given an asset tag. E.g., bearing.
+      oneOf: 
+        - type: boolean
+        - type: null
+      RULE_SPEC:
+        - name: Do not include only_used_as_a_part in the asset classification  
+          spec_ID: NJ1E1ZbOgg
+          status: TBS
+      $comment: A false or null value materially mean the same thing.
+
+  functional_location_class_schema_addon:
+
+    functional_location_type:
+      type: string
+      description:
+      enum:
+        - discrete asset
+        - system or structure 
+        - collection
+
+    compatible_asset_occupant_classes:
+      oneOf: 
+        - type: array
+          items:
+            $ref: "./01_asset.yml"
+        - type: null
+      $comment: |
+        []RULE NJQ6BwsVee: A asset must be an instance of one of classes listed in this field to be allowed to occupy a functional-location under this class. 
+
+
+
+

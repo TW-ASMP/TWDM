@@ -1,5 +1,4 @@
 $schema: http://json-schema.org/draft-07/schema#
-title: Failure Report, Work Request, Work Order
 $id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_record_schema/34_FR_WR_WO.yml
 
 $comment: In this design, the work request doubles as a failure report.
@@ -150,7 +149,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_definitions.yml#/definitions/failure_code"
+          $ref: "./00_common_object_definition_components.yml#/definitions/failure_code"
     implementation:
       WR_only: true
     RULE_SPEC: 
@@ -168,7 +167,7 @@ properties:
           properties:
             cause_code:
               description: denotes a physical-based failure condition (e.g., shaft misalignment). 
-              $ref: "./00_common_definitions.yml#/definitions/failure_code"
+              $ref: "./00_common_object_definition_components.yml#/definitions/failure_code"
               $comment: one failure code per request
             
               RULE_SPEC: 
@@ -315,7 +314,7 @@ properties:
       MX_mapping: WO.WARRANTYEXIST
     todo []: rule - determine the value from the asset's warranty information.
 
-  warranty_expiration_date:
+  expiration_date:
     description: indicates the date the warranty expires, if the asset is covered by a warranty contract.
     type: string
     format: date
@@ -351,7 +350,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_definitions.yml#/definitions/item_requirement_definition"
+          $ref: "./00_common_object_definition_components.yml#/definitions/item_requirement_definition"
         
   tool_requirements:
     description: identifies the tools required to complete a work order generated from the PM.
@@ -359,7 +358,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_definitions.yml#/definitions/tool_requirements_definition"
+          $ref: "./00_common_object_definition_components.yml#/definitions/tool_requirements_definition"
   
   service_requirements:
     description: identifies (contracted) service needed to complete to complete a work order generated from the PM.
@@ -367,7 +366,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_definitions.yml#/definitions/service_requirement_definition"
+          $ref: "./00_common_object_definition_components.yml#/definitions/service_requirement_definition"
 
   skill_and_trade_requirements:
     description: identifies the trades and qualifications of each trade needed to complete the work.
@@ -375,7 +374,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_definitions.yml#/definitions trade_requirement_definition"
+          $ref: "./00_common_object_definition_components.yml#/definitions trade_requirement_definition"
 
   # DATES
 
@@ -499,13 +498,13 @@ properties:
               - type: null
               - type: array
                 items:
-                  $ref: "./00_common_definitions.yml/attachment_def"
+                  $ref: "./00_common_object_definition_components.yml/attachment_def"
 
   # LEGISLATIVE DESIGNATION
 
   compliance_class:
     description: indicate that the completion of the specified work would satisfy some compliance requirement of a certain Level.
-    $ref: "./00_common_definitions.yml#/definitions/compliance_class"
+    $ref: "./00_common_object_definition_components.yml#/definitions/compliance_class"
   
   attachments:
     description: documents or photographs that provide further supplementary information.
@@ -513,7 +512,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_definitions.yml/attachment_def"
+          $ref: "./00_common_object_definition_components.yml/attachment_def"
     
     implementation:
       MX_mapping: 
@@ -522,9 +521,8 @@ properties:
   # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    P3_MVP: true
-    $ref: "./00_common_definitions.yml#/definitions/duplicate_record_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    $ref: "./00_common_definitions.yml#/definitions/record_retirement_def"
+    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
   
