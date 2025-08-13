@@ -21,7 +21,7 @@ properties:
       - type: null
       - type: string
 
-  applies_to_instances:
+  can_apply_to_instances:
     description: indicates if the class can be used to classify any instance
     type: boolean
     $comment: |
@@ -58,10 +58,10 @@ properties:
       - $ref: "#/$defs/functional_location_class_schema_addon"
     
   duplicate_record_of:
-    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/record_retirement_def"
 
 $defs:
   

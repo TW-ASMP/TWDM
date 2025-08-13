@@ -30,15 +30,12 @@ properties:
     description: denotes the broad types of asset that may play the functional-location (e.g., "breaker functional-location"). It can also denotes the useful function provided by an asset in the functional-location to the larger system (e.g., the "tie-breaker functional-location" provides tie-breaking function).
     $ref: "../B-entity_class_object_schema/01_physical_entity_and_functional_location_class.yml"
     RULE_SPEC:
-    - name: prevent asset class entries when classifying functional locations 
+    - name: prevent item-only class entries when classifying functional locations 
       spec_ID: 01K2G2MBYJTH0J981M6MYVKRYF
       type: [UI option constraint, validation] 
       specification: |
-        For any functional location, "FL_x", it implies
-          OR(
-            - FL_x.class.properties.applies_to = "only functional locations"
-            - FL_x.class.properties.applies_to = "assets and functional locations"
-          )
+        For any functional location, "FL_x" ->
+          - FL_x.class.properties.for_items_only = false
 
   functional_location_type: #[]complete the rule
     description:
@@ -59,7 +56,7 @@ properties:
     $ref: "#"
 
   defined_class_or_category:
-    $ref: "./00_common_object_definition_components.yml/definitions/defined_class_or_category_def"
+    $ref: "./00_re-used_object_property_definitions.yml/definitions/defined_class_or_category_def"
 
 # STATUS
 
@@ -155,10 +152,10 @@ properties:
 # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def" 
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/duplicate_record_def" 
 
   record_retirement_information:
-    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/record_retirement_def"
   
   
 #############################################################

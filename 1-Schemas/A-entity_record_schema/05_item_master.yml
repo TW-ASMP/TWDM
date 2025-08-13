@@ -51,7 +51,7 @@ properties:
 
   rotating:
     description: Signifies that instances of this item are tracked as serialized individuals.
-    $ref: "./00_common_object_definition_components.yml#/definitions/rotating_property_def" 
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/rotating_property_def" 
 
   material_item:
     description: indicates that the item is a material item, which are handled in continuous quantities.
@@ -94,7 +94,7 @@ properties:
   # COMMERCIAL PRODUCT DESCRIPTION
 
   make_and_model_info:
-    $ref: "./00_common_object_definition_components.yml/definitions/make_and_model_def"
+    $ref: "./00_re-used_object_property_definitions.yml/definitions/make_and_model_def"
   
   subset_of_commodity_item:
     description: Indicates the commercial product is also a type of generic commodities.  
@@ -211,7 +211,7 @@ properties:
   # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/record_retirement_def"

@@ -108,8 +108,8 @@ properties:
   # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/duplicate_record_def"
   
   record_retirement_information:
-    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/record_retirement_def"
   

@@ -1,0 +1,40 @@
+$schema: "http://json-schema.org/draft-07/schema#"
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/B-entity_class_object_schema/00_re-used_class_property_definitions.yml
+type: object
+
+definitions:
+
+  common_class_property_definition:
+    
+    properties:
+      name:
+        description: a noun or short noun-phrase name of the class
+        type: string
+      
+      parent_class:
+        oneOf:
+          - type: null
+          - $ref: "#"
+
+      class_description:
+        oneOf:
+          - type: null
+          - type: string
+
+      can_apply_to_instances:
+        description: indicates if the class can be used to classify any instance
+        type: boolean
+        $comment: |
+          a "FALSE" value indicates that the class is meant to be a structural part of the classification tree, and cannot be used to classify any entity (i.e. asset, functional-location, physical-location, etc).
+      
+      synonym_names:
+        description: other synonymous names that may be used by a user in search 
+        oneOf: 
+          - type: null
+          - type: array
+            items:
+              type: string
+      
+      is_a_defined_class_or_category:
+          description: Indicates a class that is only applicable when certain defined conditions of operating context and specifications are met.
+          type: boolean

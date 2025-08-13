@@ -89,16 +89,15 @@ properties:
   class:
     description: Indicates how the asset is classified
     $ref: "../B-entity_class_object_schema/01_physical_entity_and_functional_location_class.yml"
-    RULE_SPEC:
-       
+    RULE_SPEC:  
       - name: the chosen class must be applicable to assets
         spec_ID: 01K2G29JWQ65ZXZ2RXWV23ADNS
         type: [UI option constraint, validation] 
         specification: |
-          For any assets, "asset_x", it implies
-            OR(
-              - asset_x.class.properties.applies_to = "only assets"
-              - asset_x.class.properties.applies_to = "assets and functional locations"
+          For any asset, asset_x ->
+            AND(
+              asset_x.class.properties.for_functional_locations_only = false
+              asset_x.class.properties.for_items_only = false
             )
   
   is_mobile: 
@@ -162,7 +161,7 @@ properties:
 # MAKE AND MODEL
 
   make_and_model_info:
-    $ref: "./00_common_object_definition_components.yml/definitions/make_and_model_def"
+    $ref: "./00_re-used_object_property_definitions.yml/definitions/make_and_model_def"
 
 # ASSIGNMENTS
 
@@ -422,7 +421,7 @@ properties:
 # DEFINED CLASS OR CATEGORY
 
   defined_class_or_category:
-    $ref: "./00_common_object_definition_components.yml/definitions/defined_class_or_category_def"
+    $ref: "./00_re-used_object_property_definitions.yml/definitions/defined_class_or_category_def"
       
 # PHOTOS AND ATTACHMENTS
 
@@ -436,7 +435,7 @@ properties:
             - type: null
             - type: array
               items:
-                $ref: "./00_common_object_definition_components.yml/attachment_def"
+                $ref: "./00_re-used_object_property_definitions.yml/attachment_def"
 
   document_attachments:
     description: documents containing information about this asset instance
@@ -448,7 +447,7 @@ properties:
             - type: null
             - type: array
               items:
-                $ref: "./00_common_object_definition_components.yml/attachment_def"
+                $ref: "./00_re-used_object_property_definitions.yml/attachment_def"
 
 # HIDDEN
 
@@ -468,10 +467,10 @@ properties:
 # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/duplicate_record_def"
   
   record_retirement_information:
-    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/record_retirement_def"
 
 # BACKGROUND PROPERTIES POPULATED AUTOMATICALLY
 

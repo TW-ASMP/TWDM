@@ -1,6 +1,6 @@
 ---
 $schema: "http://json-schema.org/draft-07/schema#"
-$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/A-entity_record_schema/00_common_object_definition_components.yml
+$id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/A-entity_record_schema/00_re-used_object_property_definitions.yml
   
 # NOTE:
   # _: This file contains data definitions that are used multiple time, across different data objects. 

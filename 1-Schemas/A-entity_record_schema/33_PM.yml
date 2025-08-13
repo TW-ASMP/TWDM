@@ -115,7 +115,7 @@ properties:
 
   estimated_duration:
     description: is the estimated time to complete the activity in the job plan
-    $ref: "./00_common_object_definition_components.yml#/definitions/frequency_interval_definition"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/frequency_interval_definition"
   
   parts_or_material_requirements:
     description: identifies the parts or material required to complete a work order generated from the PM.
@@ -123,7 +123,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_object_definition_components.yml#/definitions/item_requirement_definition"
+          $ref: "./00_re-used_object_property_definitions.yml#/definitions/item_requirement_definition"
 
   tool_requirements:
     description: identifies the tools required to complete a work order generated from the PM.
@@ -131,7 +131,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_object_definition_components.yml#/definitions/tool_requirements_definition"
+          $ref: "./00_re-used_object_property_definitions.yml#/definitions/tool_requirements_definition"
 
   skill_and_trade_requirements:
     description: identifies the trades and qualifications of each trade needed to complete the work.
@@ -139,7 +139,7 @@ properties:
     - type: null
     - type: array
       items:
-        $ref: "./00_common_object_definition_components.yml#/definitions trade_requirement_definition"
+        $ref: "./00_re-used_object_property_definitions.yml#/definitions trade_requirement_definition"
 
   service_requirements:
     description: identifies (contracted) service needed to complete to complete a work order generated from the PM.
@@ -147,7 +147,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_object_definition_components.yml#/definitions/service_requirement_definition"
+          $ref: "./00_re-used_object_property_definitions.yml#/definitions/service_requirement_definition"
 
   # Work Triggering Specification
 
@@ -171,16 +171,16 @@ properties:
   regulated:
     
   compliance_level:
-    $ref: "./00_common_object_definition_components.yml#/definitions/compliance_class"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/compliance_class"
     work_entity_harmonization: WR(x), WO(_), JP(_)
   
   # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/duplicate_record_def"
 
   record_retirement_information:
-    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/record_retirement_def"
 
 ##########################################################
 # LOCAL OBJECT DEFINITIONS
@@ -193,7 +193,7 @@ definitions:
       type: string
       format: date
     frequency_interval:
-      $ref: "./00_common_object_definition_components.yml#/definitions/frequency_interval_definition"
+      $ref: "./00_re-used_object_property_definitions.yml#/definitions/frequency_interval_definition"
 
   meter-based_trigger_specification:
     reading_at_last_service_completion:
@@ -205,4 +205,4 @@ definitions:
     meter_condition:
       oneOf:
         - type: null
-        - $ref: "./00_common_object_definition_components.yml#/definitions/meter_condition_definition"
+        - $ref: "./00_re-used_object_property_definitions.yml#/definitions/meter_condition_definition"

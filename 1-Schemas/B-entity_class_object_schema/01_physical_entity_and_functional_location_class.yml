@@ -7,66 +7,39 @@ type: object
 
 properties:
 
-  name:
-    description: a noun or short noun-phrase name of the class
-    type: string
-  
-  parent_class:
-    oneOf:
-      - type: null
-      - $ref: B-entity_class_object_schema/01_physical_entity_and_functional_location_class.yml
-
-  class_description:
-    oneOf:
-      - type: null
-      - type: string
-
-  applies_to_instances:
-    description: indicates if the class can be used to classify any instance
-    type: boolean
-    $comment: |
-      a "FALSE" value indicates that the class is meant to be a structural part of the classification tree, and cannot be used to classify any entity (i.e. asset, functional-location, physical-location, etc).
-  
-  applies_to:
-    type: string
-    enum:
-      - only assets
-      - only functional locations
-      - assets and functional locations
-  
-  synonym_names:
-    description: other synonymous names that may be used by a user in search 
-    oneOf: 
-      - type: null
-      - type: array
-        items:
-          type: string
+  common_class_property_definition:
+    $ref: "./00_re-used_class_property_definitions.yml/common_class_property_definition"
 
   failure_class:
     description: indicates the failure class that applies to every instance of this class
     oneOf:
       - type: null
       - $ref: MaximoFailureClass
+
+# PHYSICAL ENTITY
+
+  for_items_only:
+    description: indicate that the class cannot be used to classify an asset of functional location (only items or tools). 
+    type: boolean
+    default_value: false
+
+# FUNCTIONAL LOCATION
   
-  is_a_defined_class_or_category:
-      description: Indicates a class that is only applicable when certain defined conditions of operating context and specifications are met.
-      type: boolean
-
-  item_only:
-    description: indicate that the object can only be used as an item, not an asset
-    oneOf: 
-      - type: boolean
-      - type: null
+  for_functional_location_only:
+    description: indicate that the class can only be used to classify a functional location
+    type: boolean
+    default_value: false
   
-  duplicate_record_of:
-    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
+RULE_SPEC:
 
-  record_retirement_information:
-    $ref: "./00_common_object_definition_components.yml#/definitions/record_retirement_def"
-
-
-
-
-
-
-
+  - name: a class cannot be simultaneously applicable exclusively to items and functional locations
+    spec_ID: 01K2J41KWACR2RY5V0GYMFAW0P
+    involves_prop: [for_items_only, for_functional_location_only]
+    type: [validation] 
+    specification: 
+      for a class, class_x
+      NOT (
+            class_x.for_items_only = true
+            class_x.for_functional_location_only = true
+          )
+      

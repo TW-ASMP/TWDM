@@ -46,7 +46,7 @@ properties:
   
   actual_wrench_time:
     description: is the actual time taken to complete the work order.
-    $ref: "./00_common_object_definition_components.yml#/definitions/frequency_interval_definition"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/frequency_interval_definition"
   
   actual_parts_and_material_usage:
     description: identifies the parts and material used in completing the work. 
@@ -54,7 +54,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_object_definition_components.yml#/definitions/item_requirement_definition"
+          $ref: "./00_re-used_object_property_definitions.yml#/definitions/item_requirement_definition"
 
   actual_tool_usage:
     description: identifies the tools used to perform the work.
@@ -62,7 +62,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_object_definition_components.yml#/definitions/tool_requirements_definition"
+          $ref: "./00_re-used_object_property_definitions.yml#/definitions/tool_requirements_definition"
 
   actual_services_usage:
     description: identifies (contracted) service that was actually needed complete the work.
@@ -70,7 +70,7 @@ properties:
       - type: null
       - type: array
         items:
-          $ref: "./00_common_object_definition_components.yml#/definitions/service_requirement_definition"
+          $ref: "./00_re-used_object_property_definitions.yml#/definitions/service_requirement_definition"
 
   actual_trades_involvement:
     description: identifies the trade and qualifications needed to complete the work.
@@ -78,7 +78,7 @@ properties:
     - type: null
     - type: array
       items:
-        $ref: "./00_common_object_definition_components.yml#/definitions/trade_requirement_definition"
+        $ref: "./00_re-used_object_property_definitions.yml#/definitions/trade_requirement_definition"
 
 # CHILDREN WORK-ORDER DOCUMENTATION
 
@@ -99,4 +99,4 @@ properties:
 # COMMON RECORD PROPERTIES
 
   duplicate_record_of:
-    $ref: "./00_common_object_definition_components.yml#/definitions/duplicate_record_def"
+    $ref: "./00_re-used_object_property_definitions.yml#/definitions/duplicate_record_def"
