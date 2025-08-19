@@ -30,6 +30,10 @@ properties:
     dev_note:
       P1_label: Asset
       DB: ASSET.ASSETNUM
+      Mapping: 
+        DB: MC.MAINTENT.mtnoi
+        Note: 
+        - Direct mapping from Avantis
       remark: |
         - For assets coming from TWAG - Toronto Water's GIS system - the ID value would come from TWAG through the integration.
         - Depending on the asset class, the TWAG ID coming over would either be the facility_ID or the asset_num.
@@ -59,13 +63,23 @@ properties:
     dev_note:
       P1_label: Name 
       DB: ASSET.DESCRIPTION+LONG
+    Mapping:
+      DB: MC.MAINTENT.ASSETNUM
+      Note: |
+        - Direct mapping from Avantis
 
   parent:
     description: Indicates the larger asset or the defined collection of assets, to which this asset is a part of.
     oneOf: 
       - $ref: "#"
       - type: null
-  
+    Mapping:
+      DB: MC.MAINTENT.mtnoi
+      Note: |
+        - (MC.MAINTENT1 Join MC.MELINK ON MAINTENT1.mtnoi = MELINK.mtnchild_oi) JOIN MC.MAINTENT AS MAINTENT2 ON MELINK.mtnparn_oi = MAINTENT2.mtnoi
+        - I don't think the parent is an attribute of an asset but rather a functional_location
+        - Functional_locations will need a parent relation, assets do not
+
   serial_number:
     description: The number that uniquely identifies the individual asset, affixed on the asset, either designated by the manufacturer or Toronto Water.
     oneOf: 
@@ -85,6 +99,10 @@ properties:
     $comment: |
       To TW, 
         - the serial number only needs be populated when an asset experiences a movement (except for movement for removal), or when it is being check into a storeroom. Therefore, when the value of the serial_number is null, it represents the fact that we do not know what the serial number is.
+    Mapping:
+      DB: MAINTENT1.serino
+      Note: |
+        - Notes
   
   class:
     description: Indicates how the asset is classified
@@ -99,11 +117,18 @@ properties:
               asset_x.class.properties.for_functional_locations_only = false
               asset_x.class.properties.for_items_only = false
             )
+        Mapping:
+          Note: |
+            - No direct mapping, will need to create mapping list
   
   is_mobile: 
     description: Indicate the the asset, when in service, has no fixed installation location
     type: boolean
     default_value: false
+    Mapping:
+      Note: |
+        - No direct mapping
+        - Will need to depend on asset classification
 
   is_a_commercially_available_product:
     description: An asset is made as a product of a commercial entity, as opposed to an entirely custom asset that is assembled on site.
