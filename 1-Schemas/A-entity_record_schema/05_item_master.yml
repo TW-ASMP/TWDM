@@ -19,7 +19,7 @@ properties:
         P3_MVP: TBD
         form: long
         spec_ID: VkYgCtRPlx
-        type: automatic_assertion
+        type: automation
         specification: |
           if (item_x.properties.commodity_or_commercial_product) = "commodity", then  
             the value of item_x.properties.name would be the semi-colon delimited concatenation of the following property values:
@@ -93,7 +93,7 @@ properties:
 
   # COMMERCIAL PRODUCT DESCRIPTION
 
-  make_and_model_info:
+  make_and_model_def:
     $ref: "./00_re-used_object_property_definitions.yml/definitions/make_and_model_def"
   
   subset_of_commodity_item:
@@ -137,7 +137,7 @@ properties:
         description: if the item is not an material item, its unit of issue would be "individual item"
       - name: Default value of  unit_of_issue
         spec_ID: 01JK7AM2RA8S8EPAH57W33SJ79
-        type: automatic_assertion
+        type: automation
         form: short
         description: When an item record is created, the default unit of issue is the same as the item format. 
 
@@ -148,7 +148,7 @@ properties:
     RULE_SPEC:
       - name: Default quantity in units
         spec_ID: 01JK7AFSHFQ2W8G5JD3B9XSWBV
-        type: automatic_assertion
+        type: automation
         form: short
         description: When an item record is created, the default value of quantity_in_units_of_issue is 1. 
   

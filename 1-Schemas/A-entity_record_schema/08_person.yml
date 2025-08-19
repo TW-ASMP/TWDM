@@ -18,26 +18,17 @@ properties:
     oneOf:
       - type: null
       - type: string
-  
-  section:
-    description: Indicates which section within a division that the person works for
-    type: string
-    oneOf:
-      - type: null
-      - type: string
 
-  unit:
-    description: Indicates which business-unit within a section that the person works for
+  serves_the_organization:
+    description: Indicates the most granular organizational entity that the person serves
     oneOf:
       - type: null
-      - type: string
-  
-  status:
-    type: string
-    enum:
-      - active
-      - inactive
-      - departed 
+      - $ref: "./04_org-chart_group.yml"
+
+  type: string
+  enum:
+    - active
+    - inactive
   
   person_roles:
     description: The role, associated with a certain type of system access, that the person plays in the system. 

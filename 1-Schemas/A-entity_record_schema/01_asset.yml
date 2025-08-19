@@ -24,16 +24,21 @@ properties:
       - name: ID of assets from TWAG 
         spec_ID: 01K2GM1PRQX3KFYRM07ZS62Y4J
         type: [automation]
-        specification:
-          In pseudo-code:
-            If an asset_x came from TWAG, then its "ID" value starts with the text "TWAG-", and then followed by the TWAG ID.
+        specification: |
+          If an asset_x came from TWAG, then its "ID" value must be an ID from TWAG
     dev_note:
       P1_label: Asset
       DB: ASSET.ASSETNUM
       remark: |
         - For assets coming from TWAG - Toronto Water's GIS system - the ID value would come from TWAG through the integration.
         - Depending on the asset class, the TWAG ID coming over would either be the facility_ID or the asset_num.
-
+  
+  TWAG_ID:
+    description: the unique ID (either asset or facility ID value) from TWAG
+    P3_MVP: true
+    type: string
+    integration: [GIS]
+          
   description:
     description: A short description of the asset
     type: string
@@ -42,20 +47,23 @@ properties:
         spec_ID: 4ykh0m_Dle
         type: [automation]
         specification: | 
-          pseudo-code:
-            if is_a_commercially_available_product = TRUE 
+          For any asset, asset_x, 
+          if asset_x.properties.TWAG_ID is not null # if the asset is created in TWAG
+            asset_x.description = the semi-colon delimited concatenation of 1. the asset class name (based on TWAG layer name) and 2. the geo-coordinate from TWAG.
+          else # if the asset is created in Maximo
+            if is_a_commercially_available_product == TRUE 
               asset_x.properties.description = the semi-colon delimited concatenation of:
                 - asset_x.properties.class.properties.name
-                - asset_x.properties.product_make
-                - asset_x.properties.product_model
+                - asset_x.properties.make_and_model_def.properties.product_make
+                - asset_x.properties.make_and_model_def.properties.product_model
                 - asset_x.properties.serial_number
             else # asset_x.properties."is_a_commercially_available_product" = FALSE
               asset_x.properties.description = the semi-colon delimited concatenation of:
                 - asset_x.properties.class.properties.name
                 - asset_x.properties.supplementary_description
                 - "in service since: " + asset_x.properties.in_service_date
-            # Note that the actual script should contain additional condition handle to handle null values, which should be a space.
-        status: TO DO - product make and model information must be revised
+            # COMMENT: Note that the actual script should contain additional condition handle to handle null values, which should be a space.
+        checked_on: 08/18/2025
     dev_note:
       P1_label: Name 
       DB: ASSET.DESCRIPTION+LONG
@@ -72,16 +80,18 @@ properties:
       - type: string
       - type: null
     RULE_SPEC:
-      - name: asset serial number is required (for tools) assigned to a person or a group
+      - name: The serial number is required for assets assigned to a person or a group
         spec_ID: E1cF6kMwGx
         type: [validation]
         specification: |
-          In pseudo-code:
-            Given an asset, asset_x, if one of the following is true:
-              - asset_x.assigned_to_tool_user is not NULL
-              - (asset_x.assigned_to_tool_user_group is not NULL
-            then, asset_x.properties.serial_number != NULL
-        status: check 
+          asset_x is an asset
+          if OR(
+            asset_x.properties.assigned_to_tool_user is not NULL
+            asset_x.properties.assigned_to_tool_user_group is not NULL
+            )
+          then, asset_x.properties.serial_number != NULL
+          # COMMENT: This rule is for new assets only, and should not be applied to assets from Avantis.
+        checked_on: 08/18/2025 
     $comment: |
       To TW, 
         - the serial number only needs be populated when an asset experiences a movement (except for movement for removal), or when it is being check into a storeroom. Therefore, when the value of the serial_number is null, it represents the fact that we do not know what the serial number is.
@@ -92,13 +102,14 @@ properties:
     RULE_SPEC:  
       - name: the chosen class must be applicable to assets
         spec_ID: 01K2G29JWQ65ZXZ2RXWV23ADNS
-        type: [UI option constraint, validation] 
+        type: [validation, UI_options_constraint] 
         specification: |
-          For any asset, asset_x ->
+          If asset_x is an asset, then
             AND(
-              asset_x.class.properties.for_functional_locations_only = false
-              asset_x.class.properties.for_items_only = false
+              asset_x.properties.class.properties.for_functional_locations_only == false
+              asset_x.properties.class.properties.for_items_only == false
             )
+        checked_on: 08/18/2025 
   
   is_mobile: 
     description: Indicate the the asset, when in service, has no fixed installation location
@@ -110,18 +121,21 @@ properties:
     type: boolean
     default_value: true
     RULE_SPEC:
+      - name: A commercially available assets must having make-and-model information on record
+        spec_ID: 01K2Z6ZEP2NNFFA0AAGK3453WZ
+        type: [validation]
+        specification: |
+          if asset_x.properties.is_a_commercially_available_product == true
+            asset_x.properties.make_and_model_def.properties.product_make is not null
+            asset_x.properties.make_and_model_def.properties.product_model is not null
+          #COMMENT: this rule does not apply to asset records imported from Avantis
+        checked_on: 08/18/2025
       - name: synchronize commercial product information to the item catalog record
         spec_ID: 01K1E7ZC308F8PZBS145A8QJAF
         type: [automation] 
-        specification: |
-          if
-            asset_x.item_catalog_record is not null AND
-            asset_x.item_catalog_record.commodity_or_commercial_product = "commercial product"
-            then
-               asset_x.is_a_commercially_available_product = TRUE
-               asset_x.manufacturer_company_name = asset_x.item_catalog_record.manufacturer_company_name 
-               asset_x.make_and_model = asset_x.item_catalog_record.make_and_model
-               asset_x.product_version_or_model_year = asset_x.item_catalog_record.product_version_or_model_year
+        specification: TBD - not for P3 MVP.
+        dev_note: 
+          P3_MVP: false 
     $comment: No null value allowed because this information is self-evident
 
   supplementary_description:
@@ -131,13 +145,13 @@ properties:
       - type: string
         maxLength: 50
     RULE_SPEC:
-    - name: A non-commercial product asset must have a supplementary description
+    - name: A non-commercial product asset must have a supplementary description on record
       spec_ID: 01K23Y2T4PENPAC37604MPZ5C9
       type: [validation] 
       specification:
         If asset_x.is_a_commercially_available_product = false
-        then
           asset_x.supplementary_description is not null
+      checked_on: 08/18/2025
 
 # ITEM AND TOOL ASSOCIATION
 
@@ -152,15 +166,10 @@ properties:
     oneOf: 
       - $ref: "./06_tool_master.yml"
       - type: null
-    RULE_SPEC:
-      - name: an asset may either be associated with a tool or an asset, not both
-        spec_ID: 01K1XBPBZCMPBFWM32B3WJ9W74
-        type: 
-        specification: Description in name suffices as specification.
 
 # MAKE AND MODEL
 
-  make_and_model_info:
+  make_and_model_def:
     $ref: "./00_re-used_object_property_definitions.yml/definitions/make_and_model_def"
 
 # ASSIGNMENTS
@@ -170,18 +179,21 @@ properties:
     oneOf:
       - $ref: "./02_functional-location.yml"
       - type: null
-    $comment: |
-      This value persists even if the asset is temporarily removed from the physical location associated with its functional-location (for reasons such as repair).
     RULE_SPEC:
-      - name: an asset can only be assigned to a discrete asset functional-location
-        spec_ID: 4yBXuH8qle
-        type: [constraint_or_validation]
-        specification: |
-          asset_x.properties.assigned_to_functional_location is NOT null -> 
-          asset_x.properties.assigned_to_functional_location.properties.class.properties.functional_location_type = "discrete asset"
-    dev_note:
-      P1_label: 
-      DB:
+    - name: Asset inherits its operator and maintainer values from its functional-location
+      involves_prop: [operations_unit, operated_by, maintained_by]
+      type: [automation]
+      spec_ID: 01K2YZ19RTVKBP7G6X3NH2EG9S
+      specification: |
+        For any asset, asset_x, if asset_x.properties.assigned_to_functional_location == FL_x
+          AND(
+            asset_x.properties.operations_unit = FL_x.properties.operations_unit
+            asset_x.properties.maintained_by = FL_x.properties.maintained_by 
+            asset_x.properties.operated_by = FL_x.properties.operated_by
+              )
+      checked_on: 2025-08-18
+    $comment: |
+      This assignment value would persists even if the asset is temporarily removed from the physical location associated with its functional-location (for reasons such as repair).
   
   assigned_to_tool_user:
     description: Indicates the issuance of a asset to a specific person as a tool.
@@ -189,6 +201,22 @@ properties:
     oneOf: 
       - $ref: "./08_person.yml"
       - type: null
+    RULE_SPEC:
+    - name: Asset assigned to a user or user group inherits its operator related values from them
+    type: [automation]
+    spec_ID: 01K2ZENK3B6H2G6HMBRYSQTJDV
+    specification: |
+      asset_x is an asset
+      if asset_x.properties.assigned_to_tool_user is not null
+        person_x = asset_x.properties.assigned_to_tool_user  
+        if unitOf(person_x.properties.serves_the_organization) is not null
+          person_org_x = person_x.properties.serves_the_organization
+            asset_x.properties.operations_unit = unitOf(person_org_x)
+            asset_x.properties.operated_by = person_org_x
+          if asset_x.properties.maintained_by is null
+            asset_x.properties.maintained_by = person_org_x
+      #COMMENT: given an org-chart entity, the function unitOf() determines which operational unit it falls under.
+    checked_on: 2025-08-18
 
   assigned_to_tool_user_group:
     description: A group of people, such as a facility, work area, or crew to whom the asset is assigned for use as a tool.
@@ -196,14 +224,20 @@ properties:
       - $ref: "./04_org-chart_group.yml"
       - type: null
     RULE_SPEC:
-      - name: Asset can be assigned exclusively to either a functional-location, user, or user group
-        spec_ID: 01K1EN8TXWX3AEHRNYBACSXDEX
-        type: [constraint_or_validation]
-        specification: | 
-          only one of the following properties can have value (i.e., not null) at any given time. (It is also okay for all of them to be null) 
-              - asset_x.properties."assigned_to_functional_location"
-              - asset_x.properties."assigned_to_tool_user"
-              - asset_x.properties."assigned_to_tool_user_group"
+    - name: Asset assigned a user group inherits its operator related values from them 
+      type: [automation]
+      spec_ID: 01K2ZZKQ7CGFBYTPZE5WQFPX1P
+      specification: |
+        asset_x is an asset
+        if asset_x.properties.assigned_to_tool_user_group is not null
+          group_x = asset_x.properties.assigned_to_tool_user_group 
+          if unitOf(group_x) is not null
+            asset_x.properties.operations_unit = unitOf(group_x)
+            asset_x.properties.operated_by = group_x
+            if asset_x.properties.maintained_by is null, then
+              asset_x.properties.maintained_by = group_x
+        #COMMENT: given an org-chart entity, the function unitOf() determines which operational unit it falls under.
+      checked_on: 2025-08-18
 
 # STATE AND STATUS
 
@@ -246,18 +280,32 @@ properties:
     RULE_SPEC:
       - name: Consistency between asset's status, operating state, and assignment
         spec_ID: NyG2nzL5xg
-        type: [constraint, validation]
+        type: [validation]
         specification: |
-          In pseudo-code:
-            If NOT(OR(
-                - asset_x.properties.status !="installed"
-                - asset_x.properties.status != "in possession"  
-              ))
-              then it would imply
-                asset_x.properties."assigned_to_functional_location" is null
-                asset_x.properties."assigned_to_tool_user" is null
-                asset_x.properties."assigned_to_tool_user_group" is null
-                asset_x.properties."up_and_available" = FALSE
+          asset_x is an asset
+          If NOT(OR(
+              - asset_x.properties.status !="installed"
+              - asset_x.properties.status != "in possession"  
+            ))
+            then
+              asset_x.properties."assigned_to_functional_location" must be null
+              asset_x.properties."assigned_to_tool_user" must be null
+              asset_x.properties."assigned_to_tool_user_group" must be null
+              asset_x.properties."up_and_available" == FALSE
+        checked_on: 08/18/2025
+      - name: An asset must be assigned to a functional-location, user, or user group and have an in-service date before it can be operationally available.
+        spec_ID: 41OFxr8ceg
+        type: [validation]
+        specification: | 
+          if or(and(
+                  asset_x.properties.assigned_to_functional_location is null
+                  asset_x.properties.assigned_to_tool_user is null
+                  asset_x.properties.assigned_to_tool_user_group is null         
+                    )
+                asset_x.properties.in_service_date is null
+                )
+            then asset_x.properties.up_and_available == FALSE 
+        checked_on: 2025-08-18
     dev_note:
       P1_label: Asset Up?
       DB: ASSET.ISRUNNING
@@ -277,11 +325,14 @@ properties:
       - $ref: "./04_org-chart_group.yml"
     integration: [GIS]
     RULE_SPEC:
-     - name: operations_unit and operated_by values must be consistent
-       spec_ID: 01K1XCN44DKV2B2P3GWK3QXJC8
-       involves_prop: 
-       type: [constraint_or_validation] 
-       specification:  
+    - name: operations_unit and operated_by values must be consistent
+      spec_ID: 01K1XCN44DKV2B2P3GWK3QXJC8
+      involves_prop: 
+      type: [validation, UI_options_constraint] 
+      specification: |
+        asset_x is an asset
+        asset_x.properties.operations_unit == unitOf(asset_x.properties.operated_by) 
+      checked_on: 08/18/2025
     dev_note:
       P1_label: #missing
       DB: #missing
@@ -309,7 +360,7 @@ properties:
     RULE_SPEC: 
       - name: valid values of owned_by property
         spec_ID: 410N2dr_xx
-        type: [constraint_or_validation, UI_element_behaviour]
+        type: [UI_options_constraint]
         specification: |
           - The valid range of values for selection includes the first or second levels of the organization hierarchy
           - The UI must only present the valid range of values to the users for selection, and the valid range of values must be presented as a hierarchy.
@@ -345,18 +396,6 @@ properties:
       - type: null
       - type: string
     $comment: this description field would be eliminated after all assets/functional-locations has a physical location value.
-
-  GL_cost_centre: #[] question about the elimination of this from schema made to DM
-    description: the cost centre of the maintainer group
-    oneOf: 
-      - type: null
-      - type: string
-    RULE_SPEC:
-      - name: Copy the GL cost centre from the maintainer group
-        spec_ID: 
-        involves_prop: 
-        type: [automation] 
-        specification:
           
 # ORIGIN
 
@@ -487,119 +526,61 @@ RULE_SPEC:
 
   # OWNER, OPERATOR, MAINTAINER GROUP
     
-  - name: asset inherits operator and maintainer values from its functional-location
-    involves_prop: [operations_unit, operated_by, maintained_by]
-    type: [automation, constraint_or_validation]
-    spec_ID: VJ1QRgIclg
+  - name: An asset may not be associated with both a tool and an item 
+    spec_ID: 01K1XBPBZCMPBFWM32B3WJ9W74
+    type: [validation]
     specification: |
-      - For all asset_x, if the value of asset_x.properties.assigned_to_functional_location is FL_x, then 
-            - asset_x.properties.operations_unit
-            - asset_x.properties.maintained_by
-            - asset_x.properties.operated_by
-          are to be inherited from the equivalent properties of FL_x
-    checked_on: 2024-08-20
-
-  # [] INCOMPLETE!!!!!
-  - name: Asset inherits operator and maintainer values from a user or user group
-    involves_prop: [operations_unit, operated_by]
-    type: [automation, constraint_or_validation]
-    spec_ID: 01K1XHQ3JXCNBP30VKEMJ3F0A6
-    specification: |
-      - For all asset_x, if 
-            asset_x.properties.assigned_to_tool_user = person_x  
-          then, the values of the properties
-            AND(
-              asset_x.properties.operations_unit = person_x.unit
-              asset_x.properties.operated_by = 
-            )
-          are to be inherited from the equivalent properties of FL_x
-
-            - the value of asset_x.properties.assigned_to_tool_user_group = org_x
+      if asset_x is an asset
+        not(and(
+            asset_x.properties.item_catalog_record
+            asset_x.properties.too_catalog_record
           )
+        )
+    checked_on: 08/18/2025
+          
+  - name: Asset can be unassigned or assigned exclusively to either a functional-location, user, or user group
+    spec_ID: 01K1EN8TXWX3AEHRNYBACSXDEX
+    type: [validation]
+    specification: |
+      if asset_x is an asset
+        OR(
+            AND(
+              asset_x.properties.assigned_to_functional_location is null
+              asset_x.properties.assigned_to_tool_user is null
+              asset_x.properties.assigned_to_tool_user_group is null                
+                )
+            XOR(
+              asset_x.properties.assigned_to_functional_location is not null
+              asset_x.properties.assigned_to_tool_user is not null
+              asset_x.properties.assigned_to_tool_user_group is not null
+              )
+          )
+    checked_on: 08/18/2025
 
-  - name: Asset present at site must have location information on record
-    involves_prop: [address]
+  - name: An asset in our possession must have location information
+    involves_prop: [address, physical_location]
     spec_ID: 01J5R2F9ARJDM3RMGE9WYZWVFE
-    type: [constraint_or_validation]
+    type: [validation]
     specification: |
       if the value of asset_x.properties.status is either 
-        - "in possession", or
-        - "installed"
-      then at least one of the following properties must NOT be null
-        - asset_x.properties.physical_location
-        - asset_x.properties.address
-    check_on: 2024-08-20
+        in possession
+        in service
+        abandoned in place
+      then one of the following properties must NOT be null
+        asset_x.properties.physical_location
+        asset_x.properties.address
+    checked_on: 2025-08-18
 
-  - name: Asset must have a start of operation date, before it is operationally available
-    spec_ID: NyG2nzL5xg
-    type: [constraint_or_validation]
-    specification: |
-      if both of the following properties are null
-          - (asset_x.properties."first date of City operation")
-          - (asset_x.properties."warranty start date")
-        then the value of (asset_x.properties."operating_state") CANNOT be "available (up)"
-
-  - name: An asset not assigned to a functional-location, user, or user group cannot be operating
-    spec_ID: 41OFxr8ceg
-    type: [constraint_or_validation, automatic_assertion]
-    specification: | 
-      if an asset does not have a value in any of the following properties (i.e., all nulls), 
-          - asset_x.properties."assigned_to_functional_location"
-          - asset_x.properties."assigned_to_tool_user"
-          - asset_x.properties."assigned_to_tool_user_group"           
-        then the value of (asset_x.properties."operating_state") must be "not assigned work". The opposite must also be true.
-
-  - name: Inheriting the asset location information from its functional-location
+  - name: An asset's location must be consistent with its functional-location
     spec_ID: NJdGTHLqeg
-    type: [automatic_assertion]
+    involves_prop: [address, physical_location]
+    type: [automation]
     specification: |
-        For an asset, asset_x, if 
-          AND(
-            - asset_x.properties."operating_state" = "installed"
-            - asset_x.properties."assigned_to_functional_location" is NOT null
-            OR(
-              - asset_x.properties."assigned_to_functional_location".properties."asset_physical_location" is NOT null
-              - asset_x.properties."assigned_to_functional_location".properties."address" is NOT null
+        asset_x is an asset 
+        if asset_x.properties.assigned_to_functional_location is NOT null
+            AND(
+              asset_x.properties.physical_location = asset_x.properties.assigned_to_functional_location.properties.asset_physical_location
+              asset_x.properties.address = asset_x.properties.assigned_to_functional_location.properties.address
             )
-          )
-        then
-            (asset_x.properties."physical_location") would be set to the value of 
-              (asset_x.properties."assigned_to_functional_location".properties."asset_physical_location")
-            (asset_x.properties."address") would be set to the value of 
-              (asset_x.properties."assigned_to_functional_location".properties."address")
+    checked_on: 2025-08-18
 
-  - name: Commercially available assets must having manufacturer and model information
-    spec_ID: 4y3dRfLcee
-    type: [constraint_or_validation]
-    exempt_grandfather: true 
-    specification: |
-      if the value of asset_x.properties.is_a_commercially_available_product is true
-        then NONE of the following properties can be null
-          - asset_x.properties.product_item_master_record
-          - asset_x.properties.manufacturer_name
-          - asset_x.properties.product_model_information
-    dev_note:
-      P3_MVP: true
-
-  - name: Asset status values for linear versus vertical
-    spec_ID: 01JS0WTY8W0PAP3BKW8S6N75D9
-    involves_prop: status
-    type: [constraint]
-    specification: |
-      []TBD
-  
-  - name: Inheriting manufacturer and model information from a product-item
-    spec_ID: 01JS13TGGB1329NRDZ8NYV6SWC
-    involves_prop: [manufacturer, model_and_sub-model, product_version_or_model_year, manufacturer_PN]
-    type: [automatic_assertion]
-    specification: |
-      []TBD
-
-  - name: If the item master record specifies a commercial product, then import its make and model information into the asset 
-    spec_ID: 01JS28XVG6BY8FJ65BP7ZP3RYC
-    involves_prop: [item_catalog_record,manufacturer,model_and_sub-model,product_version_or_model_year,manufacturer_PN] 
-    type: [automatic_assertion]
-    specification: |
-      []TBD
-
-  

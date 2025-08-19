@@ -25,7 +25,7 @@ properties:
 
 # FUNCTIONAL LOCATION
   
-  for_functional_location_only:
+  for_functional_locations_only:
     description: indicate that the class can only be used to classify a functional location
     type: boolean
     default_value: false
@@ -34,12 +34,12 @@ RULE_SPEC:
 
   - name: a class cannot be simultaneously applicable exclusively to items and functional locations
     spec_ID: 01K2J41KWACR2RY5V0GYMFAW0P
-    involves_prop: [for_items_only, for_functional_location_only]
+    involves_prop: [for_items_only, for_functional_locations_only]
     type: [validation] 
     specification: 
       for a class, class_x
       NOT (
             class_x.for_items_only = true
-            class_x.for_functional_location_only = true
+            class_x.for_functional_locations_only = true
           )
       

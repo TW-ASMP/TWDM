@@ -32,10 +32,10 @@ properties:
     RULE_SPEC:
     - name: prevent item-only class entries when classifying functional locations 
       spec_ID: 01K2G2MBYJTH0J981M6MYVKRYF
-      type: [UI option constraint, validation] 
+      type: [UI_options_constraint, validation] 
       specification: |
         For any functional location, "FL_x" ->
-          - FL_x.class.properties.for_items_only = false
+          FL_x.class.properties.for_items_only = false
 
   functional_location_type: #[]complete the rule
     description:
@@ -129,7 +129,7 @@ properties:
     default_value: true
   
   #owned_by:
-    # assets that are occupying a functional-location are presumed to be owned by the City. 
+    # Not needed: ownership is not a concept applicable to functional locations.
 
   criticality:
     description: the overall criticality of an asset 

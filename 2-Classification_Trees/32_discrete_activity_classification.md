@@ -52,7 +52,7 @@ The following is is the complete set of Toronto Water's discrete activity classi
   RULE_SPEC:
   - name: Valid Assignment of an Asset
     spec_ID: 01JDCNEFAED17CWF2K851ZAJKW
-    type: [automatic_assertion]
+    type: [automation]
     description: |
       classes names specified with an asterisk symbol shall have the their .property.can_apply_to_instances value set to false
 
