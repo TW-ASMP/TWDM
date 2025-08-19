@@ -23,7 +23,7 @@ definitions:
               RULE_SPEC:
                 - name: Valid class values for defined_class_or_category
                   spec_ID: VJke7GMPfl
-                  type: [validation, UI]
+                  type: [validation, UI_options_constraint]
                   specification:
                     if obj_x.defined_class_or_category = class_x
                       then obj_x.properties.is_a_defined_class_or_category = TRUE
@@ -59,12 +59,9 @@ definitions:
 # ATTACHMENTS
 
   attachment_def:
-    description: 
-    oneOf: 
-      - type: null
-      - type: array
-        items:
-          $ref: Maximo_DOCLINKS
+    properties:
+      attachment_and_description:
+        $ref: Maximo_DOCLINKS
   
 # INVENTORY
 

@@ -69,3 +69,4 @@ properties:
 
   record_retirement_information:
     $ref: "./00_re-used_object_property_definitions.yml#/definitions/record_retirement_def"
+    

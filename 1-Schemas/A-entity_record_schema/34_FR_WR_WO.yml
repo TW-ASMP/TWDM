@@ -285,7 +285,7 @@ properties:
       - no
       - unknown
     RULE_SPEC:
-      - name: Default value of requires_asset_offline is null
+      - name: Default value of requires_asset_offline == null
         req_spec_ID: 01JFK2J0HWVWKDK4WWK5RZCXWY  
         form: very short
 
