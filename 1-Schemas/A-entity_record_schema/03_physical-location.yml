@@ -52,7 +52,7 @@ properties:
       - type: null
     read-only: true
 
-  address: 
+  service_address: 
     oneOf: 
       - $ref: MaximoServiceAddressObject
       - type: null

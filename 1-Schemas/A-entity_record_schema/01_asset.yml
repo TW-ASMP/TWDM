@@ -4,14 +4,6 @@ $id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/1-Schemas/A-entity_reco
 type: object
 
 
-$comment: |
-  - TW, the datafield "feature_class" is removed from P3 design, as 1) it is not applicable in most cases 2) the information will be repetitive of the classification value.
-
-#===============================================================================
-TO_DO: |
-  - vertical's default search will be functional location, but vertical will be assets
-#===============================================================================
-
 properties:
 
   ID:
@@ -23,7 +15,7 @@ properties:
         spec_ID: 01K2GM1PRQX3KFYRM07ZS62Y4J
         type: [automation]
         specification: |
-          If an asset_x came from TWAG, then its "ID" value must be an ID from TWAG
+          If an a_x came from TWAG, then its "ID" value must be an ID from TWAG
     dev_note:
       P1_label: Asset
       DB: ASSET.ASSETNUM
@@ -33,8 +25,9 @@ properties:
   
   TWAG_ID:
     description: the unique ID (either asset or facility ID value) from TWAG
-    P3_MVP: true
-    type: string
+    oneOf:
+    - type: null
+    - type: string
     integration: [GIS]
           
   description:
@@ -44,22 +37,23 @@ properties:
       - name: asset description creation
         spec_ID: 4ykh0m_Dle
         type: [automation]
+        trigger: upon the update of any involved dat field
         specification: | 
-          For any asset, asset_x, 
-          if asset_x.properties.TWAG_ID != null # if the asset is created in TWAG
-            asset_x.description = the semi-colon delimited concatenation of 1. the asset class name (based on TWAG layer name) and 2. the geo-coordinate from TWAG.
+          For any asset, a_x, 
+          if a_x.properties.TWAG_ID != null # if the asset is created in TWAG
+            a_x.description = the semi-colon delimited concatenation of 1. the asset class name (based on TWAG layer name) and 2. the geo-coordinate from TWAG.
           else # if the asset is created in Maximo
             if is_a_commercially_available_product == TRUE 
-              asset_x.properties.description = the semi-colon delimited concatenation of:
-                - asset_x.properties.class.properties.name
-                - asset_x.properties.make_and_model_def.properties.product_make
-                - asset_x.properties.make_and_model_def.properties.product_model
-                - asset_x.properties.serial_number
-            else # asset_x.properties."is_a_commercially_available_product" == FALSE
-              asset_x.properties.description = the semi-colon delimited concatenation of:
-                - asset_x.properties.class.properties.name
-                - asset_x.properties.supplementary_description
-                - "in service since: " + asset_x.properties.in_service_date
+              a_x.properties.description = the semi-colon delimited concatenation of:
+                - a_x.properties.class.properties.name
+                - a_x.properties.make_and_model_def.properties.product_make
+                - a_x.properties.make_and_model_def.properties.product_model
+                - a_x.properties.serial_number
+            else # a_x.properties."is_a_commercially_available_product" == FALSE
+              a_x.properties.description = the semi-colon delimited concatenation of:
+                - a_x.properties.class.properties.name
+                - a_x.properties.supplementary_description
+                - "in service since: " + a_x.properties.in_service_date
             # COMMENT: Note that the actual script should contain additional condition handle to handle null values, which should be a space.
         checked_on: 2025-08-18
     dev_note:
@@ -69,8 +63,8 @@ properties:
   parent:
     description: Indicates the larger asset or the defined collection of assets, to which this asset is a part of.
     oneOf: 
-      - $ref: "#"
       - type: null
+      - $ref: "#"
   
   serial_number:
     description: The number that uniquely identifies the individual asset, affixed on the asset, either designated by the manufacturer or Toronto Water.
@@ -79,15 +73,15 @@ properties:
       - type: null
     RULE_SPEC:
       - name: The serial number is required for assets assigned to a person or a group
-        spec_ID: E1cF6kMwGx
+        spec_ID: 01K323QSQWBV6YG6K25BQ8AMFA
         type: [validation]
         specification: |
-          asset_x is an asset
+          a_x is an asset
           if OR(
-            asset_x.properties.assigned_to_tool_user != null
-            asset_x.properties.assigned_to_tool_user_group != null
+            a_x.properties.assigned_to_tool_user != null
+            a_x.properties.assigned_to_tool_user_group != null
             )
-          then, asset_x.properties.serial_number != NULL
+          then, a_x.properties.serial_number != NULL
           # COMMENT: This rule is for new assets only, and should not be applied to assets from Avantis.
         checked_on: 2025-08-18 
     $comment: |
@@ -98,14 +92,14 @@ properties:
     description: Indicates how the asset is classified
     $ref: "../B-entity_class_object_schema/01_physical_entity_and_functional_location_class.yml"
     RULE_SPEC:  
-      - name: the chosen class must be applicable to assets
+      - name: the class must be applicable to assets
         spec_ID: 01K2G29JWQ65ZXZ2RXWV23ADNS
         type: [validation, UI_options_constraint] 
         specification: |
-          If asset_x is an asset, then
+          If a_x is an asset, then
             AND(
-              asset_x.properties.class.properties.for_functional_locations_only == false
-              asset_x.properties.class.properties.for_items_only == false
+              a_x.properties.class.properties.for_functional_locations_only == false
+              a_x.properties.class.properties.for_items_only == false
             )
         checked_on: 2025-08-18 
   
@@ -123,9 +117,9 @@ properties:
         spec_ID: 01K2Z6ZEP2NNFFA0AAGK3453WZ
         type: [validation]
         specification: |
-          if asset_x.properties.is_a_commercially_available_product == true
-            asset_x.properties.make_and_model_def.properties.product_make != null
-            asset_x.properties.make_and_model_def.properties.product_model != null
+          if a_x.properties.is_a_commercially_available_product == true then
+            a_x.properties.make_and_model_def.properties.product_make != null
+            a_x.properties.make_and_model_def.properties.product_model != null
           #COMMENT: this rule does not apply to asset records imported from Avantis
         checked_on: 2025-08-18
       - name: synchronize commercial product information to the item catalog record
@@ -147,8 +141,9 @@ properties:
       spec_ID: 01K23Y2T4PENPAC37604MPZ5C9
       type: [validation] 
       specification:
-        If asset_x.is_a_commercially_available_product = false
-          asset_x.supplementary_description != null
+        a_x is an asset
+        If a_x.is_a_commercially_available_product == false then
+          a_x.supplementary_description != null
       checked_on: 2025-08-18
 
 # ITEM AND TOOL ASSOCIATION
@@ -169,10 +164,10 @@ properties:
         spec_ID: 01K1XBPBZCMPBFWM32B3WJ9W74
         type: [validation]
         specification: |
-          if asset_x is an asset then
+          if a_x is an asset then
             not(and(
-                asset_x.properties.item_catalog_record != null
-                asset_x.properties.too_catalog_record != null
+                a_x.properties.item_catalog_record != null
+                a_x.properties.too_catalog_record != null
               )
             )
         checked_on: 2025-08-18
@@ -191,28 +186,28 @@ properties:
       - type: null
     RULE_SPEC:
       - name: Asset inherits its operator and maintainer values from its functional-location
-        involves_prop: [operations_unit, operated_by, maintained_by]
         type: [automation]
+        trigger: upon the entry of assigned_to_functional_location value
         spec_ID: 01K2YZ19RTVKBP7G6X3NH2EG9S
         specification: |
-          asset_x is an asset 
-          if asset_x.properties.assigned_to_functional_location == FL_x, then
+          a_x is an asset 
+          if a_x.properties.assigned_to_functional_location == FL_x then
             AND(
-              asset_x.properties.operations_unit = FL_x.properties.operations_unit
-              asset_x.properties.maintained_by = FL_x.properties.maintained_by 
-              asset_x.properties.operated_by = FL_x.properties.operated_by
+              a_x.properties.operations_unit = FL_x.properties.operations_unit
+              a_x.properties.maintained_by = FL_x.properties.maintained_by 
+              a_x.properties.operated_by = FL_x.properties.operated_by
                 )
         checked_on: 2025-08-18
-      - name: Sync asset's location with the location of its functional-location.
+      - name: Synchronize asset's location with the location of its functional-location.
         spec_ID: 01K31B1XNY4M2RZ4W4C0S175T1
-        involves_prop: [address, physical_location]
-        type: [automation]
+        trigger: upon the entry of assigned_to_functional_location value
+        type: [automation] # not a validation because asset can be taken out of its FL for repair
         specification: |
-            asset_x is an asset 
-            if asset_x.properties.assigned_to_functional_location != null, then
+            a_x is an asset 
+            if a_x.properties.assigned_to_functional_location != null then
                 AND(
-                  asset_x.properties.physical_location = asset_x.properties.assigned_to_functional_location.properties.asset_physical_location
-                  asset_x.properties.address = asset_x.properties.assigned_to_functional_location.properties.address
+                  a_x.properties.physical_location = a_x.properties.assigned_to_functional_location.properties.asset_physical_location
+                  a_x.properties.service_address = a_x.properties.assigned_to_functional_location.properties.service_address
                 )
         checked_on: 2025-08-18
 
@@ -227,17 +222,18 @@ properties:
       - type: null
     RULE_SPEC:
       - name: Asset assigned to a user or user group inherits its operator related values from them
-        type: [automation]
+        type: [automation, validation]
+        trigger: upon the entry of assigned_to_tool_user value
         spec_ID: 01K2ZENK3B6H2G6HMBRYSQTJDV
         specification: |
-          asset_x is an asset, person_x is a person, person_org_x is a org-chart_group
-          let person_x = asset_x.properties.assigned_to_tool_user  #if it is not null
-          if unitOf(person_x.properties.serves_the_organization) != null
-            let person_org_x = person_x.properties.serves_the_organization
-            asset_x.properties.operations_unit = unitOf(person_org_x)
-            asset_x.properties.operated_by = person_org_x
-            if asset_x.properties.maintained_by == null
-              asset_x.properties.maintained_by = person_org_x
+          a_x is an asset, p_x is a person, person_org_x is a org-chart_group
+          let p_x = a_x.properties.assigned_to_tool_user  #if it is not null
+          if unitOf(p_x.properties.serves_the_organization) != null
+            let person_org_x = p_x.properties.serves_the_organization
+            a_x.properties.operations_unit = unitOf(person_org_x)
+            a_x.properties.operated_by = person_org_x
+            if a_x.properties.maintained_by == null
+              a_x.properties.maintained_by = person_org_x
         $comment: given an org-chart entity, the function unitOf() determines which operational unit it falls under.
         checked_on: 2025-08-18
 
@@ -248,34 +244,35 @@ properties:
       - type: null
     RULE_SPEC:
       - name: Asset assigned a user group inherits its operator related values from them 
-        type: [automation]
+        type: [automation, validation]
+        trigger: upon the entry of assigned_to_tool_user_group value
         spec_ID: 01K2ZZKQ7CGFBYTPZE5WQFPX1P
         specification: |
-          asset_x is an asset
-          if asset_x.properties.assigned_to_tool_user_group != null
-            let group_x = asset_x.properties.assigned_to_tool_user_group 
+          a_x is an asset
+          if a_x.properties.assigned_to_tool_user_group != null
+            let group_x = a_x.properties.assigned_to_tool_user_group 
             if unitOf(group_x) != null
-              asset_x.properties.operations_unit = unitOf(group_x)
-              asset_x.properties.operated_by = group_x
-              if asset_x.properties.maintained_by == null, then
-                asset_x.properties.maintained_by = group_x
+              a_x.properties.operations_unit = unitOf(group_x)
+              a_x.properties.operated_by = group_x
+              if a_x.properties.maintained_by == null, then
+                a_x.properties.maintained_by = group_x
         $comment: given an org-chart entity, the function unitOf() determines which operational unit it falls under.
       
       - name: Asset can be assigned exclusively to either a functional-location, user, or user group
         spec_ID: 01K1EN8TXWX3AEHRNYBACSXDEX
         type: [validation]
         specification: |
-          if asset_x is an asset then
+          if a_x is an asset then
             OR(
                 AND(
-                  asset_x.properties.assigned_to_functional_location == null
-                  asset_x.properties.assigned_to_tool_user == null
-                  asset_x.properties.assigned_to_tool_user_group == null                
-                    )
+                  a_x.properties.assigned_to_functional_location == null
+                  a_x.properties.assigned_to_tool_user == null
+                  a_x.properties.assigned_to_tool_user_group == null                
+                  )
                 XOR(
-                  asset_x.properties.assigned_to_functional_location != null
-                  asset_x.properties.assigned_to_tool_user != null
-                  asset_x.properties.assigned_to_tool_user_group != null
+                  a_x.properties.assigned_to_functional_location != null
+                  a_x.properties.assigned_to_tool_user != null
+                  a_x.properties.assigned_to_tool_user_group != null
                   )
               )
         checked_on: 2025-08-18
@@ -294,21 +291,38 @@ properties:
       - missing
     RULE_SPEC:
       - name: An in-possession asset must have location information
-        involves_prop: [address, physical_location]
         spec_ID: 01J5R2F9ARJDM3RMGE9WYZWVFE
         type: [validation]
         specification: |
           if OR(
-            asset_x.properties.status == "in possession"
-            asset_x.properties.status == "in service"
-            asset_x.properties.status == "abandoned in place"
+            a_x.properties.status == "in possession"
+            a_x.properties.status == "in service"
+            a_x.properties.status == "abandoned in place"
             ) 
-          then 
-            OR(
-              asset_x.properties.physical_location != null
-              asset_x.properties.address != null
-              )
+          then OR(
+            a_x.properties.physical_location != null
+            a_x.properties.service_address != null
+            )
+      - name: An in-service asset must be assigned either to a functional-location, user, or user group
+        spec_ID: 01K323A10SBFK6ZBX8VHEF30XG
+        type: [validation]
+        specification: |
+          if a_x.properties.status == "in service"
+          then OR(
+            a_x.properties.assigned_to_functional_location != null
+            a_x.properties.assigned_to_tool_user != null
+            a_x.properties.assigned_to_tool_user_group != null
+            )
         checked_on: 2025-08-18
+          
+      - name: when an asset is removed from possession, disassociated it from its functional location
+        spec_ID: 01K32FRJ0DWWCH40ZW4EC7PKAC
+        type: [automation, validation] 
+        specification: |
+          a_x is an asset
+          if a_x.properties.status == "removed from possession" then
+            a_x.properties.assigned_to_functional_location = null
+          
     $comment: |
       - TW, This data field != nullable because the lack of knowledge is explicitly expressed as "missing" or "lost", and the non-existence is expressed as "planned" or "removed from possession".
       - TW, It is possible for an asset can be assigned (or designated) to a person, group, or functional location before it is "in commission".
@@ -337,29 +351,37 @@ properties:
       - The value in this field is meaningless when the asset's status <> "in service".
     RULE_SPEC:
       - name: An asset that is not in possession must be shown as not operationally available (down)
-        spec_ID: NyG2nzL5xg
-        type: [automation]
+        spec_ID: 01K322NHKEHBN7SMABPS7ZWNMK
+        type: [automation, validation]
         specification: |
-          asset_x is an asset
-          If NOT(OR(
-              asset_x.properties.status != "in possession"  
-              asset_x.properties.status != "in service"
+          a_x is an asset
+          If OR(
+              a_x.properties.status == "planned"  
+              a_x.properties.status == "abandoned in place"
+              a_x.properties.status == "removed from possession"
+              a_x.properties.status == "missing"
             ))
-            then asset_x.properties."up_and_available" = FALSE
+            then a_x.properties.up_and_available = FALSE
         checked_on: 2025-08-18
       
-      - name: An asset must be assigned to a functional-location, user, or user group and have an in-service date before it can be operationally available.
-        spec_ID: 41OFxr8ceg
+      - name: An asset must be assigned before it is in service
+        spec_ID: 01K322NPRZAKD5WMGFT8VARRHA
         type: [validation]
         specification: | 
-          if or(and(
-                  asset_x.properties.assigned_to_functional_location == null
-                  asset_x.properties.assigned_to_tool_user == null
-                  asset_x.properties.assigned_to_tool_user_group == null         
-                    )
-                asset_x.properties.in_service_date == null
+          if and(
+                  a_x.properties.assigned_to_functional_location == null
+                  a_x.properties.assigned_to_tool_user == null
+                  a_x.properties.assigned_to_tool_user_group == null         
                 )
-            then asset_x.properties.up_and_available == FALSE 
+            then a_x.properties.up_and_available == FALSE 
+        checked_on: 2025-08-18
+      
+      - name: An asset must have an in service date value before it is in service
+        spec_ID: 01K3218261914CZAV8WAA7615M
+        type: [validation]
+        specification: | 
+          if a_x.properties.in_service_date == null
+            then a_x.properties.up_and_available == FALSE 
         checked_on: 2025-08-18
     dev_note:
       P1_label: Asset Up?
@@ -380,12 +402,13 @@ properties:
       - $ref: "./04_org-chart_group.yml"
     integration: [GIS]
     RULE_SPEC:
-      - name: operations_unit and operated_by values must be consistent
+      - name: The "operations unit" and "operated by" values must be consistent
         spec_ID: 01K1XCN44DKV2B2P3GWK3QXJC8
         type: [validation, UI_options_constraint] 
         specification: |
-          if asset_x is an asset, then
-            asset_x.properties.operations_unit == unitOf(asset_x.properties.operated_by) 
+          if a_x is an asset, then
+            a_x.properties.operations_unit == unitOf(a_x.properties.operated_by)
+            # note that the value could be null
         checked_on: 2025-08-18
     dev_note:
       P1_label: #missing
@@ -412,18 +435,19 @@ properties:
     $comment: |
       For linear assets, this value will come from the TWAG record. The org-chart list is to be shared with TWAG, through the common definition in the data hub. This TWAG integration on this particular value may not fit into the MVP scope.
     RULE_SPEC: 
-      - name: valid values of owned_by property
+      - name: valid values of the "owned by" property
         spec_ID: 410N2dr_xx
-        type: [UI_options_constraint]
+        type: [validation, UI_options_constraint]
         specification: |
           - The valid range of values for selection includes the first or second levels of the organization hierarchy
           - The UI must only present the valid range of values to the users for selection, and the valid range of values must be presented as a hierarchy.
         checked_on: 2024-08-19
-      - name: the default value of owned_by property is Toronto Water
+      
+      - name: the default value of "owned by" property is Toronto Water
         spec_ID: 01K1XHX0G1Y0DXRY64E5YSXVT1
         type: [automation]
         specification: |
-          for all new assets, asset_x, not created though integration with the GIS, the default value of owned_by is Toronto Water. 
+          for all new assets, a_x, not created though integration with the GIS, the default value of owned_by is Toronto Water. 
         checked_on: 2024-08-19
     dev_note:
       P1_label: Owner
@@ -431,19 +455,18 @@ properties:
       remark: |
         - Example from the first level of the organization hierarchy: City of Toronto, York Region
         - Example from the second level of the organization hierarchy: Toronto Water
-
-  address:
-    oneOf:
-      - $ref: MaximoServiceAddressObject
-      - type: null
-    $comment: |
-      this is referencing Maximo's native service address object 
     
   physical_location:
     description: Either the physical location of where the asset is installed (inherited from the functional-location record) or physical location where the asset is stored (such as a storage cabinet inside a room). 
     oneOf:
-      - $ref: "./03_physical-location.yml"
       - type: null
+      - $ref: "./03_physical-location.yml"
+
+  service_address:
+    description: the street address of the site or the geo-coordinate, where the asset resides
+    oneOf:
+      - type: null
+      - $ref: MaximoServiceAddressObject
 
   physical_location_description:
     description: the legacy, free-text, physical location description
@@ -457,52 +480,56 @@ properties:
   installation_contract_number:
     description: The installation_contract_number (usually RFQ#) assigned by the City
     oneOf: 
-      - type: string
       - type: null
+      - type: string
 
   in_service_date:
     description: The day that the asset is turned over to the City from a contractor, or if the City installed the asset itself - the day the asset enters operation after testing is completed.
     oneOf: 
-      - type: string
       - type: null
+      - type: string
     $comment: |
       This usually coincides with "warranty start date".  However, if the asset is not delivered through a project, "warranty start date" may be empty. 
 
   purchase_cost:
     description: the original purchase cost of the asset (not necessary if the asset is associated with a item master record)
     oneOf: 
-      - type: number
       - type: null
+      - type: number
   
 # SERVICE CONTRACTS
 
   warranty_contract:
     description: indicates the active warranty contract covering that asset
-    $ref: "./11_warranty_service_contract.yml"
+    oneOf:
+      type: null
+      $ref: "./11_warranty_service_contract.yml"
     read-only: true
     RULE_SPEC:
       - name: Add warranty contract
         spec_ID: 01K2DESNBMQFY85RAW1S318NRR
-        type: [automation] 
+        type: [automation]
+        trigger: at the creation or update of the contract
         specification:
-          for any asset, asset_x if
+          for any asset, a_x if
            1. there exists a warranty_contract_y, where
-           2. asset_x is found in warranty_contract_y.properties.covers_assets, and
+           2. a_x is found in warranty_contract_y.properties.covers_assets, and
            3. warranty_contract_y has not passed its expiration date
           then 
-            asset_x.properties.warranty_contract = warranty_contract_y
+            a_x.properties.warranty_contract = warranty_contract_y
         checked_on: 2025-08-19
      
       - name: Remove expired warranty contract
         spec_ID: 01K31K0W7JVKP16V7HTQAWZDZK
         type: [automation]
+        trigger: at a defined time, daily
         specification:
-          for any asset, asset_x if
+          for any asset, a_x if
            1. there exists a warranty_contract_y, where 
-           2. asset_x.properties.warranty_contract == warranty_contract_y
+           2. a_x.properties.warranty_contract == warranty_contract_y
            2. warranty_contract_y has passed its expiration date
           then 
-            asset_x.properties.warranty_contract = null
+            a_x.properties.warranty_contract = null
         checked_on: 2025-08-19
 
   service_contract:
@@ -517,26 +544,28 @@ properties:
       - name: Add current service contracts
         spec_ID: 01K2DFCBJXE24C6RY3TYW8M5AB
         type: [automation] 
+        trigger: at the creation or update of the contract
         specification:
-          For any asset, asset_x, if
+          For any asset, a_x, if
            1. there exists a service_contract_y, where
-           2. asset_x is found in service_contract_y.properties.covers_assets, and
+           2. a_x is found in service_contract_y.properties.covers_assets, and
            3. service_contract_y has not passed its expiration date
-           4. service_contract_y is not in asset_x.properties.service_contract
+           4. service_contract_y is not in a_x.properties.service_contract
           then 
-            addToList(service_contract_y, asset_x.properties.service_contract)
+            addToList(service_contract_y, a_x.properties.service_contract)
         checked_on: 2025-08-19
       
       - name: Remove expired service contracts
         spec_ID: 01K31K0W7JVKP16V7HTQAWZDZK
         type: [automation]
+        trigger: at a defined time, daily
         specification:
-          for any asset, asset_x if
+          for any asset, a_x if
            1. there exists a service_contract_y, where 
-           2. service_contract_y is in asset_x.properties.service_contract
+           2. service_contract_y is in a_x.properties.service_contract
            2. service_contract_y has passed its expiration date
           then 
-            removeFromList(service_contract_y, asset_x.properties.service_contract)
+            removeFromList(service_contract_y, a_x.properties.service_contract)
         checked_on: 2025-08-19
 
 # DEFINED CLASS OR CATEGORY
@@ -581,22 +610,5 @@ properties:
 # HIGHER LEVEL RULES
 #############################################################
 
-RULE_SPEC:
 
-- name: Moving an asset (out of its functional location)
-  spec_ID: 01K31CQC2J67S10CNEGCGS1DMD
-  type: [function] 
-  specification: |
-
-- name: Moving an asset (out of its functional location)
-  spec_ID: 01K31CQC2J67S10CNEGCGS1DMD
-  type: [function] 
-  specification: |
     
-    
-
-
-
-
-
-

@@ -34,10 +34,15 @@ properties:
       spec_ID: 01K2G2MBYJTH0J981M6MYVKRYF
       type: [UI_options_constraint, validation] 
       specification: |
-        For any functional location, "FL_x" ->
+        For any functional location, "FL_x" -> 
           FL_x.class.properties.for_items_only = false
-
-  functional_location_type: #[]complete the rule
+    
+    - name: asset class value must be compatible with the functional location class value
+      spec_ID: 01K323PZACFR7678RFPAZVNCPN
+      type: [automation, UI_options_constraint, validation] 
+      specification: |
+        
+  functional_location_type:
     description:
     type: string
     enum:
@@ -53,7 +58,16 @@ properties:
         
   parent:
     description: references the functional-location that is served by the larger asset, which physically subsumes the asset serving this functional-location.
-    $ref: "#"
+    oneOf:
+      - type: null
+      - $ref: "#"
+    RULE_SPEC:
+      - name: If an asset is assigned to a functional location and the functional location has a parent, then 
+        spec_ID:  
+        type: [automation] 
+        specification:
+          a_x and asset_y are an assets
+          fl_x and fl_y are a functional locations
 
   defined_class_or_category:
     $ref: "./00_re-used_object_property_definitions.yml/definitions/defined_class_or_category_def"
@@ -78,20 +92,37 @@ properties:
   up_and_available:
     type: Boolean
     description: Indicates whether the asset is available for doing the work that it is assigned at a given moment.
+    RULE_SPEC:
+      - name: if the asset in the functional location is down, the functional location is down
+        spec_ID: 01K322YBXK3X9EG8RVZGHNXGNH
+        involves_prop: 
+        type: [automation, UI_options_constraint, validation] 
+        specification: |
+      - name: if no asset is in the functional location, the functional location is down
+        spec_ID: 01K322YFFH1VB5MJDXA41QVRPE
+        type: [automation, UI_options_constraint, validation] 
+        specification: |
 
 # LOCATION
 
-  address:
+  physical_location:
+    description: refers to the physical-location in which the asset serving the functional-location would be installed.
+    oneOf: 
+      - $ref: "./03_physical-location.yml"
+      - type: null
+  
+  service_address:
     oneOf: 
       - $ref: MaximoServiceAddressObject
       - type: null
     description: is the geo-coordinate or the nearest street address of the asset.
-  
-  physical_location:
-    oneOf: 
-      - $ref: "./03_physical-location.yml"
-      - type: null
-    description: refers to the physical-location in which the asset serving the functional-location would be installed.
+    RULE_SPEC:
+      - name: the address of the functional location must be the same as the address of its physical location
+        spec_ID: 01K31Z4WXXCF5NHFB85PMP01AD
+        type: [validation]
+        specification: |
+          if fl_x is an functional location then
+            fl_x.properties.service_address == fl_x.properties.physical_location.properties.service_address 
 
   physical_location_description:
     description: the legacy, free-text, physical location description
@@ -230,3 +261,14 @@ RULE_SPEC:
 
     #[]RULE:
     # IN COMMON LANGUAGE: At any given time, each functional-location may only have a single asset assigned to it (i.e., associated with the functional-location via the asset's "assigned_to_functional_location" property).
+
+      - name: the class must be applicable to assets
+        spec_ID: 01K2G29JWQ65ZXZ2RXWV23ADNS
+        type: [validation, UI_options_constraint] 
+        specification: |
+          If a_x is an asset, then
+            AND(
+              a_x.properties.class.properties.for_functional_locations_only == false
+              a_x.properties.class.properties.for_items_only == false
+            )
+        checked_on: 2025-08-18 
