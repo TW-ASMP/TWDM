@@ -5,50 +5,77 @@ type: object
 properties:
 
   ID:
+    description: is the unique ID build from the ID codes. E.g., ORG:TAB-WA1
     type: string
-    description: is the unique ID 
-  
-  name:
-    type: string 
+    maxLength: 50
+    RULE_SPEC:
+      - name: generate the ID, hierarchically, from ID codes
+        spec_ID: V1CIm6_YMg
+        type: [automation]
+        automation_note: must live-update whenever the "ID_code" or "parent" value changes
+        specification: |
+          Given the present org-group, OG1,
+          If OG1 is a org-group within the a unit
+            ID value starts with "ORG:" and followed by the the concatenation, delimited by "-", of the "ID_code" of all OG1's ancestors, up to the unit (i.e., the ancestor classified as "unit")
+          else
+            ID value starts with "ORG:" and followed by the ID_segment. 
 
   parent:
     oneOf:
       - $ref: "#"
       - type: null
 
+  name:
+    description: full name of the organization, e.g. Ashbridges Bay Wastewater Treatment Plant
+    type: string
+    
+  ID_code:
+    description: The ID code the represents the current organization, with in the parent organization. For example, TAB, ASMP, or WA1.
+    type: string
+    maxLength: 5
+
   class:
     $ref: B-entity_class_object_schema/04_org_class.yml
 
-  specification_data:
-    type: object
-    description: is a set of specification property data. (The applicable properties are dependent on the definition made in the chosen class.)
-
-  leader:
-    oneOf:
-      - $ref: "./08_person.yml"
-      - type: null
+  led_by:
     description: indicates the person who lead the group
+    oneOf:
+      - type: null
+      - $ref: "./08_person.yml"
   
   GL_cost_centre:
-    oneOf:
-      - string
-      - type: null
     description: identifies the organizational unit incurring or managing the expense
-    $comment: For example, TW4095 is the cost centre for Work Area 1 of Highland Creek Wastewater Treatment Plant.
+    oneOf:
+      - type: null
+      - string
+    $comment: Cost centre is specified natively against an org-chart location. For example, TW4095 is the cost centre for Work Area 1 of Highland Creek Wastewater Treatment Plant.
 
   base_location:
-    oneOf: 
-      - $ref: "./03_physical-location.yml"
-      - type: null
     description: 
+    oneOf: 
+      - type: null
+      - $ref: "./03_physical-location.yml"
 
   equivalent_to_Maximo_site:
     description: indicates that this org-chart group maps to a particular site (a native Maximo object)
-    $ref: MaximoSiteObject
+    oneOf:
+      - type: null
+      - $ref: MaximoSiteObject
 
   equivalent_to_Maximo_org:
     description: indicates that this org-chart group maps to a particular org-chart group (a native Maximo object)
-    $ref: MaximoOrgObject
+    oneOf:
+      - type: null
+      - $ref: MaximoOrgObject
+    RULE_SPEC:
+      - name: an org-chart-group cannot be simultaneously equivalent to a site and a org
+        spec_ID:
+        type: [UI_options_constraint, validation]
+        automation_trigger:
+        specification: |
+          if OG1 is a org-chart-group
+            NOT(AND(OG1.equivalent_to_Maximo_site is not NULL, OG1.equivalent_to_Maximo_org is not NULL))
+
 
   # equivalent_to_Maximo_crew:
   #   P3_MVP: true

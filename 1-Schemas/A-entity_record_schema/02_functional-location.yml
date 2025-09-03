@@ -8,17 +8,38 @@ properties:
   ID:
     description: is the unique ID of the functional-location known as the "tag number" or "entity number" in Avantis's vocabulary. (Avantis is the a WMS). For example THC-DIG-V-0110.
     type: string
+    maxLength: 50
 
   TWAG_ID:
-    description: the unique ID from TWAG.
+    description: the unique ID from TWAG (either the asset ID or the facility ID)
     P3_MVP: true
     type: string
     integration: [GIS]
 
-  description: #[] rule for concatenation
+  description:
     description: is a structured description of the functional-location.
     type: string
-  
+    RULE_SPEC:
+      - name: Automatic creation of functional location description
+        spec_ID: V1sxf7xqze
+        type: [automation]
+        automation_trigger: 
+          - upon the update of any involved data field in the UI
+          - upon the a change commit to the record
+        specification: |
+          fl1 is a functional location
+          if fl1.TWAG_ID == null then
+            TBD
+          else
+            fl1.description = the semi-colon delimited concatenation of(
+              - fl1.class,
+              - fl1.description_of_function,
+              - (lambda a, b: a if a is not Null else b)(fl.physical_location, fl.legacy_physical_location_description)
+              )
+        note: 
+          - do not apply this rule to asset records imported from Avantis.
+          - the lambda function turns the legacy text value if the physical location field is empty 
+               
   description_of_function:
     description: a short description of the system function that the asset performs
     type: string
@@ -30,32 +51,39 @@ properties:
     description: denotes the broad types of asset that may play the functional-location (e.g., "breaker functional-location"). It can also denotes the useful function provided by an asset in the functional-location to the larger system (e.g., the "tie-breaker functional-location" provides tie-breaking function).
     $ref: "../B-entity_class_object_schema/01_physical_entity_and_functional_location_class.yml"
     RULE_SPEC:
-    - name: prevent item-only class entries when classifying functional locations 
-      spec_ID: 01K2G2MBYJTH0J981M6MYVKRYF
-      type: [UI_options_constraint, validation] 
-      specification: |
-        For any functional location, "FL_x" -> 
-          FL_x.class.properties.for_items_only = false
-    
-    - name: asset class value must be compatible with the functional location class value
-      spec_ID: 01K323PZACFR7678RFPAZVNCPN
-      type: [automation, UI_options_constraint, validation] 
-      specification: |
-        
-  functional_location_type:
-    description:
-    type: string
-    enum:
-      - discrete asset
-      - system or structure 
-      - collection
-    RULE_SPEC: 
-    - name: only one asset can be assigned to a "discrete asset" or "system or structure" functional location
-      spec_ID: 
-      involves_prop: 
-      type: [validation] 
-      specification:
-        
+      - name: Classes meant for classifying items cannot be used on functional location 
+        spec_ID: EJRrnCrtfg
+        type: [UI_options_constraint, validation] 
+        specification: |
+          If FL1 is a functional location then 
+            FL1.class.for_items_only = false
+      
+      - name: The class must be applicable to the asset
+        spec_ID: NyU-7vOKMx
+        type: [validation, UI_options_constraint] 
+        specification: |
+          If a1 is an asset, then
+            AND(
+              a1.properties.class.properties.for_functional_locations_only == false
+              a1.properties.class.properties.for_items_only == false
+            )
+        checked_on: 2025-08-18 
+      
+      - name: Functional Location class must be compatible with the asset class
+        spec_ID:
+        type: [automation, UI_options_constraint, validation]
+        automation_trigger:
+        specification: |
+           
+        note:
+
+  GL_functional_area:
+    description: a 10-digit code indicating the functional area
+    oneOf:
+      - string
+      - type: null
+    $comment: the functional area should be specified "natively" on the functional location object
+
   parent:
     description: references the functional-location that is served by the larger asset, which physically subsumes the asset serving this functional-location.
     oneOf:
@@ -66,51 +94,72 @@ properties:
         spec_ID:  
         type: [automation] 
         specification:
-          a_x and asset_y are an assets
-          fl_x and fl_y are a functional locations
+          a1 and asset_y are an assets
+          FL1 and fl_y are a functional locations
+        
+  functional_location_type:
+    description:
+    type: string
+    enum:
+      - discrete asset
+      - collection
+      - system or structure
+    RULE_SPEC: 
+    - name: only one asset can be assigned to a "discrete asset" or "system or structure" functional location
+      spec_ID: 
+      involves_prop: 
+      type: [validation] 
+      specification:
 
   defined_class_or_category:
     $ref: "./00_re-used_object_property_definitions.yml/definitions/defined_class_or_category_def"
-
+  
 # STATUS
+
+  assigned_occupant:
+    description: indicates the asset assigned to this functional location
+    $ref: "./01_asset.yml"
+    $comment: this field must agree with the assigned_to_functional_location field on the asset
 
   status:
     type: string
     enum:
       - specified
-      - active
+      - realized
       - eliminated
     description: is the life-cycle status of a functional-location.
+    RULE_SPEC:
+      - name: Cannot eliminate a functional location before its children are eliminated
+        spec_ID: NkG_1ge9Gx
+        type: [validation]
+        automation_trigger:
+        specification: |
+          fl1, flx are functional locations
+          if fl1.status == eliminated
+            for all flx, flx.parent == fl1
+              flx.status == eliminated
     $comment: |
-      "specified" means the functional-location is conceived and exists in some specification or design documentation; "active" means the necessary supports exist for an asset to serve in the functional-location and function of the asset being utilized; "eliminated" represents a negation of either or both conditions of the active status.
-  
-  last_status_update:
-    description: the last time the status was updated
-    type: string
-    format: date
+      "specified" means the functional-location is conceived and exists in some specification or design documentation; "realized" means the necessary supports exist for an asset to serve in the functional-location and function of the asset being utilized; "eliminated" represents a negation of either or both conditions of the active status.
   
   up_and_available:
     type: Boolean
-    description: Indicates whether the asset is available for doing the work that it is assigned at a given moment.
+    description: Indicates whether the asset is available for doing the work assigned to it at any given moment.
+    read-only: true
     RULE_SPEC:
-      - name: if the asset in the functional location is down, the functional location is down
-        spec_ID: 01K322YBXK3X9EG8RVZGHNXGNH
-        involves_prop: 
-        type: [automation, UI_options_constraint, validation] 
+      - name: a functional location is up (available) only when an asset is assigned to it and the asset is up (available).
+        spec_ID: NyvtNxeqGe
+        type: [automation]
         specification: |
-      - name: if no asset is in the functional location, the functional location is down
-        spec_ID: 01K322YFFH1VB5MJDXA41QVRPE
-        type: [automation, UI_options_constraint, validation] 
-        specification: |
-
+          a1 is an asset, fl1 is a functional location
+          if AND(
+            - a1.assigned_to_functional_location == fl1
+            - a1.up_and_available == TRUE
+            )
+          then fl1.up_and_available = TRUE
+          else fl1.up_and_available = FALSE
+            
 # LOCATION
 
-  physical_location:
-    description: refers to the physical-location in which the asset serving the functional-location would be installed.
-    oneOf: 
-      - $ref: "./03_physical-location.yml"
-      - type: null
-  
   service_address:
     oneOf: 
       - $ref: MaximoServiceAddressObject
@@ -121,10 +170,16 @@ properties:
         spec_ID: 01K31Z4WXXCF5NHFB85PMP01AD
         type: [validation]
         specification: |
-          if fl_x is an functional location then
-            fl_x.properties.service_address == fl_x.properties.physical_location.properties.service_address 
+          if FL1 is an functional location then
+            FL1.properties.service_address == FL1.properties.physical_location.properties.service_address 
 
-  physical_location_description:
+  physical_location:
+    description: refers to the physical-location in which the asset serving the functional-location would be installed.
+    oneOf: 
+      - $ref: "./03_physical-location.yml"
+      - type: null
+
+  legacy_physical_location_description:
     description: the legacy, free-text, physical location description
     oneOf:
       - type: null
@@ -144,10 +199,6 @@ properties:
     oneOf:
       - type: null 
       - $ref: "./04_org-chart_group.yml"
-  
-  inherit_operated_by_from_parent:
-    type: boolean
-    default_value: true
 
   maintained_by:
     description: is the group responsible for the overall maintenance of the asset - for example, a unit, work area, or crew.
@@ -155,30 +206,24 @@ properties:
       - type: null
       - $ref: "./04_org-chart_group.yml"
 
-  inherit_maintained_by_from_parent: 
-    type: boolean
-    default_value: true
-  
   #owned_by:
     # Not needed: ownership is not a concept applicable to functional locations.
 
   criticality:
-    description: the overall criticality of an asset 
+    description: the overall criticality of the functional location 
     oneOf:
-      - $ref: "#/definitions/criticalityRatingDef"
+      - $ref: "./00_re-used_object_property_definitions.yml/definitions/criticality_rating_def"
       - type: null
 
-  GL_functional_area: #[] question about the elimination of this from schema made to DM
-    oneOf:
-      - string
-      - type: null
-    description: identifies the purpose or service the expense supports.
+# COMPLIANCE
 
-  specification_data:
-    type: object
-    $ref: "."
-    description: is a set of functional performance specification data. (The applicable specifications are dependent on the definition made in the chosen class.)
+  associated_with_compliance_activities:
+    description: indicate the compliance activities that applies to the current functional location
+    $ref: "./00_re-used_object_property_definitions.yml/associated_with_compliance_activities_def"
   
+  assigned_asset_is_associated_with_compliance_activities:
+    description: indicate the compliance activities that applies to the asset assigned to the functional location
+    $ref: "./00_re-used_object_property_definitions.yml/associated_with_compliance_activities_def"
 
 # COMMON RECORD PROPERTIES
 
@@ -188,87 +233,3 @@ properties:
   record_retirement_information:
     $ref: "./00_re-used_object_property_definitions.yml#/definitions/record_retirement_def"
   
-  
-#############################################################
-# LOCAL OBJECT DEFINITION
-#############################################################
-
-definitions:
-  criticality rating definition:
-    type: object
-    properties:
-      rating:
-        type: integer
-      description:
-        type: string
-    enum:
-      - rating: 1
-        description: TBD
-      - rating: 2
-        description: TBD
-      - rating: 3
-        description: TBD
-      - rating: 4
-        description: TBD
-      - rating: 5
-        description: TBD
-
-
-#############################################################
-# RULES
-#############################################################
-
-RULE_SPEC:
-
-  - name: ID of Linear Assets Represented as functional-location in Maximo
-    spec_ID: Vku-67dDxx
-    involves_prop: [ID]
-    type: [triggered action]
-    specification:
-      trigger: replication creation of assetY record from the TWAG
-      action: apply Facility ID from TWAG as ID 
-    status: false
-
-  - name: ID of Linear Assets Represented as functional-location in Maximo
-    spec_ID: Vku-67dDxx
-    involves_prop: [ID]
-    type: [triggered action]
-    specification:
-      - if:
-        oneOf:
-          - assetfunctional-locationClass:
-              properties:
-                  className:
-                    const: pumping station
-          - assetfunctional-locationClass:
-              properties:
-                  className:
-                    const: water treatment plant
-          - assetfunctional-locationClass:
-              properties:
-                  className:
-                    const: large chamber
-        then:
-          required: GIS_object_ID
-    status: false
-
-    #[]RULE VkiDyJcSxg: Before a functional-location can be eliminated, all children, as well as the descendants of the functional-location in the hierarchy must also be eliminated. $comment: a procedure should to be created to allow the recursive elimination of a functional-location and all of its children.
-
-    #[]RULE VygDC0Frxl: When a functional-location is "eliminated", it must no longer be visible in any view of the functional-location hierarchy. (Its entire branch must not be available either, because all of its descendants would be eliminated as well.)
-    #[]Review with To ASMP: with this rule, we no longer need to have a hierarchy branched for retired functional-locations.
-
-    #[]RULE EkP5qy5Sxl: If change auditing cannot be turned on, then when a functional-location record status is "eliminated", all the specification in the record's data fields must be frozen.
-
-    #[]RULE:
-    # IN COMMON LANGUAGE: At any given time, each functional-location may only have a single asset assigned to it (i.e., associated with the functional-location via the asset's "assigned_to_functional_location" property).
-
-      - name: the class must be applicable to assets
-        spec_ID: 01K2G29JWQ65ZXZ2RXWV23ADNS
-        type: [validation, UI_options_constraint] 
-        specification: |
-          If a_x is an asset, then
-            AND(
-              a_x.properties.class.properties.for_functional_locations_only == false
-              a_x.properties.class.properties.for_items_only == false
-            )
-        checked_on: 2025-08-18 

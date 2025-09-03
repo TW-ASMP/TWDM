@@ -11,9 +11,7 @@ The following is a sample of the Toronto Water's org-chart group classification.
     * division
     * section
     * unit
-    * Group in TW*
-        * work area
-        * crew
+    * supervisor led group
 * government agency
 * private business
 * non-governmental organization

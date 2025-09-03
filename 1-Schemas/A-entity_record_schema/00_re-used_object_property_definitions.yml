@@ -7,6 +7,32 @@ $id: https://raw.githubusercontent.com/TW-ASMP/TWDM/main/A-entity_record_schema/
 
 definitions:
 
+  criticality_rating_def:
+    properties:
+      rating:
+        type: integer
+      description:
+        type: string
+    enum:
+      - rating: 1
+        description: Highest
+      - rating: 2
+        description: High
+      - rating: 3
+        description: Medium
+      - rating: 4
+        description: Low
+      - rating: 5
+        description: Lowest
+  
+  associated_with_compliance_activities_def:
+    description: A list of job plans specifying activities required to satisfy compliance requirements
+    oneOf:
+      - type: null
+      - type: array
+        items:
+          - $ref: "./32_job_plan.yml"
+
 # DEFINED CLASS OR CATEGORY
 
   defined_class_or_category_def:
@@ -67,6 +93,7 @@ definitions:
 
   rotating_property_def:
     type: boolean
+    default_value: false
     $comment: |
       A rotating item is a trackable item, represented also as an asset in Maximo. When the value of this field is true, we must serialize every instance of the item. This commitment is beyond what we can presently achieve at TW. The more pragmatic starting point considered in 2024 is as follows:
         1) for the initial implementation, specify all items as non-rotating

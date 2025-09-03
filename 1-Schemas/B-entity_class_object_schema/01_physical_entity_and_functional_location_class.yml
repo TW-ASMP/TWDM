@@ -22,7 +22,10 @@ properties:
     description: indicate that the class cannot be used to classify an asset of functional location (only items or tools). 
     type: boolean
     default_value: false
-
+  
+  default_functional_location_class:
+    description: indicates the class 
+    
 # FUNCTIONAL LOCATION
   
   for_functional_locations_only:
