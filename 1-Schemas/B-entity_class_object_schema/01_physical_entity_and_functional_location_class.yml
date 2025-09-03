@@ -19,12 +19,21 @@ properties:
 # PHYSICAL ENTITY
 
   for_items_only:
-    description: indicate that the class cannot be used to classify an asset of functional location (only items or tools). 
+    description: indicate that the class cannot be used to classify an asset or functional location, only items - e.g., lubricant, tire, o-ring, belt.
     type: boolean
     default_value: false
+    RULE_SPEC: 
+      - name: if an entity can only be an item, then it cannot be ...
+        spec_ID:
+        type: [UI_options_constraint, validation]
+        run_when:
+        specification: |
   
   default_functional_location_class:
-    description: indicates the class 
+    description: indicates the class
+    oneOf:
+      - type: null
+      - $ref: "#"
     
 # FUNCTIONAL LOCATION
   

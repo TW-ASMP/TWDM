@@ -65,22 +65,24 @@ definitions:
     properties:
       
       product_make:
-        oneOf:
-        - type: null
-        - type: string
         description: The company that brands the product. If a company brands the product and another manufactures the the project, then enter the name of the former. 
+        type: string
 
       product_model:
-        oneOf:
-        - type: null
-        - type: string
         description: The complete model and sub-model description. For example, "Multilin 869"
+        type: string
 
       product_version_or_model_year:
+        description: Identifies the specific version of the product model. For example "v2" or "2023".
         oneOf:
         - type: null
         - type: string
-        description: Identifies the specific version of the product model. For example "v2" or "2023".
+
+      manufacturer_part_number:
+        description: ID of the particular product for ordering
+        oneOf:
+          - type: null
+          - type: string
 
 # ATTACHMENTS
 

@@ -95,11 +95,6 @@ properties:
               a1.properties.class.properties.for_items_only == false
             )
         checked_on: 2025-08-18 
-  
-  is_mobile: 
-    description: Indicate the the asset, when in service, has no fixed installation location
-    type: boolean
-    default_value: false
 
   is_a_commercially_available_product:
     description: An asset is made as a product of a commercial entity, as opposed to an entirely custom asset that is assembled on site.
@@ -142,19 +137,21 @@ properties:
 # ITEM AND TOOL ASSOCIATION
 
   item_catalog_record:
-    description: This field links the asset to an item record, indicating that the asset is an rotating and serialized asset.
+    description: This field links the asset to an item record
     oneOf: 
       - $ref: "./05_item_master.yml"
       - type: null
+    $comment: This linkage either 1) establish the asset as a rotating item, if the item master record is designated as rotating, or 2) simply identifies the asset to be an instance of the item (useful as a container attribute information) if the item master record is not designated as rotating
 
   tool_catalog_record:
-    description: This field links the asset to a defined tool record, indicating that the asset is an serialized tool.
+    description: This field links the asset to a master rotating tool record
     oneOf: 
       - $ref: "./06_tool_master.yml"
       - type: null
+    $comment: Intent - this linkage establishes the asset as a rotating tool, which can be reserved for work.
     RULE_SPEC:
       - name: An asset may not be associated with a tool record and an item record at the same time
-        spec_ID: 01K1XBPBZCMPBFWM32B3WJ9W74
+        spec_ID: N1WGIPZcGe
         type: [validation]
         specification: |
           if a1 is an asset then
@@ -163,7 +160,6 @@ properties:
                 a1.properties.too_catalog_record != null
               )
             )
-        checked_on: 2025-08-18
 
 # MAKE AND MODEL
 
